@@ -79,7 +79,7 @@
   wireForm(
     document.querySelector("form[data-form=contact]"),
     CONTACT_ENDPOINT,
-    "This form is not connected yet. For product issues, use the GitHub links on the Support page.",
+    "This form is not connected yet. Public contact channels open when the company's registration is complete.",
     "Thanks. We read every message and reply within three business days."
   );
 

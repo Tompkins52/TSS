@@ -34,8 +34,7 @@ ORG_JSONLD = """<script type="application/ld+json">
   "url": "%(base)s",
   "logo": "%(base)sassets/img/icon-512.png",
   "foundingDate": "2026-10",
-  "address": {"@type": "PostalAddress", "addressRegion": "IL", "addressCountry": "US"},
-  "sameAs": ["https://github.com/Tompkins52"]
+  "address": {"@type": "PostalAddress", "addressRegion": "IL", "addressCountry": "US"}
 }
 </script>"""
 
