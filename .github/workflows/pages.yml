@@ -23,7 +23,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Build the site
-        run: python3 build.py --base-url "${{ vars.SITE_BASE_URL || 'https://tompkins52.github.io/TSS/' }}"
+        run: python3 build.py --base-url "${{ vars.SITE_BASE_URL || 'https://tompkinssoftwaresystems.com/' }}"
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
