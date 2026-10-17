@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{page_title}}</title>
+<meta name="description" content="{{description}}">
+<meta name="theme-color" content="#12352b">
+<link rel="canonical" href="{{canonical}}">
+<link rel="icon" href="{{root}}assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="{{root}}assets/img/apple-touch-icon.png">
+<link rel="manifest" href="{{root}}site.webmanifest">
+<link rel="preload" href="{{root}}assets/fonts/SourceSerif4Variable-Roman.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{root}}assets/fonts/PublicSans-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="{{root}}assets/css/site.css">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tompkins Software Systems">
+<meta property="og:title" content="{{page_title}}">
+<meta property="og:description" content="{{description}}">
+<meta property="og:url" content="{{canonical}}">
+<meta property="og:image" content="{{base_url}}assets/img/og-image.png">
+<meta name="twitter:card" content="summary">
+{{extra_head}}
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="{{root}}index.html" aria-label="Tompkins Software Systems, home">
+      <svg class="mark" viewBox="0 0 40 40" width="36" height="36" aria-hidden="true" focusable="false"><rect width="40" height="40" rx="7" fill="#12352b"/><rect x="9" y="9" width="22" height="5.5" rx="1" fill="#d4a84b"/><rect x="17.25" y="9" width="5.5" height="19" rx="1" fill="#d4a84b"/><rect x="9" y="30.5" width="22" height="2" rx="1" fill="#f3f4ee" opacity="0.92"/></svg>
+      <span class="brand-name"><span class="brand-top">Tompkins</span><span class="brand-sub">Software Systems</span></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="bars" aria-hidden="true"><span></span></span><span class="label">Menu</span></button>
+    <nav id="site-nav" class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="{{root}}products.html" data-nav="products">Products</a></li>
+        <li><a href="{{root}}about.html" data-nav="about">About</a></li>
+        <li><a href="{{root}}customers.html" data-nav="customers">Customers</a></li>
+        <li><a href="{{root}}updates.html" data-nav="updates">Updates</a></li>
+        <li><a href="{{root}}contact.html" data-nav="contact">Contact</a></li>
+        <li class="nav-cta"><a class="btn btn-primary btn-small" href="{{root}}newsletter.html" data-nav="newsletter">Newsletter</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<main id="main">

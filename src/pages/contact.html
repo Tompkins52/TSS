@@ -1,0 +1,75 @@
+<!--
+title: Contact
+description: How to reach Tompkins Software Systems LLC in Elgin, Illinois, for sales, procurement paperwork, pro bono requests, and product support.
+nav: contact
+priority: 0.7
+-->
+<section class="page-head band-dark on-dark">
+  <div class="wrap">
+    <span class="eyebrow">Contact</span>
+    <h1>Get in touch.</h1>
+    <p class="lede">We are a newly organized company and our public email and phone channels open when the state completes our registration. Until then, the form below and the product issue trackers both reach us.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap split">
+    <div>
+      <form data-form="contact" novalidate>
+        <div class="field">
+          <label for="c-name">Name</label>
+          <input type="text" id="c-name" name="name" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="c-org">Organization <span class="muted">(optional)</span></label>
+          <input type="text" id="c-org" name="organization" autocomplete="organization">
+        </div>
+        <div class="field">
+          <label for="c-email">Email address</label>
+          <input type="email" id="c-email" name="email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="c-topic">Topic</label>
+          <select id="c-topic" name="topic">
+            <option>Products and pricing</option>
+            <option>Custom build for a department</option>
+            <option>Pro bono request (nonprofit)</option>
+            <option>Procurement paperwork (W-9, vendor forms)</option>
+            <option>Product support</option>
+            <option>Security report</option>
+            <option>Something else</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="c-message">Message</label>
+          <textarea id="c-message" name="message" required></textarea>
+          <span class="hint">Please do not include passwords, employee records, or incident details in this form.</span>
+        </div>
+        <p class="hp" aria-hidden="true"><label>Leave this field empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label></p>
+        <button class="btn btn-primary" type="submit">Send message</button>
+        <p class="form-status" role="status" aria-live="polite" hidden></p>
+      </form>
+    </div>
+    <aside>
+      <div class="sidebar-note">
+        <h3>Tompkins Software Systems LLC</h3>
+        <dl class="spec" style="grid-template-columns:1fr">
+          <dt>Location</dt><dd>Elgin, Illinois, United States</dd>
+          <dt>Email</dt><dd>Published on registration</dd>
+          <dt>Phone</dt><dd>Published on registration</dd>
+          <dt>Hours</dt><dd>Business days, Central Time</dd>
+          <dt>Product support</dt><dd><a href="{{root}}support.html">Support page</a></dd>
+          <dt>Code</dt><dd><a href="https://github.com/Tompkins52" rel="noopener">github.com/Tompkins52</a></dd>
+        </dl>
+      </div>
+      <div class="sidebar-note" style="margin-top:1rem;border-left-color:var(--green-700)">
+        <h3>Before you write</h3>
+        <ul>
+          <li>Procurement details and NAICS codes are on the <a href="{{root}}customers.html#how-to-buy">how to buy</a> page.</li>
+          <li>Pro bono requests: see <a href="{{root}}customers.html#nonprofits">what we look for</a>.</li>
+          <li>Press and brand assets: see the <a href="{{root}}brand.html">brand page</a>.</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</section>

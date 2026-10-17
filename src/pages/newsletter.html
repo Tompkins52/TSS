@@ -1,0 +1,71 @@
+<!--
+title: Newsletter
+description: The Work Order is the monthly newsletter from Tompkins Software Systems: what shipped, what we learned, and what is next. One email a month, no tracking, unsubscribe in one click.
+nav: newsletter
+priority: 0.7
+-->
+<section class="page-head band-dark on-dark">
+  <div class="wrap">
+    <span class="eyebrow">Newsletter</span>
+    <h1>The Work Order</h1>
+    <p class="lede">One email a month from Tompkins Software Systems: what shipped, what we learned building it, and what is next. Written by the people who write the software.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap split">
+    <div>
+      <form data-form="newsletter" novalidate>
+        <div class="field">
+          <label for="nl-email">Email address</label>
+          <input type="email" id="nl-email" name="email" autocomplete="email" placeholder="you@example.gov" required>
+        </div>
+        <div class="field">
+          <label for="nl-role">What best describes you? <span class="muted">(optional)</span></label>
+          <select id="nl-role" name="role">
+            <option value="">Choose one</option>
+            <option>Public works or municipal staff</option>
+            <option>Nonprofit staff or volunteer</option>
+            <option>Drone pilot or Part 107 student</option>
+            <option>Developer or technology staff</option>
+            <option>Other</option>
+          </select>
+          <span class="hint">Helps us decide what to write about. We never use it for anything else.</span>
+        </div>
+        <p class="hp" aria-hidden="true"><label>Leave this field empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label></p>
+        <button class="btn btn-primary" type="submit">Subscribe</button>
+        <p class="form-note">You will get a confirmation email first. Every issue has an unsubscribe link, and it works on the first click.</p>
+        <p class="form-status" role="status" aria-live="polite" hidden></p>
+      </form>
+    </div>
+    <aside>
+      <div class="sidebar-note">
+        <h3>What is in an issue</h3>
+        <ul>
+          <li>Releases and changelogs for every product</li>
+          <li>One short lesson from the month's work</li>
+          <li>Changes to the OSHA or FAA material our products depend on</li>
+          <li>What we are building next, and when</li>
+        </ul>
+      </div>
+      <div class="sidebar-note" style="margin-top:1rem;border-left-color:var(--green-700)">
+        <h3>What is not</h3>
+        <ul>
+          <li>No marketing sequences or "drip" campaigns</li>
+          <li>No open or click tracking</li>
+          <li>No sharing your address with anyone</li>
+          <li>Never more than one issue a month</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="section section-tint">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Past issues</h2>
+      <p>The first issue goes out after the company launch. Issues will be archived here so you can read them without subscribing.</p>
+    </div>
+  </div>
+</section>
