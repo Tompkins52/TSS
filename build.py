@@ -100,6 +100,12 @@ def main():
             extra_head = ""
             if meta.get("jsonld") == "organization":
                 extra_head = ORG_JSONLD % {"base": base}
+            # A page that has moved: "redirect: products/new-page.html" sends visitors
+            # on, points search engines at the new address, and stays out of the sitemap.
+            if meta.get("redirect"):
+                canonical = base + meta["redirect"]
+                extra_head += '\n<meta http-equiv="refresh" content="0; url=%s%s">' % (root, meta["redirect"])
+                meta["noindex"] = "true"
             if meta.get("noindex") == "true":
                 extra_head += '\n<meta name="robots" content="noindex">'
             values = {
