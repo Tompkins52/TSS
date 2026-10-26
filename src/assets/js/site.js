@@ -79,7 +79,7 @@
   wireForm(
     document.querySelector("form[data-form=contact]"),
     CONTACT_ENDPOINT,
-    "This form is not connected yet. Public contact channels are being set up and will be published on the contact page shortly.",
+    "This form is not connected yet. Please email your message to admin@tompkinssoftwaresystems.com; what you typed is still here to copy.",
     "Thanks. We read every message and reply within three business days."
   );
 

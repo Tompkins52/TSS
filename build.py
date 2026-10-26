@@ -32,6 +32,7 @@ ORG_JSONLD = """<script type="application/ld+json">
   "name": "Tompkins Software Systems LLC",
   "alternateName": "TSS",
   "url": "%(base)s",
+  "email": "admin@tompkinssoftwaresystems.com",
   "logo": "%(base)sassets/img/icon-512.png",
   "foundingDate": "2026-10",
   "address": {"@type": "PostalAddress", "addressRegion": "IL", "addressCountry": "US"}
