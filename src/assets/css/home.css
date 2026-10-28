@@ -309,12 +309,10 @@ body.home .site-nav li.nav-cta .btn-primary:hover { background: var(--brass-300)
 .built-grid { display: grid; gap: 1.5rem; }
 @media (min-width: 880px) { .built-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.75rem; } .built { padding: 4rem 0 3rem; } }
 .prod { display: grid; gap: 0.9rem; align-content: start; min-width: 0; }
-.shot { display: block; position: relative; border-radius: var(--radius-lg); background: var(--green-900); padding: 0; box-shadow: 0 16px 40px rgba(26, 34, 30, 0.18), 0 0 0 1px rgba(26, 34, 30, 0.08); overflow: visible; text-decoration: none; }
-.shot .chrome { display: flex; gap: 5px; padding: 8px 10px; }
-.shot .chrome i { width: 8px; height: 8px; border-radius: 50%; background: rgba(255, 255, 255, 0.3); }
-.shot > img { display: block; width: 100%; height: auto; border-radius: 0 0 var(--radius-lg) var(--radius-lg); background: #fff; }
+.shot { display: block; position: relative; border-radius: var(--radius-lg); padding: 0; box-shadow: 0 16px 40px rgba(26, 34, 30, 0.18), 0 0 0 1px rgba(26, 34, 30, 0.12); overflow: visible; text-decoration: none; }
+.shot > img { display: block; width: 100%; height: auto; border-radius: var(--radius-lg); background: #fff; }
 .shot .ph { position: absolute; right: -8px; bottom: -14px; width: 27%; border-radius: 10px; border: 3px solid #0d1d18; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3); background: #fff; }
-.shot:hover { box-shadow: 0 20px 44px rgba(26, 34, 30, 0.24), 0 0 0 1px var(--green-600); }
+.shot:hover { box-shadow: 0 20px 44px rgba(26, 34, 30, 0.24), 0 0 0 2px var(--green-600); }
 .prod-copy { padding-top: 0.5rem; display: grid; gap: 0.45rem; }
 .prod-copy .status { display: flex; flex-wrap: wrap; gap: 0.35rem; }
 .prod-copy h3 { font-size: 1.35rem; margin: 0; }
