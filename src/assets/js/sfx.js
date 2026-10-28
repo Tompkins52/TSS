@@ -1,14 +1,15 @@
-/* Small sounds for the interactive pages, made with the Web Audio API. No audio files.
-   Off until the visitor turns them on; the choice is kept in this browser only. */
+/* Small sounds for the sample apps, made with the Web Audio API. No audio files.
+   On by default; the speaker button turns them off, and that choice is kept in this browser. */
 (function () {
   "use strict";
-  var KEY = "tss-sound", ctx = null, on = false, master = null;
-  try { on = window.localStorage && localStorage.getItem(KEY) === "on"; } catch (e) { on = false; }
+  var KEY = "tss-sound", ctx = null, on = true, master = null, stored = null;
+  try { stored = window.localStorage ? localStorage.getItem(KEY) : null; } catch (e) { stored = null; }
+  on = stored === null ? true : stored === "on";
 
   function ensure() {
     if (ctx) { if (ctx.state === "suspended") ctx.resume(); return ctx; }
     var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
-    ctx = new AC(); master = ctx.createGain(); master.gain.value = 0.9; master.connect(ctx.destination);
+    ctx = new AC(); master = ctx.createGain(); master.gain.value = 0.8; master.connect(ctx.destination);
     return ctx;
   }
   function env(node, t0, attack, dur, peak) {
@@ -18,26 +19,38 @@
   function tone(freq, dur, type, peak, slideTo, delay) {
     var t0 = ctx.currentTime + (delay || 0), o = ctx.createOscillator(); o.type = type || "sine";
     o.frequency.setValueAtTime(freq, t0); if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t0 + dur);
-    env(o, t0, 0.005, dur, peak); o.start(t0); o.stop(t0 + dur + 0.05);
+    env(o, t0, 0.006, dur, peak); o.start(t0); o.stop(t0 + dur + 0.05);
   }
-  function noise(dur, kind, from, to, peak, delay) {
+  function noise(dur, kind, from, to, peak, delay, q) {
     var t0 = ctx.currentTime + (delay || 0), n = Math.floor(ctx.sampleRate * dur), buf = ctx.createBuffer(1, n, ctx.sampleRate), d = buf.getChannelData(0);
     for (var i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
     var src = ctx.createBufferSource(); src.buffer = buf;
-    var f = ctx.createBiquadFilter(); f.type = kind || "bandpass"; f.Q.value = 0.9; f.frequency.setValueAtTime(from, t0); if (to) f.frequency.exponentialRampToValueAtTime(to, t0 + dur);
-    src.connect(f); env(f, t0, 0.01, dur, peak); src.start(t0); src.stop(t0 + dur + 0.05);
+    var f = ctx.createBiquadFilter(); f.type = kind || "bandpass"; f.Q.value = q || 0.8; f.frequency.setValueAtTime(from, t0); if (to) f.frequency.exponentialRampToValueAtTime(to, t0 + dur);
+    src.connect(f); env(f, t0, 0.012, dur, peak); src.start(t0); src.stop(t0 + dur + 0.05);
   }
 
   var SOUNDS = {
-    tick: function () { tone(1300, 0.05, "triangle", 0.05, 900); },
-    pop: function () { tone(280, 0.08, "sine", 0.09, 640); },
-    flip: function () { noise(0.11, "bandpass", 2200, 500, 0.14); tone(520, 0.04, "sine", 0.03, 380, 0.03); },
-    stamp: function () { tone(120, 0.16, "sine", 0.18, 60); noise(0.05, "lowpass", 500, 120, 0.1); },
-    chime: function () { tone(1046.5, 0.22, "sine", 0.07); tone(1318.5, 0.26, "sine", 0.06, null, 0.09); },
-    splash: function () { noise(0.28, "bandpass", 3200, 260, 0.1); tone(320, 0.14, "sine", 0.05, 140); },
-    whoosh: function () { noise(0.24, "bandpass", 380, 2600, 0.08); },
-    error: function () { tone(190, 0.07, "square", 0.045); tone(170, 0.09, "square", 0.045, null, 0.1); },
-    draw: function () { noise(0.9, "highpass", 3500, 5000, 0.018); }
+    /* a view changes */
+    tick: function () { tone(1250, 0.045, "triangle", 0.035, 900); },
+    /* a new sample app: a page turning */
+    flip: function () { noise(0.12, "bandpass", 1900, 420, 0.08, 0, 0.6); tone(170, 0.07, "sine", 0.025, 110, 0.04); },
+    /* something added */
+    pop: function () { tone(330, 0.07, "sine", 0.055, 720); },
+    /* approved, paid, closed */
+    stamp: function () { tone(140, 0.16, "sine", 0.12, 55); noise(0.06, "lowpass", 420, 120, 0.06); },
+    /* an export, a certificate, a confirmation */
+    chime: function () { tone(1046.5, 0.24, "sine", 0.05); tone(1318.5, 0.3, "sine", 0.045, null, 0.1); },
+    /* paint hitting the screen, then the droplets */
+    splat: function () {
+      noise(0.2, "bandpass", 1400, 150, 0.1, 0, 0.5); tone(420, 0.16, "sine", 0.05, 110);
+      [0.09, 0.14, 0.2, 0.27].forEach(function (d, i) { tone(1700 + i * 350 + Math.random() * 200, 0.03, "sine", 0.025, null, d); });
+    },
+    /* reset, desktop to phone */
+    whoosh: function () { noise(0.22, "bandpass", 320, 2300, 0.05); },
+    /* a conflict or a missing field */
+    error: function () { tone(230, 0.06, "triangle", 0.035); tone(205, 0.08, "triangle", 0.035, null, 0.09); },
+    /* the blueprint being drawn */
+    draw: function () { noise(0.9, "highpass", 3200, 5200, 0.012); }
   };
 
   function play(name) {
@@ -54,6 +67,8 @@
     if (on && !quiet) { ensure(); play("chime"); }
   }
   document.addEventListener("click", function (e) { var b = e.target.closest("[data-sound]"); if (b) set(!on); });
+  // The audio context needs a real gesture before it can make a sound; the first touch or click provides it.
+  document.addEventListener("pointerdown", function () { if (on) ensure(); }, { capture: true, passive: true });
   if (document.readyState !== "loading") set(on, true); else document.addEventListener("DOMContentLoaded", function () { set(on, true); });
 
   window.TSSound = { play: play, set: set, isOn: function () { return on; } };

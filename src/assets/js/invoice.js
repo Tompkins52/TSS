@@ -7,7 +7,6 @@
   var form = document.querySelector("[data-inv]"); if (!form) return;
   var preview = document.querySelector("[data-preview]"), linesEl = form.querySelector("[data-lines]"), savedEl = form.querySelector("[data-saved]");
   var progBox = form.querySelector("[data-prog]"), logoIn = form.querySelector("[data-logo]"), logoClear = form.querySelector("[data-logo-clear]");
-  var UNITS = ["ea", "hr", "day", "lot", "ft", "sq ft", "lb", "mi", "mo"];
 
   function sfx(n) { if (window.TSSound) window.TSSound.play(n); }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
@@ -26,7 +25,7 @@
     return { biz: { name: "", addr: "", phone: "", email: "", web: "", taxid: "", accent: "#12352b", logo: "" },
       num: "INV-1001", date: today(), terms: "Net 30", due: addDays(today(), 30), dueAuto: true, po: "", ref: "",
       cust: { name: "", attn: "", addr: "", email: "" }, ship: "", desc: "", from: "", to: "",
-      lines: [{ d: "", q: 1, u: "ea", r: "", t: true }], disc: "", tax: "", freight: "", paid: "",
+      lines: [{ d: "", q: 1, u: "", r: "", t: true }], disc: "", tax: "", freight: "", paid: "",
       prog: { on: false, contract: "", n: 1, m: 3, prev: "" }, pay: { to: "", late: "", instr: "", notes: "" } };
   }
   function sample() {
@@ -35,7 +34,7 @@
     s.num = "INV-1043"; s.po = "PO 4471"; s.ref = "Quote 1042";
     s.cust = { name: "Lakeside Dental", attn: "Accounts payable", addr: "42 Lakeview Dr\nPrairie City, IL", email: "ap@lakesidedental.example" };
     s.ship = "Same as billing"; s.desc = "Panel upgrade and six new 20 A circuits for the second-floor exam rooms. Inspected and passed."; s.from = addDays(today(), -16); s.to = addDays(today(), -3);
-    s.lines = [{ d: "200 A panel and breakers (parts)", q: 1, u: "ea", r: 1180, t: true }, { d: "Labor, panel replacement", q: 8, u: "hr", r: 95, t: false }, { d: "20 A circuit materials", q: 6, u: "ea", r: 85, t: true }, { d: "Labor, circuits", q: 12, u: "hr", r: 95, t: false }, { d: "Permit and inspection", q: 1, u: "lot", r: 180, t: false }];
+    s.lines = [{ d: "200 A panel and breakers (parts)", q: 1, u: "", r: 1180, t: true }, { d: "Labor, panel replacement (hours)", q: 8, u: "", r: 95, t: false }, { d: "20 A circuit materials", q: 6, u: "", r: 85, t: true }, { d: "Labor, circuits (hours)", q: 12, u: "", r: 95, t: false }, { d: "Permit and inspection", q: 1, u: "", r: 180, t: false }];
     s.tax = 7.25; s.freight = 48.5; s.paid = 1500;
     s.prog = { on: true, contract: 9600, n: 2, m: 3, prev: 3200 };
     s.pay = { to: "Hart Electric LLC", late: "1.5% per month after the due date", instr: "Mail checks to the address above, or ask for our ACH letter. Card payments add 3%.", notes: "Thank you for the work. The panel carries a two-year workmanship warranty; call us before you call anyone else." };
@@ -77,17 +76,15 @@
     renderLines();
   }
   function renderLines() {
-    var html = '<div class="lines-head"><span>Description</span><span>Qty</span><span>Unit</span><span>Rate</span><span>Amount</span><span></span></div>';
+    var html = '<div class="lines-head"><span>Line item</span><span>Qty</span><span>Rate</span><span>Amount</span><span></span></div>';
     inv.lines.forEach(function (l, i) {
       html += '<div class="line" data-i="' + i + '">' +
-        '<input type="text" value="' + esc(l.d) + '" placeholder="What was done or delivered" data-k="d" aria-label="Description">' +
+        '<input type="text" value="' + esc(l.d) + '" placeholder="What was done or delivered (8 hr labor, 6 outlets)" data-k="d" aria-label="Line item">' +
         '<input class="num" type="number" min="0" step="any" value="' + esc(l.q) + '" data-k="q" aria-label="Quantity">' +
-        '<input type="text" list="units" value="' + esc(l.u) + '" data-k="u" aria-label="Unit">' +
         '<input class="num" type="number" min="0" step="0.01" value="' + esc(l.r) + '" placeholder="0.00" data-k="r" aria-label="Rate">' +
         '<span class="amt" data-amt>' + money(num(l.q) * num(l.r)) + "</span>" +
         '<span class="tx"><label><input type="checkbox" data-k="t"' + (l.t ? " checked" : "") + '> tax</label><button type="button" class="rm" data-rm aria-label="Remove line">×</button></span></div>';
     });
-    html += '<datalist id="units">' + UNITS.map(function (u) { return "<option>" + u + "</option>"; }).join("") + "</datalist>";
     linesEl.innerHTML = html;
   }
 
@@ -107,8 +104,8 @@
   });
   form.addEventListener("click", function (e) {
     var b = e.target.closest("button, label.file-btn"); if (!b) return;
-    if (b.hasAttribute("data-rm")) { var i = Number(b.closest(".line").getAttribute("data-i")); inv.lines.splice(i, 1); if (!inv.lines.length) inv.lines.push({ d: "", q: 1, u: "ea", r: "", t: true }); renderLines(); render(); save(); sfx("tick"); return; }
-    if (b.hasAttribute("data-addline")) { inv.lines.push({ d: "", q: 1, u: "ea", r: "", t: true }); renderLines(); var last = linesEl.querySelector(".line:last-of-type input"); if (last) last.focus(); render(); save(); sfx("pop"); return; }
+    if (b.hasAttribute("data-rm")) { var i = Number(b.closest(".line").getAttribute("data-i")); inv.lines.splice(i, 1); if (!inv.lines.length) inv.lines.push({ d: "", q: 1, u: "", r: "", t: true }); renderLines(); render(); save(); sfx("tick"); return; }
+    if (b.hasAttribute("data-addline")) { inv.lines.push({ d: "", q: 1, u: "", r: "", t: true }); renderLines(); var last = linesEl.querySelector(".line:last-of-type input"); if (last) last.focus(); render(); save(); sfx("pop"); return; }
     if (b.hasAttribute("data-print")) { sfx("flip"); setTimeout(function () { window.print(); }, 120); return; }
     if (b.hasAttribute("data-new")) { newInvoice(); return; }
     if (b.hasAttribute("data-csv")) { downloadCsv(); return; }
@@ -184,8 +181,9 @@
     html += '<section class="inv-parties"><div><h3>Bill to</h3><div class="bn">' + (esc(c.name) || "Customer") + "</div>" + (c.attn ? "<div>Attn: " + esc(c.attn) + "</div>" : "") + (c.addr ? '<div class="pre">' + esc(c.addr) + "</div>" : "") + (c.email ? "<div>" + esc(c.email) + "</div>" : "") + "</div>" +
       (inv.ship ? '<div><h3>Ship to / job site</h3><div class="pre">' + esc(inv.ship) + "</div></div>" : "") +
       (inv.desc || period ? '<div><h3>Services</h3>' + (period ? "<div>" + period + "</div>" : "") + (inv.desc ? '<div class="pre">' + esc(inv.desc) + "</div>" : "") + "</div>" : "") + "</section>";
-    html += '<table class="inv-lines"><thead><tr><th>Description</th><th class="num">Qty</th><th>Unit</th><th class="num">Rate</th><th class="num">Amount</th></tr></thead><tbody>' +
-      (lines.length ? lines.map(function (l) { return "<tr><td>" + esc(l.d) + (l.t && num(inv.tax) ? '<span class="t">T</span>' : "") + '</td><td class="num">' + esc(l.q) + "</td><td>" + esc(l.u) + '</td><td class="num">' + money(l.r) + '</td><td class="num">' + money(num(l.q) * num(l.r)) + "</td></tr>"; }).join("") : '<tr class="empty"><td colspan="5">Add a line item on the left.</td></tr>') + "</tbody></table>";
+    var units = lines.some(function (l) { return l.u; });
+    html += '<table class="inv-lines"><thead><tr><th>Description</th><th class="num">Qty</th>' + (units ? "<th>Unit</th>" : "") + '<th class="num">Rate</th><th class="num">Amount</th></tr></thead><tbody>' +
+      (lines.length ? lines.map(function (l) { return "<tr><td>" + esc(l.d) + (l.t && num(inv.tax) ? '<span class="t">T</span>' : "") + '</td><td class="num">' + esc(l.q) + "</td>" + (units ? "<td>" + esc(l.u) + "</td>" : "") + '<td class="num">' + money(l.r) + '</td><td class="num">' + money(num(l.q) * num(l.r)) + "</td></tr>"; }).join("") : '<tr class="empty"><td colspan="5">Add a line item on the left.</td></tr>') + "</tbody></table>";
     var tot = '<div class="inv-totals"><div><span>Subtotal</span><span>' + money(t.sub) + "</span></div>" + (t.disc ? "<div><span>Discount</span><span>-" + money(t.disc) + "</span></div>" : "") +
       (num(inv.tax) ? "<div><span>Taxable subtotal</span><span>" + money(t.taxBase) + "</span></div><div><span>Sales tax (" + num(inv.tax) + "%)</span><span>" + money(t.tax) + "</span></div>" : "") +
       (t.freight ? "<div><span>Freight</span><span>" + money(t.freight) + "</span></div>" : "") + '<div class="total"><span>Total</span><span>' + money(t.total) + "</span></div>" +

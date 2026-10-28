@@ -44,6 +44,9 @@ scripts: assets/js/sfx.js, assets/js/home.js
             <label><input type="radio" name="device" value="desktop" checked><span>Desktop</span></label>
             <label><input type="radio" name="device" value="phone"><span>Phone</span></label>
           </fieldset>
+          <fieldset class="seg lays" data-layseg>
+            <legend class="visually-hidden">Layout</legend>
+          </fieldset>
           <fieldset class="swatches" data-swatches>
             <legend>Color palette</legend>
           </fieldset>
@@ -51,7 +54,7 @@ scripts: assets/js/sfx.js, assets/js/home.js
             <button type="button" class="fontbtn" data-fontbtn aria-expanded="false" aria-haspopup="listbox"><span>Font</span><b data-fontname>Public Sans</b></button>
             <div class="fontmenu" data-fontmenu role="listbox" aria-label="Font" hidden></div>
           </div>
-          <button class="reset sound" type="button" data-sound aria-pressed="false" title="Sounds for clicks, saves, and stamps. Off until you turn them on."><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M2 6h3l4-3v10l-4-3H2z" fill="currentColor"/><path class="wave" d="M11 5.5a3.5 3.5 0 0 1 0 5M12.8 3.5a6 6 0 0 1 0 9" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg><span class="visually-hidden" data-sound-label>Sound off</span></button>
+          <button class="reset sound" type="button" data-sound aria-pressed="false" title="Sounds for the sample apps: a page turn, a stamp, a splash. Tap to turn them off."><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M2 6h3l4-3v10l-4-3H2z" fill="currentColor"/><path class="wave" d="M11 5.5a3.5 3.5 0 0 1 0 5M12.8 3.5a6 6 0 0 1 0 9" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg><span class="visually-hidden" data-sound-label>Sound off</span></button>
           <button class="reset" type="button" data-reset>Reset</button>
         </div>
         <div class="device desktop" data-device>
@@ -59,7 +62,7 @@ scripts: assets/js/sfx.js, assets/js/home.js
             <noscript><p style="padding:1rem">The sample apps need JavaScript. Everything else on the site works without it.</p></noscript>
           </div>
         </div>
-        <p class="device-caption">Sample data. Pick a palette (or your own color) and a typeface; each app keeps its look while you are here. Nothing is saved or sent.</p>
+        <p class="device-caption">Sample data. Pick a layout, a palette (or your own color), and a typeface; each app keeps its look while you are here. Nothing is saved or sent.</p>
         <form class="start" data-start action="{{root}}contact.html" method="get">
           <label for="need"><span data-start-label>Want work orders like this for your department?</span> Say what your version would need and we will write back within three business days.</label>
           <div class="start-row">

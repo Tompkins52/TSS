@@ -98,6 +98,39 @@
     if (draft && msg) msg.style.minHeight = "16rem";
   }
 
+  /* ---- Motion: things fade in as they arrive and out as they leave; the map drifts; a reading line ---- */
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduceMotion) {
+    var REVEAL = ".card, .feat-grid > li, .timeline > li, .values > li, .sectors > li, .screens-grid figure, .checklist > li, .sidebar-note, .facts dl > div, .section-head, .demo-copy, .demo .panel, .phero-shots, .grp, .how-list > li, .prose > h2, .callout, .spec";
+    var items = document.querySelectorAll(REVEAL), counts = [];
+    Array.prototype.forEach.call(items, function (el) {
+      if (el.closest("#try")) return;
+      el.classList.add("rv");
+      var parent = el.parentNode, entry = null;
+      for (var i = 0; i < counts.length; i++) if (counts[i].p === parent) entry = counts[i];
+      if (!entry) { entry = { p: parent, n: 0 }; counts.push(entry); }
+      el.style.setProperty("--i", entry.n % 6); entry.n++;
+    });
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { en.target.classList.toggle("in", en.isIntersecting); });
+      }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+      Array.prototype.forEach.call(document.querySelectorAll(".rv"), function (el) { io.observe(el); });
+    } else { Array.prototype.forEach.call(document.querySelectorAll(".rv"), function (el) { el.classList.add("in"); }); }
+
+    var bands = document.querySelectorAll(".band-dark"), header = document.querySelector(".site-header"), line = null;
+    if (header) { line = document.createElement("div"); line.className = "read-line"; header.appendChild(line); }
+    var ticking = false;
+    var onScroll = function () {
+      ticking = false;
+      var y = window.scrollY || window.pageYOffset;
+      Array.prototype.forEach.call(bands, function (b) { var r = b.getBoundingClientRect(); if (r.bottom > 0 && r.top < window.innerHeight) b.style.setProperty("--py", Math.round((r.top - window.innerHeight / 2) * -0.12) + "px"); });
+      if (line) { var h = document.documentElement.scrollHeight - window.innerHeight; line.style.width = (h > 0 ? Math.min(100, y / h * 100) : 0) + "%"; }
+    };
+    window.addEventListener("scroll", function () { if (!ticking) { ticking = true; window.requestAnimationFrame(onScroll); } }, { passive: true });
+    onScroll();
+  }
+
   /* ---- Footer year ----------------------------------------------------------- */
   var year = document.querySelector("[data-year]");
   if (year) year.textContent = String(new Date().getFullYear());

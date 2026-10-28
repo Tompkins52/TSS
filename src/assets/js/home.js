@@ -817,28 +817,33 @@
      The shell: who it is for, the device, and the start-from-this form
      ===================================================================== */
   var AUD = [
-    { id: "works", label: "Public works", kind: "Work orders", app: WorkOrders, ask: "Want a work order board like this for your department?", hint: "For example: photos from the truck, and a public map of what is open", title: "Work orders for a streets crew", why: "Requests come in from the website, the front desk, and the phone. The board is the one list the crew works from, and the Friday report writes itself.", topic: "build" },
-    { id: "gov", label: "Local government", kind: "Permit desk", app: Permits, ask: "Want a permit desk like this for your office?", hint: "For example: online payment, and inspections scheduled from the permit", title: "A permit desk residents can use from a phone", why: "Apply, see the fee, get the permit by email. The clerk works one queue instead of a stack of PDFs, and the fee table is theirs to edit.", topic: "build" },
-    { id: "biz", label: "Small business", kind: "Estimates", app: Estimates, ask: "Want estimates like this for your business?", hint: "For example: customer signatures, and an export for the bookkeeper", title: "Estimates that go out before you leave the driveway", why: "Line items, tax, a copy the customer can read on a phone, and a list of what is still waiting on a yes.", topic: "build" },
-    { id: "np", label: "Nonprofit", kind: "Volunteer shifts", app: Volunteers, ask: "Want volunteer sign-ups like this for your organization?", hint: "For example: background check status, and text reminders", title: "Volunteer shifts that fill themselves", why: "Open spots, sign-ups, reminders, and the hours report your board asks for, without a shared spreadsheet that nobody trusts.", topic: "build" },
-    { id: "learn", label: "Learning platform", kind: "Course player", app: Course, ask: "Want a course player like this for your learners?", hint: "For example: our own videos, and a report for managers", title: "A course player with a quiz and a certificate", why: "Lessons, a pass mark, and a certificate the learner downloads. The sample course is three short lessons on spotting phishing; yours would be your content.", topic: "build" },
-    { id: "park", label: "Park district", kind: "Reservations", app: Reservations, ask: "Want reservations like this for your district?", hint: "For example: online deposits, and a public calendar", title: "Reservations that cannot double-book a room", why: "Rooms, fields, and the pavilion on one week. A hold becomes a booking when the deposit comes in, and two groups cannot land on the same hour.", topic: "build" },
-    { id: "fleet", label: "Fleet and trucking", kind: "Pre-trip inspections", app: PreTrip, ask: "Want inspections like this for your fleet?", hint: "For example: photos of the defect, and mileage from the odometer", title: "Pre-trip inspections the way the rules want them", why: "The driver's walk-around, the shop's repair, and the sign-off, in one record. A brake defect parks the truck until a mechanic clears it.", topic: "build" },
-    { id: "hoa", label: "Property and HOAs", kind: "Resident requests", app: Residents, ask: "Want a resident portal like this for your community?", hint: "For example: architectural requests, and a board vote", title: "Requests, dues, and notices for a community", why: "Residents report from their phone, the manager assigns the vendor, dues are one list instead of a spreadsheet, and a notice reaches everyone at once.", topic: "build" },
-    { id: "club", label: "Membership organization", kind: "Members and dues", app: Members, ask: "Want a membership system like this for your organization?", hint: "For example: a member directory, and online dues", title: "Members, renewals, and events without the binder", why: "Posts, chambers, clubs, and associations: who is current, who is due, who is coming Thursday, and the treasurer's report on the first of the month.", topic: "build" },
-    { id: "league", label: "Sports league", kind: "Season scheduler", app: League, ask: "Want a scheduler like this for your league?", hint: "For example: field assignments, and text alerts for rainouts", title: "A season that schedules itself", why: "Add the teams and every team plays every other team. Enter a score and the standings move. Parents see the page; coaches get the text.", topic: "build" },
-    { id: "idea", label: "My own idea", kind: "Licensing console", app: Console, ask: "Have an idea that needs this behind it?", hint: "For example: what it does and who would pay for it", title: "The back office your idea needs once it is a product", why: "Name the app, set a price per seat, add a customer, and the license key is generated. This is what we set up so you can sell what you own.", topic: "idea" }
+    { id: "works", label: "Public works", kind: "Work orders", app: WorkOrders, ask: "Want a work order board like this for your department?", hint: "For example: photos from the truck, and a public map of what is open", title: "Work orders for a streets crew", why: "Requests come in from the website, the front desk, and the phone. The board is the one list the crew works from, and the Friday report writes itself.", look: { palette: "evergreen", font: "sans", layout: "classic", icon: "M3 13l5-5m0 0 2-2a2.5 2.5 0 0 1 3.5 3.5l-2 2m-3.5-3.5 3.5 3.5M3 13l1 1" }, topic: "build" },
+    { id: "gov", label: "Local government", kind: "Permit desk", app: Permits, ask: "Want a permit desk like this for your office?", hint: "For example: online payment, and inspections scheduled from the permit", title: "A permit desk residents can use from a phone", why: "Apply, see the fee, get the permit by email. The clerk works one queue instead of a stack of PDFs, and the fee table is theirs to edit.", look: { palette: "paper", font: "atkinson", layout: "modern", icon: "M2 7h12M3 7v6h10V7M8 2l6 4H2z M5 13v-4M8 13v-4M11 13v-4" }, topic: "build" },
+    { id: "biz", label: "Small business", kind: "Estimates", app: Estimates, ask: "Want estimates like this for your business?", hint: "For example: customer signatures, and an export for the bookkeeper", title: "Estimates that go out before you leave the driveway", why: "Line items, tax, a copy the customer can read on a phone, and a list of what is still waiting on a yes.", look: { palette: "rust", font: "barlow", layout: "classic", icon: "M2 14l5-5m2-6 3 3-5 5-3-3zM10 2l4 4" }, topic: "build" },
+    { id: "np", label: "Nonprofit", kind: "Volunteer shifts", app: Volunteers, ask: "Want volunteer sign-ups like this for your organization?", hint: "For example: background check status, and text reminders", title: "Volunteer shifts that fill themselves", why: "Open spots, sign-ups, reminders, and the hours report your board asks for, without a shared spreadsheet that nobody trusts.", look: { palette: "brick", font: "merriweather", layout: "friendly", icon: "M8 13 3 8.5a2.8 2.8 0 0 1 4-4l1 1 1-1a2.8 2.8 0 0 1 4 4z" }, topic: "build" },
+    { id: "learn", label: "Learning platform", kind: "Course player", app: Course, ask: "Want a course player like this for your learners?", hint: "For example: our own videos, and a report for managers", title: "A course player with a quiz and a certificate", why: "Lessons, a pass mark, and a certificate the learner downloads. The sample course is three short lessons on spotting phishing; yours would be your content.", look: { palette: "ocean", font: "inter", layout: "friendly", icon: "M2 3h5a1 1 0 0 1 1 1v9a1 1 0 0 0-1-1H2zM14 3H9a1 1 0 0 0-1 1v9a1 1 0 0 1 1-1h5z" }, topic: "build" },
+    { id: "park", label: "Park district", kind: "Reservations", app: Reservations, ask: "Want reservations like this for your district?", hint: "For example: online deposits, and a public calendar", title: "Reservations that cannot double-book a room", why: "Rooms, fields, and the pavilion on one week. A hold becomes a booking when the deposit comes in, and two groups cannot land on the same hour.", look: { palette: "teal", font: "nunito", layout: "friendly", icon: "M8 2 4 8h2l-2.5 4H14L11.5 8H14zM8 12v2" }, topic: "build" },
+    { id: "fleet", label: "Fleet and trucking", kind: "Pre-trip inspections", app: PreTrip, ask: "Want inspections like this for your fleet?", hint: "For example: photos of the defect, and mileage from the odometer", title: "Pre-trip inspections the way the rules want them", why: "The driver's walk-around, the shop's repair, and the sign-off, in one record. A brake defect parks the truck until a mechanic clears it.", look: { palette: "charcoal", font: "plex", layout: "compact", icon: "M1 5h9v6H1zM10 7h3l2 2v2h-5zM4 13a1 1 0 1 0 0-.1M12 13a1 1 0 1 0 0-.1" }, topic: "build" },
+    { id: "hoa", label: "Property and HOAs", kind: "Resident requests", app: Residents, ask: "Want a resident portal like this for your community?", hint: "For example: architectural requests, and a board vote", title: "Requests, dues, and notices for a community", why: "Residents report from their phone, the manager assigns the vendor, dues are one list instead of a spreadsheet, and a notice reaches everyone at once.", look: { palette: "sand", font: "lora", layout: "modern", icon: "M2 8l6-5 6 5M4 7v6h8V7M7 13v-3h2v3" }, topic: "build" },
+    { id: "club", label: "Membership organization", kind: "Members and dues", app: Members, ask: "Want a membership system like this for your organization?", hint: "For example: a member directory, and online dues", title: "Members, renewals, and events without the binder", why: "Posts, chambers, clubs, and associations: who is current, who is due, who is coming Thursday, and the treasurer's report on the first of the month.", look: { palette: "plum", font: "serif", layout: "compact", icon: "M8 2l1.8 3.6 4 .6-2.9 2.8.7 4L8 11.1 4.4 13l.7-4L2.2 6.2l4-.6z" }, topic: "build" },
+    { id: "league", label: "Sports league", kind: "Season scheduler", app: League, ask: "Want a scheduler like this for your league?", hint: "For example: field assignments, and text alerts for rainouts", title: "A season that schedules itself", why: "Add the teams and every team plays every other team. Enter a score and the standings move. Parents see the page; coaches get the text.", look: { palette: "cobalt", font: "grotesk", layout: "modern", icon: "M4 2h8v3a4 4 0 0 1-8 0zM2 3h2v2H2zM12 3h2v2h-2zM6 13h4M8 9v4" }, topic: "build" },
+    { id: "idea", label: "My own idea", kind: "Licensing console", app: Console, ask: "Have an idea that needs this behind it?", hint: "For example: what it does and who would pay for it", title: "The back office your idea needs once it is a product", why: "Name the app, set a price per seat, add a customer, and the license key is generated. This is what we set up so you can sell what you own.", look: { palette: "ink", font: "mono", layout: "compact", icon: "M8 1c3 2 4 5 4 8l-2 2H6l-2-2c0-3 1-6 4-8zM7 13h2v2H7zM8 6a1 1 0 1 0 0-.1" }, topic: "idea" }
   ];
   var byId = {}; AUD.forEach(function (a) { byId[a.id] = a; });
 
   /* Palettes and fonts the visitor can pick for each sample app. Applied as CSS variables on the screen. */
   var PALETTES = [
     { id: "evergreen", label: "Evergreen and brass", top: "#12352b", side: "#0c241d", accent: "#184a3c", accentDark: "#12352b", soft: "#dfeae3", hi: "#d4a84b", bg: "#f4f5f1" },
-    { id: "navy", label: "Navy and amber", top: "#1b2a4a", side: "#111c33", accent: "#24407a", accentDark: "#1b2f5c", soft: "#dfe6f3", hi: "#f0b44c", bg: "#f3f4f7" },
-    { id: "slate", label: "Slate and teal", top: "#2f3e46", side: "#1f2a30", accent: "#2a7f80", accentDark: "#1f6364", soft: "#d9eeee", hi: "#8fd8cc", bg: "#f4f6f6" },
-    { id: "oxblood", label: "Oxblood and gold", top: "#5c1a1f", side: "#3b1013", accent: "#8b2a30", accentDark: "#6a1f24", soft: "#f3e0e1", hi: "#e3b85b", bg: "#f7f4f1" },
-    { id: "graphite", label: "Graphite and lime", top: "#2b2b2b", side: "#1a1a1a", accent: "#3f3f3f", accentDark: "#262626", soft: "#e6e6e6", hi: "#b5e03d", bg: "#f5f5f5" },
-    { id: "paper", label: "Paper and blue", top: "#ffffff", topInk: "#1a221e", topMuted: "#6b7280", side: "#f1f2ee", sideInk: "#1a221e", sideMuted: "#5e675f", sideOn: "rgba(0, 0, 0, 0.05)", accent: "#1f5c9b", accentDark: "#174a7e", soft: "#dde9f6", hi: "#1f5c9b", bg: "#fafafa" }
+    { id: "paper", label: "Paper and blue", top: "#ffffff", topInk: "#1a221e", topMuted: "#6b7280", side: "#f1f2ee", sideInk: "#1a221e", sideMuted: "#5e675f", sideOn: "rgba(0, 0, 0, 0.05)", accent: "#1f5c9b", accentDark: "#174a7e", soft: "#dde9f6", hi: "#1f5c9b", bg: "#fafafa" },
+    { id: "teal", label: "Teal and sand", top: "#0f6b63", side: "#0b5049", accent: "#13857a", accentDark: "#0f6b63", soft: "#d6efec", hi: "#f2d37a", bg: "#f3f8f7" },
+    { id: "rust", label: "Rust and ivory", top: "#b4541b", side: "#8e4115", accent: "#c9641f", accentDark: "#a24f18", soft: "#fbe6d8", hi: "#ffe9c2", bg: "#fbf7f2" },
+    { id: "charcoal", label: "Charcoal and lime", top: "#2b2f33", side: "#1d2023", accent: "#44494f", accentDark: "#2b2f33", soft: "#e6e8ea", hi: "#b5e03d", bg: "#f5f6f6" },
+    { id: "sand", label: "Sand and walnut", top: "#f4ecdd", topInk: "#3b2f22", topMuted: "#8a7a66", side: "#efe4cf", sideInk: "#3b2f22", sideMuted: "#7c6b56", sideOn: "rgba(0, 0, 0, 0.06)", accent: "#7a4f2a", accentDark: "#5f3c20", soft: "#f1e4d2", hi: "#7a4f2a", bg: "#fcf9f3" },
+    { id: "brick", label: "Brick and cream", top: "#9b2f2f", side: "#7a2222", accent: "#b23a3a", accentDark: "#9b2f2f", soft: "#f8e1e1", hi: "#ffe2b3", bg: "#faf5f2" },
+    { id: "plum", label: "Plum and peach", top: "#5b2a86", side: "#46206a", accent: "#6f3aa5", accentDark: "#5b2a86", soft: "#ece0f6", hi: "#ffb37a", bg: "#f8f5fb" },
+    { id: "cobalt", label: "Cobalt and amber", top: "#1e3f9b", side: "#15307a", accent: "#2a52c4", accentDark: "#1e3f9b", soft: "#dfe6fb", hi: "#ffc24d", bg: "#f4f6fb" },
+    { id: "ocean", label: "Ocean and coral", top: "#0e5f7a", side: "#0a4a60", accent: "#107a99", accentDark: "#0e5f7a", soft: "#d8eef4", hi: "#ff8a65", bg: "#f2f8fa" },
+    { id: "ink", label: "Ink and electric", top: "#141a22", side: "#0d1117", accent: "#3a5ff8", accentDark: "#2946c7", soft: "#dfe5ff", hi: "#7cf2c8", bg: "#f4f5f8" }
   ];
   var FONTS = [
     { id: "sans", label: "Public Sans", kind: "Sans, the site's own", body: '"Public Sans", "Helvetica Neue", Arial, sans-serif', head: '"Source Serif 4", Georgia, serif', size: "12px" },
@@ -853,6 +858,13 @@
     { id: "merriweather", label: "Merriweather", kind: "Serif, sturdy", body: 'Merriweather, Georgia, serif', head: 'Merriweather, Georgia, serif', size: "11.5px" },
     { id: "mono", label: "JetBrains Mono", kind: "Monospace", body: '"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace', head: '"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace', size: "11px" },
     { id: "system", label: "System", kind: "Whatever the device uses", body: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif', head: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif', size: "12px" }
+  ];
+  /* Four layouts. Each changes where the navigation lives and how dense and rounded everything is. */
+  var LAYOUTS = [
+    { id: "classic", label: "Classic", shell: "side", desc: "Sidebar, square corners, the look a city council trusts", icon: "M1.5 2.5h13v11h-13zM5.5 2.5v11M1.5 6h4" },
+    { id: "modern", label: "Tabs", shell: "top", desc: "Navigation across the top, rounded and roomy", icon: "M1.5 2.5h13v11h-13zM1.5 6h13M4 4.3h2M7.5 4.3h2" },
+    { id: "compact", label: "Compact", shell: "rail", desc: "An icon rail and tight rows for people who live in it all day", icon: "M1.5 2.5h13v11h-13zM4 2.5v11M2.7 5h.1M2.7 7.5h.1M2.7 10h.1" },
+    { id: "friendly", label: "Friendly", shell: "pills", desc: "Big buttons, soft corners, nothing to learn", icon: "M1.5 2.5h13v11h-13zM3 6h3.5M8 6h3.5M3 9h10" }
   ];
   /* A palette made from one color the visitor picks. */
   function hexToHsl(hex) {
@@ -881,13 +893,22 @@
   var states = {}, themes = {};
   function current() { return byId[state.aud]; }
   function st() { if (!states[state.aud]) states[state.aud] = current().app.init(); return states[state.aud]; }
-  function theme() { if (!themes[state.aud]) themes[state.aud] = { palette: "evergreen", font: "sans", custom: "#1b3a6b" }; return themes[state.aud]; }
+  function theme() { if (!themes[state.aud]) { var lk = current().look || {}; themes[state.aud] = { palette: lk.palette || "evergreen", font: lk.font || "sans", layout: lk.layout || "classic", custom: "#1b3a6b" }; } return themes[state.aud]; }
   function palette() { var t = theme(); return t.palette === "custom" ? derivePalette(t.custom) : find(PALETTES, t.palette); }
+
+  // The layouts: four presets, each shown as a small drawing of itself.
+  var laySeg = hero.querySelector("[data-layseg]");
+  LAYOUTS.forEach(function (l) {
+    var lab = document.createElement("label"); lab.className = "lay"; lab.title = l.label + ": " + l.desc;
+    lab.innerHTML = '<input type="radio" name="layout" value="' + l.id + '" aria-label="' + esc(l.label + " layout") + '"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="' + l.icon + '" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="tip">' + esc(l.label) + "</span>";
+    laySeg.appendChild(lab);
+  });
+  laySeg.addEventListener("change", function (e) { if (e.target.name === "layout") { theme().layout = e.target.value; sfx("whoosh"); draw(true); applyTheme(); } });
 
   // The swatches: one per palette, then one that opens the device's own color picker.
   PALETTES.forEach(function (p) {
     var l = document.createElement("label"); l.className = "sw";
-    l.innerHTML = '<input type="radio" name="palette" value="' + p.id + '"' + (p.id === "evergreen" ? " checked" : "") + ' aria-label="' + esc(p.label) + '"><i style="--a:' + p.top + ';--b:' + p.hi + '"></i><span class="tip">' + esc(p.label) + "</span>";
+    l.innerHTML = '<input type="radio" name="palette" value="' + p.id + '"' + (p.id === "evergreen" ? " checked" : "") + ' aria-label="' + esc(p.label) + '"><i style="--a:' + p.top + ';--b:' + p.accent + ';--c:' + p.hi + ';--d:' + p.bg + '"></i><span class="tip">' + esc(p.label) + "</span>";
     swatches.appendChild(l);
   });
   var customSw = document.createElement("label"); customSw.className = "sw custom";
@@ -897,14 +918,20 @@
   swatches.addEventListener("change", function (e) { if (e.target.name === "palette") { theme().palette = e.target.value; applyTheme(); splash(e.target.parentNode); } });
   var customTimer = null;
   customIn.addEventListener("input", function () { var t = theme(); t.custom = customIn.value; t.palette = "custom"; applyTheme(); clearTimeout(customTimer); customTimer = setTimeout(function () { splash(customSw); }, 150); });
-  /* The new colors spread across the screen from the swatch that was picked. */
+  /* A paint splash: the new color lands on the screen from the swatch that was picked, with droplets. */
   function splash(from) {
-    sfx("splash");
+    sfx("splat");
     if (reduceMotion) return;
-    var p = palette(), el = document.createElement("div"); el.className = "splash"; el.style.background = p.accent;
-    var r1 = from.getBoundingClientRect(), r2 = device.getBoundingClientRect();
-    el.style.left = (r1.left + r1.width / 2 - r2.left) + "px"; el.style.top = (r1.top + r1.height / 2 - r2.top) + "px";
-    device.appendChild(el); setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 900);
+    var p = palette(), r1 = from.getBoundingClientRect(), r2 = device.getBoundingClientRect();
+    var x = Math.max(16, Math.min(r2.width - 16, r1.left + r1.width / 2 - r2.left)), y = 26;
+    var pts = [], n = 14, path = "";
+    for (var i = 0; i < n; i++) { var ang = i / n * Math.PI * 2, rad = 34 + Math.random() * 22; pts.push([Math.cos(ang) * rad, Math.sin(ang) * rad]); }
+    for (i = 0; i < n; i++) { var a = pts[i], b = pts[(i + 1) % n], mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2; path += (i ? "" : "M" + mx.toFixed(1) + " " + my.toFixed(1)) + " Q" + b[0].toFixed(1) + " " + b[1].toFixed(1) + " " + ((b[0] + pts[(i + 2) % n][0]) / 2).toFixed(1) + " " + ((b[1] + pts[(i + 2) % n][1]) / 2).toFixed(1); }
+    var drops = "";
+    for (i = 0; i < 12; i++) { var da = Math.random() * Math.PI * 2, dd = 70 + Math.random() * 110, dr = 2.5 + Math.random() * 5; drops += '<circle class="drop" r="' + dr.toFixed(1) + '" fill="' + (i % 3 ? p.accent : p.hi) + '" style="--dx:' + (Math.cos(da) * dd).toFixed(0) + 'px;--dy:' + (Math.sin(da) * dd).toFixed(0) + 'px;animation-delay:' + (Math.random() * 90).toFixed(0) + 'ms"/>'; }
+    var el = document.createElement("div"); el.className = "splash"; el.style.left = x + "px"; el.style.top = y + "px";
+    el.innerHTML = '<svg viewBox="-100 -100 200 200" aria-hidden="true"><path class="blob flood" d="' + path + '" fill="' + p.accent + '"/><path class="blob second" d="' + path + '" fill="' + p.hi + '"/>' + drops + "</svg>";
+    device.appendChild(el); setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 1300);
   }
 
   // The font menu: every typeface shown in itself, so the choice is visible before it is made.
@@ -935,6 +962,7 @@
     if (radio) radio.checked = true;
     customSw.classList.toggle("on", t.palette === "custom"); customSw.querySelector("i").style.background = t.palette === "custom" ? p.top : ""; if (customIn.value !== t.custom) customIn.value = t.custom;
     fontName.textContent = f.label;
+    Array.prototype.forEach.call(laySeg.querySelectorAll('input[name="layout"]'), function (r) { r.checked = r.value === t.layout; });
     Array.prototype.forEach.call(fontMenu.querySelectorAll("button"), function (b) { b.setAttribute("aria-selected", b.getAttribute("data-font") === t.font ? "true" : "false"); });
     fitScreen();
   }
@@ -946,16 +974,21 @@
     var views = app.views(s);
     var nav = views.map(function (v) {
       var on = s.view === v.id ? " on" : "", lock = v.locked ? " locked" : "", done = v.done ? " done" : "";
-      return '<button type="button" class="nv' + on + lock + done + '" data-act="view" data-v="' + v.id + '"' + (v.locked ? ' aria-disabled="true"' : "") + "><span>" + esc(phone && v.tab ? v.tab : v.label) + "</span></button>";
+      var short = (phone || find(LAYOUTS, theme().layout).shell === "rail") && v.tab ? v.tab : v.label;
+      return '<button type="button" class="nv' + on + lock + done + '" data-act="view" data-v="' + v.id + '"' + (v.locked ? ' aria-disabled="true"' : "") + "><span>" + esc(short) + "</span></button>";
     }).join("");
-    var html = '<div class="app-top"><span class="app-name" data-appname>' + esc(app.name(s)) + '</span><span class="who">' + esc(app.who(s)) + '</span><span class="clock" data-clock>' + clock() + "</span></div>";
-    html += '<div class="app-body">' + (phone ? "" : '<nav class="app-side" aria-label="' + esc(app.section) + '"><div class="side-head">' + esc(app.section) + "</div>" + nav + "</nav>");
+    var layout = find(LAYOUTS, theme().layout), shell = phone ? (layout.shell === "pills" ? "pills" : "phone") : layout.shell;
+    var icon = a.look && a.look.icon ? '<svg class="app-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="' + a.look.icon + '" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/></svg>' : "";
+    var html = '<div class="app-top">' + icon + '<span class="app-name" data-appname>' + esc(app.name(s)) + '</span>' + (shell === "top" ? '<nav class="app-tabsx" aria-label="' + esc(app.section) + '">' + nav + "</nav>" : "") + '<span class="who">' + esc(app.who(s)) + '</span><span class="clock" data-clock>' + clock() + "</span></div>";
+    if (shell === "pills") html += '<nav class="app-pills" aria-label="' + esc(app.section) + '">' + nav + "</nav>";
+    html += '<div class="app-body">' + (shell === "side" ? '<nav class="app-side" aria-label="' + esc(app.section) + '"><div class="side-head">' + esc(app.section) + "</div>" + nav + "</nav>" : shell === "rail" ? '<nav class="app-side rail" aria-label="' + esc(app.section) + '">' + nav + "</nav>" : "");
     html += '<div class="app-main" data-main>' + app.render(s, s.view, phone) + (s.msg ? '<div class="toast' + (s.err ? " err" : "") + '" role="status">' + esc(s.msg) + "</div>" : "") + "</div></div>";
-    if (phone) html += '<nav class="app-tabs" aria-label="' + esc(app.section) + '">' + nav + "</nav>";
+    if (shell === "phone") html += '<nav class="app-tabs" aria-label="' + esc(app.section) + '">' + nav + "</nav>";
+    screen.setAttribute("data-shell", shell); screen.setAttribute("data-layout", layout.id);
     // The built app, and on a switch, the same app as a blueprint on top of it, wiped away left to right.
     var plan = animate && !reduceMotion;
     screen.innerHTML = '<div class="layer real">' + html + "</div>" + (plan ? '<div class="layer plan" aria-hidden="true" inert>' + html.replace(/ (data-[a-z-]+|name|aria-label|title|placeholder)="[^"]*"/g, "").replace(/ (data-[a-z-]+|required|autofocus|checked|disabled|tabindex="0")(?=[ >])/g, "") + '</div><div class="scan" aria-hidden="true"></div>' : "");
-    if (plan) sfx("draw");
+    if (plan && animate) sfx("draw");
     if (plan) setTimeout(function () { Array.prototype.forEach.call(screen.querySelectorAll(".plan, .scan"), function (e) { if (e.parentNode) e.parentNode.removeChild(e); }); }, 1400);
     if (s.msg) { s.msg = null; var t = screen.querySelector(".toast"); setTimeout(function () { if (t && t.parentNode) t.parentNode.removeChild(t); }, 3200); }
     var cue = s.err ? "error" : s.stamp ? "stamp" : s.chime ? "chime" : s.flash ? "pop" : null;
@@ -1031,7 +1064,11 @@
   startForm.addEventListener("submit", function (e) {
     e.preventDefault();
     var a = current(), need = needEl.value.trim();
-    var t = theme(), look = (t.palette !== "evergreen" || t.font !== "sans") ? " Look: " + palette().label.toLowerCase() + ", " + find(FONTS, t.font).label + " type." : "";
+    var t = theme(), lk = a.look || {}, parts = [];
+    if (t.palette !== (lk.palette || "evergreen")) parts.push(palette().label.toLowerCase());
+    if (t.font !== (lk.font || "sans")) parts.push(find(FONTS, t.font).label + " type");
+    if (t.layout !== (lk.layout || "classic")) parts.push(find(LAYOUTS, t.layout).label.toLowerCase() + " layout");
+    var look = parts.length ? " Look: " + parts.join(", ") + "." : "";
     var draft = "I tried the " + a.kind.toLowerCase() + " sample for " + a.label.toLowerCase() + " on your site." + look + (need ? " Our version would need: " + need : " Here is what we need: ");
     window.location.href = startForm.getAttribute("action") + "?topic=" + a.topic + "&draft=" + encodeURIComponent(draft);
   });
