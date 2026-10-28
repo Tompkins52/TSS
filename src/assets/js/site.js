@@ -83,7 +83,7 @@
     "Thanks. We read every message and reply within three business days."
   );
 
-  /* ---- Contact form prefilled from the drafting table ---------------------- */
+  /* ---- Contact form prefilled from the sample apps on the home page -------- */
   var contactForm = document.querySelector("form[data-form=contact]");
   if (contactForm && window.URLSearchParams) {
     var params = new URLSearchParams(window.location.search);

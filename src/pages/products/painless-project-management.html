@@ -1,64 +1,117 @@
 <!--
 title: Painless Project Management
-description: A one-page way to run a project without becoming a project manager. Charter it, run it with up to eight milestones and a two-minute weekly update, and report it in one roll-up.
+description: A one-page way to run a project without becoming a project manager. Charter it, run it with up to eight milestones and a two-minute weekly update, and report it in one roll-up. Move the sliders and watch the roll-up rewrite itself.
 nav: products
 priority: 0.8
+styles: assets/css/product.css
+scripts: assets/js/product.js
 -->
-<section class="page-head band-dark on-dark">
+<section class="phero band-dark on-dark">
+  <div class="wrap phero-grid">
+    <div class="phero-copy">
+      <span class="eyebrow">Product</span>
+      <h1>Painless Project Management</h1>
+      <p class="lede">A one-page way to run a project without becoming a project manager. Three steps, one page each: charter it, run it, report it.</p>
+      <div class="product-hero-meta">
+        <span class="badge badge-ok">Available</span>
+        <span class="badge badge-dark">Web, nothing to install</span>
+        <span class="badge badge-dark">Public demo</span>
+      </div>
+      <div class="actions">
+        <a class="btn btn-brass" href="https://tompkins52.github.io/painless-pm/" rel="noopener">Open the demo</a>
+        <a class="btn btn-ghost" href="#try">Try a piece of it</a>
+      </div>
+    </div>
+    <div class="phero-shots">
+      <div class="frame"><span class="chrome" aria-hidden="true"><i></i><i></i><i></i></span><img src="{{root}}assets/img/products/pm-rollup.webp" alt="The roll-up: every project on one page, sorted by who needs attention, with the executive summary written automatically" width="1100" height="687"></div>
+      <img class="frame-phone" src="{{root}}assets/img/products/pm-phone-rollup.webp" alt="The roll-up on a phone" width="390" height="844">
+    </div>
+  </div>
+</section>
+<div class="phero-rule" aria-hidden="true"></div>
+
+<section class="try-section" id="try">
   <div class="wrap">
-    <span class="eyebrow">Product</span>
-    <h1>Painless Project Management</h1>
-    <p class="lede">A one-page way to run a project without becoming a project manager. Three steps, one page each: charter it, run it, report it.</p>
-    <div class="product-hero-meta">
-      <span class="badge badge-ok">Available</span>
-      <span class="badge badge-dark">Web, nothing to install</span>
-      <span class="badge badge-dark">Public demo</span>
+    <div class="demo" id="demo-pm">
+      <div class="demo-copy">
+        <span class="eyebrow">Try a piece of it</span>
+        <h2>The weekly update, and what it turns into</h2>
+        <p>Move the sliders. The roll-up on the right rewrites itself using the product's own rules: an overdue milestone turns the schedule amber and red after 14 days, a forecast over approved turns the budget amber and red past 110 percent, and a project nobody has updated in two weeks is flagged as quiet.</p>
+        <div class="actions"><a class="btn btn-primary btn-small" href="https://tompkins52.github.io/painless-pm/" rel="noopener">Open the demo with three example projects</a></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><span>Fleet telematics rollout</span><span class="muted">Weekly update</span></div>
+        <div class="panel-body pm-grid">
+          <div class="pm-controls">
+            <div><label for="pm-approved">Approved budget <span class="val" data-approved-v></span></label><input class="range" id="pm-approved" type="range" min="20000" max="500000" step="5000" value="120000" data-approved></div>
+            <div><label for="pm-spent">Spent to date <span class="val" data-spent-v></span></label><input class="range" id="pm-spent" type="range" min="0" max="750000" step="5000" value="70000" data-spent></div>
+            <div><label for="pm-forecast">Forecast at completion <span class="val" data-forecast-v></span></label><input class="range" id="pm-forecast" type="range" min="0" max="750000" step="5000" value="118000" data-forecast></div>
+            <div><label for="pm-done">Milestones done <span class="val" data-done-v></span></label><input class="range" id="pm-done" type="range" min="0" max="8" step="1" value="5" data-done></div>
+            <div><label for="pm-next">Next milestone <span class="val" data-next-v></span></label><input class="range" id="pm-next" type="range" min="-30" max="30" step="1" value="6" data-next></div>
+            <div><label for="pm-last">Last weekly update <span class="val" data-last-v></span></label><input class="range" id="pm-last" type="range" min="0" max="30" step="1" value="3" data-last></div>
+            <div class="pm-help"><label><input type="checkbox" data-help> I need help</label> <label class="visually-hidden" for="pm-where">Where do you need help?</label><input type="text" id="pm-where" placeholder="Where?" data-where></div>
+          </div>
+          <div class="pm-roll">
+            <h3>Roll-up</h3>
+            <div class="rag" data-rag></div>
+            <div class="pm-milestones" data-ms aria-hidden="true"></div>
+            <p class="pm-summary" data-summary></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-tint">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>What it does</h2>
+      <p>Most projects in a department are run by someone whose actual job is something else. They need to know what was approved, where the money stands, whether the next milestone is on time, and who to ask for help. That is the whole product.</p>
+    </div>
+    <ul class="feat-grid">
+      <li><strong>1. Charter it</strong><span>One page: department, sponsor, lead, why, what, what we get, approved budget, whether it needs a capital request or a contract, start and end dates. Until the page is complete, it is not a project.</span></li>
+      <li><strong>2. Run it</strong><span>Up to eight milestones. Three money numbers: approved, spent, forecast. A two-minute weekly update: schedule, budget, and whether you need help, and where.</span></li>
+      <li><strong>3. Report it</strong><span>Every project rolls up to one view sorted by who needs attention: help requests, off-track schedule or budget, and projects that have gone quiet. The executive summary writes itself.</span></li>
+      <li><strong>Export anywhere</strong><span>The roll-up exports to CSV with one row per project and one column per field, flat on purpose so it maps directly to monday.com or any other board.</span></li>
+      <li><strong>Rules of the road</strong><span>Every project has a sponsor and a lead; nobody else needs a title. Eight milestones, maximum. Post the update on Friday even when nothing changed. Red is not failure; hiding red is.</span></li>
+      <li><strong>Single user now, team later</strong><span>The public demo keeps projects in your browser. The same page runs against a shared database for a team; every read and write goes through one small storage object, so that is a configuration change, not a rewrite.</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <h2>Screens</h2>
+    <div class="screens-grid">
+      <figure><img src="{{root}}assets/img/products/pm-charter.webp" alt="The charter page: one form that has to be complete before a project exists" width="1100" height="687" loading="lazy"><figcaption>The charter. Until it is complete, it is not a project.</figcaption></figure>
+      <figure><img src="{{root}}assets/img/products/pm-projects.webp" alt="The projects list with status, milestones, and the three money numbers" width="1100" height="687" loading="lazy"><figcaption>Projects, each with its milestones and three money numbers.</figcaption></figure>
+      <figure class="tall"><img src="{{root}}assets/img/products/pm-phone.webp" alt="Painless Project Management on a phone" width="390" height="844" loading="lazy"><figcaption>The Friday update takes two minutes, from a phone if that is where you are.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="facts">
+  <div class="wrap">
+    <dl>
+      <div><dt>Status</dt><dd>Available (demo build); team version on request</dd></div>
+      <div><dt>Runs on</dt><dd>Any modern browser</dd></div>
+      <div><dt>Data lives</dt><dd>In your browser (demo) or your team's database</dd></div>
+      <div><dt>Pricing</dt><dd>Demo build is free. Team hosting quoted per department.</dd></div>
+      <div><dt>Support and privacy</dt><dd><a href="{{root}}support.html#painless-pm">Support</a>, <a href="{{root}}privacy.html#painless-pm">privacy notes</a></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="cta band-dark on-dark">
+  <div class="wrap">
+    <div>
+      <h2>Run your next project on it.</h2>
+      <p>Open the demo, load the three example projects, and run your own alongside them. When a team needs to share it, ask about hosting.</p>
     </div>
     <div class="actions">
       <a class="btn btn-brass" href="https://tompkins52.github.io/painless-pm/" rel="noopener">Open the demo</a>
       <a class="btn btn-ghost" href="{{root}}contact.html">Ask about a team version</a>
     </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="wrap split">
-    <div class="prose">
-      <h2>The problem it solves</h2>
-      <p>Most projects in a department are run by someone whose actual job is something else. They do not need a Gantt chart, a RACI matrix, or a 40-page methodology. They need to know what was approved, where the money stands, whether the next milestone is on time, and who to ask for help. The heavyweight tools make that harder, not easier, and the result is that the project lives in one person's head.</p>
-
-      <h2>How it works</h2>
-      <ul class="feature-list">
-        <li><strong>1. Charter it</strong><span>One page: department, sponsor, lead, why, what, what we get, approved budget, whether it needs a capital request or a contract, start and end dates. Until the page is complete, it is not a project.</span></li>
-        <li><strong>2. Run it</strong><span>Up to eight milestones. Three money numbers: approved, spent, forecast. A two-minute weekly update: schedule, budget, and whether you need help, and where.</span></li>
-        <li><strong>3. Report it</strong><span>Every project rolls up to one view sorted by who needs attention: help requests, off-track schedule or budget, and projects that have gone quiet. An executive summary is written automatically.</span></li>
-        <li><strong>Export anywhere</strong><span>The roll-up exports to CSV with one row per project and one column per field, flat on purpose so it maps directly to monday.com or any other board.</span></li>
-      </ul>
-
-      <h2>Rules of the road</h2>
-      <ul>
-        <li>Every project has a sponsor and a lead. Nobody else needs a title.</li>
-        <li>Eight milestones, maximum. If you need more, it is two projects.</li>
-        <li>The weekly update takes two minutes. Post it on Friday, even when nothing changed.</li>
-        <li>Red is not failure. Hiding red is.</li>
-        <li>If you need help, say where. That is how help finds you.</li>
-      </ul>
-
-      <h2>Editions</h2>
-      <p>The public demo build keeps projects in your browser, so it is single-user and single-device: good for trying the method, running your own projects, or showing it to a director. The same page runs against a shared database for a team; every read and write goes through one small storage object, so moving to a shared version is a configuration change, not a rewrite.</p>
-    </div>
-    <aside>
-      <div class="sidebar-note">
-        <h3>At a glance</h3>
-        <dl class="spec" style="grid-template-columns:1fr">
-          <dt>Status</dt><dd>Available (demo build); team version on request</dd>
-          <dt>Runs on</dt><dd>Any modern browser</dd>
-          <dt>Data lives</dt><dd>In your browser (demo) or your team's database</dd>
-          <dt>Pricing</dt><dd>Demo build is free. Team hosting quoted per department.</dd>
-          <dt>Support</dt><dd><a href="{{root}}support.html#painless-pm">Support page</a></dd>
-          <dt>Privacy</dt><dd><a href="{{root}}privacy.html#painless-pm">Privacy notes</a></dd>
-        </dl>
-      </div>
-    </aside>
   </div>
 </section>

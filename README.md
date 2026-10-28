@@ -34,13 +34,22 @@ Inside a page, write `{{root}}` in front of any link to another page or asset (`
 
 ## The home page
 
-The home page is interactive and lives in three files: `src/pages/index.html` (markup), `src/assets/css/home.css` (styles for the drafting table and the demos), and `src/assets/js/home.js` (behavior). Nothing is sent anywhere; everything runs in the visitor's browser.
+The home page is interactive and lives in three files: `src/pages/index.html` (markup), `src/assets/css/home.css` (styles), and `src/assets/js/home.js` (behavior). Nothing is sent anywhere; everything runs in the visitor's browser and is gone when the tab closes.
 
-- **The drafting table** (`#table`). Audience, people slider, module chips, and platform controls drive a live app preview (desktop or phone frame) and a draft charter. "Send this charter" opens the contact page with the topic and message prefilled through URL parameters (`?topic=build|idea&draft=...`); `site.js` reads them. Audiences, modules, and the preview widgets are the `AUD`, `MOD`, and `widget()` tables at the top of `home.js`. Build size is a rough point count (modules plus platform plus crew size); the typical week ranges are in `buildSize()`. No prices appear anywhere; the charter says the price is fixed and set in the charter.
-- **Painless Project Management demo** (`#demo-pm`). Sliders feed the product's own roll-up rules (overdue milestone: amber, red past 14 days; forecast over approved: amber, red past 110 percent; quiet after 14 days without an update).
-- **IntelliSafe demo** (`#demo-safe`). A drag-to-compare between a paper sign-in sheet (inline SVG) and a compliance matrix. The handle is a native range input, so it works with a keyboard.
-- **Part 107 Prep demo** (`#demo-107`). The question of the day rotates by day of year through the `QUESTIONS` list in `home.js`. Add questions there; each has a category, the choices, the correct index, an explanation, and the regulation it comes from.
-- The drafting crosshair and the draw-in animations switch off for visitors who prefer reduced motion, and the crosshair only appears on devices with a mouse.
+- **Six sample apps** (`#try`). The visitor picks who they are and gets a working sample app in a device frame: work orders (public works), a permit desk (local government), an estimate builder (small business), volunteer shifts (nonprofit), a course player with a quiz and a certificate (learning platform), and a licensing console (my own idea). Each app is an object in `home.js` with `views`, `init` (the sample data), `render`, `act` (clicks and form submits), and optionally `live` (inputs that update numbers without redrawing). The shell at the bottom of the file draws the top bar, the side navigation or phone tabs, and the main area, and wires events by delegation. Exports are real CSV and SVG downloads built in the browser.
+- **Desktop and phone.** The desktop screen is drawn at 720 by 450 pixels and scaled to fit its column; the phone frame is 320 wide. Narrow viewports start on the phone layout. Reset restores the sample data for the current app.
+- **Start from this.** The box under the device opens the contact page with the topic and a message prefilled through URL parameters (`?topic=build|idea&draft=...`); `site.js` reads them.
+- To add an audience, add an entry to `AUD` (label, kind, title, why, ask, hint, topic, app) and a matching radio in `index.html`. To change sample data, edit the `init` function of the app.
+
+## Product pages
+
+Each product page starts with the real screens (`src/assets/img/products/`, WebP, 1100 pixels wide for desktop and 390 for phone), then a piece of the product to try, then a six-item feature grid with the long details in a disclosure, three more screens, a facts strip, and the release history. The interactive pieces live in `src/assets/js/product.js` and `src/assets/css/product.css`:
+
+- **Painless Project Management** (`#demo-pm`). Sliders feed the product's own roll-up rules (overdue milestone: amber, red past 14 days; forecast over approved: amber, red past 110 percent; quiet after 14 days without an update).
+- **IntelliSafe** (`#demo-safe`). A drag-to-compare between a paper sign-in sheet (inline SVG) and a compliance matrix. The handle is a native range input, so it works with a keyboard.
+- **Part 107 Prep** (`#demo-107`). The question of the day rotates by day of year through the `QUESTIONS` list. Add questions there; each has a category, the choices, the correct index, an explanation, and the regulation it comes from.
+
+To refresh the screenshots, open each product locally, capture at 1280 by 800 (desktop) and 390 by 844 at 2x (phone), resize to 1100 and 390 wide, and save as WebP in `src/assets/img/products/` under the same names.
 
 ## Build and preview locally
 
@@ -84,7 +93,6 @@ Everything below is a placeholder or a decision that is still open. Nothing here
 - [ ] **Dates on the Updates page** are month-level for the product releases. Tighten them if you want exact dates.
 - [ ] **App store links.** When Part 107 Prep is live on the App Store and Google Play, add the store badges and links to `src/pages/products/part-107-prep.html` and change its status labels. The privacy policy URL for the store listings is `privacy.html#part-107-prep` and the support URL is `support.html#part-107-prep`.
 - [ ] **Open Graph image.** `src/assets/img/og-image.png` is the mark on an evergreen field with no text. Fine for launch; a version with the company name can replace it any time.
-- [ ] **Screenshots.** The product pages have no screenshots. Adding one per product (in `src/assets/img/`) is the single biggest visual upgrade available.
 
 ## Brand
 

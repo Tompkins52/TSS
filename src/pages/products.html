@@ -1,49 +1,71 @@
 <!--
 title: Products
-description: Software built by Tompkins Software Systems: IntelliSafe, Painless Project Management, Part 107 Prep, and the Phantom Soldier site for Project Veteran Overwatch.
+description: Software built by Tompkins Software Systems: IntelliSafe, Painless Project Management, Part 107 Prep, and the Phantom Soldier site for Project Veteran Overwatch. Each one has a piece you can try on its page.
 nav: products
 priority: 0.9
+styles: assets/css/home.css
 -->
 <section class="page-head band-dark on-dark">
   <div class="wrap">
     <span class="eyebrow">Products</span>
     <h1>Three products and one pro bono build.</h1>
-    <p class="lede">Everything here is in use today. The status label on each one says exactly where it stands, and every page links to its support channel.</p>
+    <p class="lede">Everything here is in use today. The status label on each one says exactly where it stands, every page has a piece of the product you can try, and every page links to its support channel.</p>
   </div>
 </section>
 
-<section class="section">
+<section class="built">
   <div class="wrap">
-    <div class="grid grid-2">
-      <article class="card">
-        <div class="card-meta"><span class="badge badge-ok">Available</span><span class="badge">Web and self-hosted</span></div>
-        <h3>IntelliSafe</h3>
-        <p>Annual OSHA training in nineteen modules, eight-section incident reports with diagrams and signed statements, and site inspections and annual audits. Runs in a browser with nothing to install, or on the department's own server with employee accounts and email reminders.</p>
-        <p><strong>Licensed by</strong> IntelliSafe Systems LLC. Developed by Tompkins Software Systems. Formerly Public Works Safety Training.</p>
-        <p><strong>For:</strong> public works directors, safety managers, investigators, and division supervisors.</p>
-        <a class="card-link" href="{{root}}products/intellisafe.html">Product details</a>
+    <div class="built-grid">
+      <article class="prod">
+        <a class="shot" href="{{root}}products/intellisafe.html" aria-label="IntelliSafe, product page">
+          <span class="chrome" aria-hidden="true"><i></i><i></i><i></i></span>
+          <img src="{{root}}assets/img/products/safe-training.webp" alt="IntelliSafe: the training dashboard with nineteen modules and their status" width="1100" height="687">
+          <img class="ph" src="{{root}}assets/img/products/safe-phone.webp" alt="" width="390" height="844">
+        </a>
+        <div class="prod-copy">
+          <div class="status"><span class="badge badge-ok">Available</span><span class="badge">Browser and self-hosted</span></div>
+          <h3><a href="{{root}}products/intellisafe.html">IntelliSafe</a></h3>
+          <p>Annual OSHA training in nineteen modules, eight-section incident reports with diagrams and signed statements, and site inspections and annual audits. Licensed by IntelliSafe Systems LLC, developed by Tompkins Software Systems. Formerly Public Works Safety Training.</p>
+          <p><strong>For:</strong> public works directors, safety managers, investigators, and division supervisors.</p>
+          <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/intellisafe.html">Product page</a><a class="btn btn-outline btn-small" href="https://tompkins52.github.io/Safety-Training/" rel="noopener">Open IntelliSafe</a></div>
+        </div>
       </article>
-      <article class="card">
-        <div class="card-meta"><span class="badge badge-ok">Available</span><span class="badge">Web</span></div>
-        <h3>Painless Project Management</h3>
-        <p>A one-page way to run a project without becoming a project manager. A charter gate, up to eight milestones, three money numbers, a two-minute weekly update, and a roll-up that sorts projects by who needs attention.</p>
-        <p><strong>For:</strong> department heads and anyone handed a project without a project manager.</p>
-        <a class="card-link" href="{{root}}products/painless-project-management.html">Product details</a>
+      <article class="prod">
+        <a class="shot" href="{{root}}products/painless-project-management.html" aria-label="Painless Project Management, product page">
+          <span class="chrome" aria-hidden="true"><i></i><i></i><i></i></span>
+          <img src="{{root}}assets/img/products/pm-rollup.webp" alt="Painless Project Management: the roll-up of every project, sorted by who needs attention" width="1100" height="687">
+          <img class="ph" src="{{root}}assets/img/products/pm-phone.webp" alt="" width="390" height="844">
+        </a>
+        <div class="prod-copy">
+          <div class="status"><span class="badge badge-ok">Available</span><span class="badge">Web</span></div>
+          <h3><a href="{{root}}products/painless-project-management.html">Painless Project Management</a></h3>
+          <p>A one-page way to run a project without becoming a project manager. A charter gate, up to eight milestones, three money numbers, a two-minute weekly update, and a roll-up that sorts projects by who needs attention.</p>
+          <p><strong>For:</strong> department heads and anyone handed a project without a project manager.</p>
+          <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/painless-project-management.html">Product page</a><a class="btn btn-outline btn-small" href="https://tompkins52.github.io/painless-pm/" rel="noopener">Open the demo</a></div>
+        </div>
       </article>
-      <article class="card">
-        <div class="card-meta"><span class="badge badge-ok">Web: available</span><span class="badge badge-brass">Apps: in preparation</span></div>
-        <h3>Part 107 Prep</h3>
-        <p>A free study site and a mobile app for the FAA remote pilot certificate, the commercial drone license. Study modules, more than 200 original practice questions with explanations, timed exams, a daily goal, and spaced review. All progress stays on your own device.</p>
-        <p><strong>For:</strong> anyone studying for the Part 107 knowledge test, including municipal drone programs.</p>
-        <a class="card-link" href="{{root}}products/part-107-prep.html">Product details</a>
+      <article class="prod">
+        <a class="shot" href="{{root}}products/part-107-prep.html" aria-label="Part 107 Prep, product page">
+          <span class="chrome" aria-hidden="true"><i></i><i></i><i></i></span>
+          <img src="{{root}}assets/img/products/p107-home.webp" alt="Part 107 Prep: the study home page with the five knowledge areas and the daily plan" width="1100" height="687">
+          <img class="ph" src="{{root}}assets/img/products/p107-phone-exam.webp" alt="" width="390" height="844">
+        </a>
+        <div class="prod-copy">
+          <div class="status"><span class="badge badge-ok">Web: available</span><span class="badge badge-brass">Apps: in preparation</span></div>
+          <h3><a href="{{root}}products/part-107-prep.html">Part 107 Prep</a></h3>
+          <p>A free study site and a mobile app for the FAA remote pilot certificate, the commercial drone license. Study modules, more than 200 original practice questions with explanations, timed exams, a daily goal, and spaced review. All progress stays on your own device.</p>
+          <p><strong>For:</strong> anyone studying for the Part 107 knowledge test, including municipal drone programs.</p>
+          <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/part-107-prep.html">Product page</a><a class="btn btn-outline btn-small" href="https://tompkins52.github.io/part107-prep/" rel="noopener">Open the study site</a></div>
+        </div>
       </article>
-      <article class="card">
-        <div class="card-meta"><span class="badge badge-ok">Live</span><span class="badge badge-brass">Pro bono</span></div>
+    </div>
+    <div class="probono">
+      <div>
+        <span class="badge badge-brass">Pro bono</span>
         <h3>Phantom Soldier</h3>
-        <p>Veteran stories, told as songs. A project of Project Veteran Overwatch: a veteran tells a story, it comes back as a song released under one name, never theirs, and everything the music earns goes to veteran suicide prevention. We built and maintain the website at no charge.</p>
-        <p><strong>For:</strong> veterans of any branch, era, or job, and the people around them.</p>
-        <a class="card-link" href="{{root}}products/phantom-soldier.html">What we built</a>
-      </article>
+        <p>Veteran stories, told as songs. A project of Project Veteran Overwatch: a veteran tells a story, it comes back as a song released under one name, never theirs, and everything the music earns goes to veteran suicide prevention. We built and maintain the website at no charge, and PVO owns it.</p>
+      </div>
+      <div class="actions"><a class="btn btn-outline btn-small" href="{{root}}products/phantom-soldier.html">What we built</a><a class="btn btn-outline btn-small" href="https://phantomsoldier.org/" rel="noopener">Visit phantomsoldier.org</a></div>
     </div>
   </div>
 </section>
@@ -55,7 +77,7 @@ priority: 0.9
       <p>A product gets on this list when three things are true: we needed it ourselves, at least one other organization has the same problem, and off-the-shelf software is priced or designed for a different kind of customer. We would rather publish three tools that work than a roadmap of twenty. Pro bono work gets on the list when a veteran-serving organization needs something built and we can finish it.</p>
       <h2>What every product comes with</h2>
       <ul>
-        <li>A product page with an honest status label and a dated changelog.</li>
+        <li>A product page with an honest status label, a piece of the product to try, and a dated changelog.</li>
         <li>A support channel that reaches the people who wrote the code.</li>
         <li>A privacy section that says, in plain terms, what data the product touches.</li>
         <li>No required subscription. If a product needs hosting, you can host it yourself.</li>
@@ -64,7 +86,7 @@ priority: 0.9
     <aside>
       <div class="sidebar-note">
         <h3>Need something that is not here?</h3>
-        <p>We take a small number of custom builds each year for public works, local government, small businesses, and nonprofits, and we help people with an idea build and license a platform of their own. See <a href="{{root}}customers.html#how-to-buy">how an engagement works</a>.</p>
+        <p>We take a small number of custom builds each year for public works, local government, small businesses, nonprofits, and learning platforms, and we help people with an idea build and license a platform of their own. Start with the <a href="{{root}}index.html#try">sample apps on the home page</a> or see <a href="{{root}}customers.html#how-to-buy">how an engagement works</a>.</p>
       </div>
     </aside>
   </div>

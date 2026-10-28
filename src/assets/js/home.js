@@ -1,513 +1,591 @@
-/* Tompkins Software Systems home page: the drafting table and the live demos.
-   No dependencies. Nothing is recorded or sent anywhere. */
+/* Tompkins Software Systems home page: six working sample apps.
+   No dependencies. Everything runs in the visitor's browser; nothing is sent anywhere. */
 (function () {
   "use strict";
 
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  function el(tag, cls, html) {
-    var e = document.createElement(tag);
-    if (cls) e.className = cls;
-    if (html != null) e.innerHTML = html;
-    return e;
-  }
-  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
-  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+  /* ---------- Small helpers ---------- */
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function fmt(n) { return Number(n).toLocaleString("en-US"); }
   function money(n) { return "$" + fmt(Math.round(n)); }
-  function fill(range) {
-    var min = Number(range.min || 0), max = Number(range.max || 100), v = Number(range.value);
-    range.style.setProperty("--fill", ((v - min) / (max - min) * 100) + "%");
+  function money2(n) { return "$" + Number(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function plural(n, one, many) { return n + " " + (n === 1 ? one : many); }
+  function dateAt(offsetDays) { var d = new Date(); d.setDate(d.getDate() + (offsetDays || 0)); return d; }
+  function longDate(d) { return d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }); }
+  function shortDate(d) { return d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }); }
+  function nextWeekday(dow) { var d = new Date(); var diff = (dow - d.getDay() + 7) % 7; if (diff === 0) diff = 7; d.setDate(d.getDate() + diff); return d; }
+  function isoDate(d) { return d.toISOString().slice(0, 10); }
+  function hash(s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return h >>> 0; }
+  function licenseKey(seed) {
+    var alpha = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789", out = "", h = hash(seed);
+    for (var i = 0; i < 16; i++) { h = Math.imul(h ^ (h >>> 13), 1274126177) >>> 0; out += alpha[h % 32]; if (i % 4 === 3 && i < 15) out += "-"; }
+    return out;
   }
-  function wireRange(range, fn) {
-    fill(range);
-    range.addEventListener("input", function () { fill(range); fn(); });
+  function csv(rows) {
+    return rows.map(function (r) { return r.map(function (c) { c = String(c == null ? "" : c); return /[",\n]/.test(c) ? '"' + c.replace(/"/g, '""') + '"' : c; }).join(","); }).join("\r\n");
   }
-
-  /* =====================================================================
-     1. The drafting table
-     ===================================================================== */
-  var AUD = {
-    works: { label: "Public works", org: "a public works department", unit: ["crew member", "crew members"], app: "Streets Division", preset: ["training", "incidents", "inspections"],
-      modules: ["training", "incidents", "inspections", "workorders", "inventory", "scheduling", "photos", "offline", "reports"] },
-    city: { label: "City hall", org: "a city or county office", unit: ["staff member", "staff members"], app: "Clerk's Office", preset: ["permits", "portal", "payments"],
-      modules: ["permits", "forms", "portal", "payments", "records", "scheduling", "inspections", "reports"] },
-    biz: { label: "Small business", org: "a small business", unit: ["employee", "employees"], app: "Shop Manager", preset: ["scheduling", "workorders", "invoices"],
-      modules: ["scheduling", "workorders", "invoices", "portal", "inventory", "photos", "offline", "reports"] },
-    np: { label: "Nonprofit", org: "a nonprofit", unit: ["staff member or volunteer", "staff and volunteers"], app: "Program Office", preset: ["volunteers", "donations", "events"],
-      modules: ["volunteers", "donations", "events", "portal", "forms", "training", "records", "reports"] },
-    idea: { label: "My own idea", org: "your own venture", unit: ["user", "users"], app: "Your App", preset: ["accounts", "portal", "payments"],
-      modules: ["accounts", "portal", "payments", "licensing", "content", "notifications", "offline", "reports"] }
-  };
-
-  var MOD = {
-    training: { short: "training", label: "Training and quizzes", does: "annual training with a quiz per module, certificates, and reminders before anything is overdue" },
-    incidents: { short: "incident reporting", label: "Incident reports", does: "incident reports with statements, diagrams, and an investigation that has to be finished before it closes" },
-    inspections: { short: "inspections", label: "Inspections and checklists", does: "inspections and audits from checklists, with findings assigned to a person and a date" },
-    workorders: { short: "work order", label: "Work orders", does: "work orders from request to done, with who has it and what it cost" },
-    inventory: { short: "inventory", label: "Inventory and assets", does: "inventory and asset tracking with reorder points" },
-    scheduling: { short: "scheduling", label: "Scheduling and shifts", does: "schedules and shifts that people can see from their phone" },
-    photos: { short: "photo", label: "Photos and diagrams", does: "photos and marked-up diagrams attached to the record they belong to" },
-    offline: { short: "field", label: "Works offline in the field", does: "field use with no signal, syncing when the truck is back in range" },
-    reports: { short: "reporting", label: "Reports for leadership", does: "a one-page roll-up for the people who approve the budget" },
-    permits: { short: "permit", label: "Permits and applications", does: "permit applications with a queue, status, and fees" },
-    forms: { short: "forms", label: "Online forms", does: "online forms that replace the PDF nobody can fill in on a phone" },
-    portal: { short: "portal", label: "Customer or member portal", does: "a portal where customers, residents, or members sign in and see where things stand" },
-    payments: { short: "payment", label: "Payments and fees", does: "payments and fees taken online, with receipts" },
-    invoices: { short: "invoicing", label: "Invoices and estimates", does: "estimates and invoices sent from the job, paid online" },
-    records: { short: "records", label: "Records and documents", does: "records and documents that are searchable and retained on a schedule" },
-    volunteers: { short: "volunteer", label: "Volunteers and hours", does: "volunteer sign-up and hours tracking" },
-    donations: { short: "donation", label: "Donations and goals", does: "donations with goals, receipts, and year-end statements" },
-    events: { short: "event", label: "Events and sign-ups", does: "events with sign-ups, reminders, and attendance" },
-    accounts: { short: "account", label: "Accounts and roles", does: "accounts with roles, so each person sees only what they should" },
-    licensing: { short: "licensing", label: "Licenses you sell", does: "licensing, so you can sell seats or subscriptions under your own name" },
-    content: { short: "content", label: "Content you publish", does: "content you publish and update without a developer" },
-    notifications: { short: "notification", label: "Email and text notifications", does: "email and text notifications when something needs attention" }
-  };
-
-  var PLAT = {
-    browser: { label: "Any browser", runs: "in any browser, nothing to install" },
-    server: { label: "Your own server", runs: "on a server your organization controls" },
-    hosted: { label: "We host it", runs: "hosted and kept running by us" },
-    app: { label: "Phone app", runs: "as an iOS and Android app, with the web version alongside" }
-  };
-
-  var PEOPLE = [1, 3, 5, 10, 15, 25, 40, 60, 100, 150, 250, 500];
-
-  var state = { aud: "works", people: 5, modules: ["training", "incidents", "inspections"], plat: "browser", device: window.innerWidth < 640 ? "phone" : "desktop", deviceAuto: true };
-  var prevModules = [];
-
-  var table = document.getElementById("table");
-  if (table) initTable();
-
-  function initTable() {
-    var audSeg = table.querySelector("[data-aud]");
-    var chips = table.querySelector("[data-chips]");
-    var peopleRange = table.querySelector("[data-people]");
-    var peopleOut = table.querySelector("[data-people-out]");
-    var platSeg = table.querySelector("[data-plat]");
-    var devSeg = table.querySelector("[data-device]");
-    var device = table.querySelector("[data-preview]");
-    var charter = table.querySelector("[data-charter]");
-    var copyBtn = table.querySelector("[data-copy]");
-    var sendBtn = table.querySelector("[data-send]");
-    var copied = table.querySelector("[data-copied]");
-
-    devSeg.querySelector('input[value="' + state.device + '"]').checked = true;
-    peopleRange.min = 0; peopleRange.max = PEOPLE.length - 1; peopleRange.value = PEOPLE.indexOf(25);
-    state.people = PEOPLE[Number(peopleRange.value)];
-
-    audSeg.addEventListener("change", function (e) {
-      if (e.target.name !== "aud") return;
-      state.aud = e.target.value;
-      state.modules = AUD[state.aud].preset.slice();
-      renderChips();
-      update();
-    });
-    platSeg.addEventListener("change", function (e) {
-      if (e.target.name !== "plat") return;
-      state.plat = e.target.value;
-      if (state.deviceAuto) {
-        state.device = state.plat === "app" ? "phone" : "desktop";
-        devSeg.querySelector('input[value="' + state.device + '"]').checked = true;
-      }
-      update();
-    });
-    devSeg.addEventListener("change", function (e) {
-      if (e.target.name !== "device") return;
-      state.device = e.target.value;
-      state.deviceAuto = false;
-      update();
-    });
-    wireRange(peopleRange, function () { state.people = PEOPLE[Number(peopleRange.value)]; update(); });
-    chips.addEventListener("click", function (e) {
-      var b = e.target.closest(".chip");
-      if (!b) return;
-      var id = b.getAttribute("data-mod");
-      var i = state.modules.indexOf(id);
-      if (i >= 0) state.modules.splice(i, 1); else state.modules.push(id);
-      b.setAttribute("aria-pressed", i >= 0 ? "false" : "true");
-      update();
-    });
-    copyBtn.addEventListener("click", function () {
-      var text = charterText();
-      function done() { copied.hidden = false; setTimeout(function () { copied.hidden = true; }, 2500); }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text); done(); });
-      } else { fallbackCopy(text); done(); }
-    });
-
-    window.addEventListener("resize", fitScreen);
-    function fitScreen() {
-      var screen = device.querySelector(".screen");
-      if (state.device !== "desktop") { screen.style.transform = ""; device.style.height = ""; return; }
-      var s = Math.min(1, device.clientWidth / 720);
-      screen.style.transform = "scale(" + s + ")";
-      device.style.height = Math.round(410 * s) + "px";
-    }
-
-    // Drafting crosshair: only where there is a fine pointer and motion is welcome.
-    if (!reduceMotion && window.matchMedia && window.matchMedia("(pointer: fine)").matches) {
-      var xh = el("div", "xhair h"), xv = el("div", "xhair v"), raf = null, mx = 0, my = 0;
-      table.appendChild(xh); table.appendChild(xv);
-      table.addEventListener("mousemove", function (e) {
-        var r = table.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top;
-        table.classList.add("tracking");
-        if (!raf) raf = requestAnimationFrame(function () { xh.style.top = my + "px"; xv.style.left = mx + "px"; raf = null; });
-      });
-      table.addEventListener("mouseleave", function () { table.classList.remove("tracking"); });
-    }
-
-    renderChips();
-    update();
-
-    // One orchestrated moment on load: the screen resolves out of draft lines.
-    if (!reduceMotion) {
-      device.classList.add("drafting");
-      device.querySelector(".screen").classList.add("boot");
-      setTimeout(function () { device.classList.remove("drafting"); }, 1100);
-    }
-
-    function renderChips() {
-      chips.innerHTML = "";
-      AUD[state.aud].modules.forEach(function (id) {
-        var b = el("button", "chip", esc(MOD[id].label));
-        b.type = "button";
-        b.setAttribute("data-mod", id);
-        b.setAttribute("aria-pressed", state.modules.indexOf(id) >= 0 ? "true" : "false");
-        chips.appendChild(b);
-      });
-    }
-
-    function update() {
-      var a = AUD[state.aud];
-      peopleOut.textContent = fmt(state.people) + " " + (state.people === 1 ? a.unit[0] : a.unit[1]);
-      table.querySelector("[data-count]").textContent = state.modules.length ? state.modules.length + " selected" : "none yet";
-      device.className = "device " + state.device;
-      renderPreview(device.querySelector(".screen"));
-      fitScreen();
-      renderCharter();
-      var topic = state.aud === "idea" ? "idea" : "build";
-      sendBtn.href = "contact.html?topic=" + topic + "&draft=" + encodeURIComponent(charterText());
-      prevModules = state.modules.slice();
-    }
-
-    function renderCharter() {
-      var a = AUD[state.aud];
-      var mods = state.modules.map(function (id) { return MOD[id]; });
-      var size = buildSize();
-      var name = projectName();
-      var own = state.aud === "idea"
-        ? "You own the name and the rights. We build it and set up the licensing so you can sell it."
-        : "You own your data and your records. The software is licensed to you or built for you, as the charter says.";
-      charter.querySelector("[data-c-name]").textContent = name;
-      charter.querySelector("[data-c-for]").textContent = a.org + ", " + fmt(state.people) + " " + (state.people === 1 ? a.unit[0] : a.unit[1]);
-      var list = charter.querySelector("[data-c-does]");
-      list.innerHTML = mods.length ? mods.map(function (m) { return "<li>" + esc(cap(m.does)) + "</li>"; }).join("") : "<li>Pick at least one thing it needs to do.</li>";
-      charter.querySelector("[data-c-runs]").textContent = cap(PLAT[state.plat].runs);
-      charter.querySelector("[data-c-size] b").textContent = size.label;
-      charter.querySelector("[data-c-size] span").textContent = size.weeks;
-      charter.querySelector("[data-c-own]").textContent = own;
-    }
-
-    function charterText() {
-      var a = AUD[state.aud];
-      var size = buildSize();
-      var lines = [
-        "DRAFT CHARTER (from tompkinssoftwaresystems.com)",
-        "Project: " + projectName(),
-        "For: " + a.org + ", " + fmt(state.people) + " " + (state.people === 1 ? a.unit[0] : a.unit[1]),
-        "What it does:"
-      ];
-      state.modules.forEach(function (id) { lines.push("  - " + cap(MOD[id].does)); });
-      lines.push("Runs: " + cap(PLAT[state.plat].runs));
-      lines.push("Build size: " + size.label + ", typically " + size.weeks);
-      lines.push("");
-      lines.push("Anything else we should know:");
-      return lines.join("\n");
-    }
-
-    function projectName() {
-      var a = AUD[state.aud];
-      if (!state.modules.length) return "A tool for " + a.org;
-      var first = MOD[state.modules[0]].short;
-      var second = state.modules[1] ? MOD[state.modules[1]].short : null;
-      var what = second ? first + " and " + second : first;
-      if (state.aud === "idea") return cap(what) + " platform";
-      return cap(what) + " tool for " + a.org;
-    }
-
-    function buildSize() {
-      var pts = state.modules.length + (state.plat === "app" ? 2 : state.plat === "browser" ? 0 : 1) + (state.people >= 100 ? 1 : 0);
-      if (pts <= 3) return { label: "Small build", weeks: "3 to 5 weeks" };
-      if (pts <= 6) return { label: "Medium build", weeks: "6 to 10 weeks" };
-      return { label: "Large build", weeks: "10 to 16 weeks" };
-    }
+  function download(name, text, type) {
+    try {
+      var blob = new Blob([text], { type: type || "text/plain;charset=utf-8" });
+      var url = URL.createObjectURL(blob), a = document.createElement("a");
+      a.href = url; a.download = name; document.body.appendChild(a); a.click();
+      setTimeout(function () { document.body.removeChild(a); URL.revokeObjectURL(url); }, 500);
+      return true;
+    } catch (e) { return false; }
   }
-
-  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
-  function fallbackCopy(text) {
-    var ta = document.createElement("textarea");
-    ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "absolute"; ta.style.left = "-9999px";
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text).catch(function () { legacyCopy(text); }); return true; }
+    return legacyCopy(text);
+  }
+  function legacyCopy(text) {
+    var ta = document.createElement("textarea"); ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.top = "-1000px";
     document.body.appendChild(ta); ta.select();
-    try { document.execCommand("copy"); } catch (e) { /* ignore */ }
-    document.body.removeChild(ta);
+    var ok = false; try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(ta); return ok;
   }
+  function initials(name) { return name.split(/\s+/).map(function (p) { return p.charAt(0); }).join("").toUpperCase().slice(0, 2); }
 
-  /* ---- The app preview ---- */
-  function renderPreview(screen) {
-    var a = AUD[state.aud];
-    var n = state.people;
-    var mods = state.modules.slice();
-    var phone = state.device === "phone";
-    screen.innerHTML = "";
-
-    var top = el("div", "app-top");
-    if (!phone) top.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
-    top.appendChild(el("span", "app-name", esc(a.app)));
-    if (mods.indexOf("offline") >= 0) top.appendChild(el("span", "sync", phone ? "Synced" : "Offline ready, 3 records waiting to sync"));
-    screen.appendChild(top);
-
-    var body = el("div", "app-body");
-    if (!phone) {
-      var side = el("div", "app-side");
-      side.appendChild(el("div", "side-head", "Modules"));
-      mods.forEach(function (id, i) { var s = el("a", i === 0 ? "on" : "", esc(MOD[id].label)); s.href = "#"; s.tabIndex = -1; s.setAttribute("aria-hidden", "true"); side.appendChild(s); });
-      body.appendChild(side);
-    }
-    var main = el("div", "app-main");
-    if (!mods.length) main.appendChild(el("div", "app-empty", "Nothing selected yet. Turn on something it needs to do."));
-    mods.forEach(function (id) {
-      var w = widget(id, n, a);
-      if (prevModules.indexOf(id) < 0 && !reduceMotion) w.classList.add("in");
-      main.appendChild(w);
-    });
-    body.appendChild(main);
-    screen.appendChild(body);
-
-    if (phone) {
-      var tabs = el("div", "app-tabs");
-      var shown = mods.slice(0, 4);
-      shown.forEach(function (id, i) { tabs.appendChild(el("span", i === 0 ? "on" : "", "<i></i>" + esc(shortLabel(id)))); });
-      if (mods.length > 4) tabs.appendChild(el("span", "", "<i></i>More"));
-      if (!mods.length) tabs.appendChild(el("span", "on", "<i></i>Home"));
-      screen.appendChild(tabs);
-    }
+  /* ---------- HTML snippets used by every app ---------- */
+  function pill(text, kind) { return '<span class="pill' + (kind ? " " + kind : "") + '">' + esc(text) + "</span>"; }
+  function stat(label, value, sub) { return '<div class="stat"><span class="v">' + value + '</span><span class="l">' + esc(label) + "</span>" + (sub ? '<span class="s">' + esc(sub) + "</span>" : "") + "</div>"; }
+  function btn(act, label, cls, extra) { return '<button type="button" class="b' + (cls ? " " + cls : "") + '" data-act="' + act + '"' + (extra || "") + ">" + esc(label) + "</button>"; }
+  function field(label, inner, cls) { return '<label class="f' + (cls ? " " + cls : "") + '"><span>' + (cls === "raw" ? label : esc(label)) + "</span>" + inner + "</label>"; }
+  function input(name, value, attrs) { return '<input class="in" name="' + name + '" value="' + esc(value) + '"' + (attrs || "") + ">"; }
+  function select(name, opts, value, attrs) {
+    return '<select class="in" name="' + name + '"' + (attrs || "") + ">" + opts.map(function (o) { return '<option' + (o === value ? " selected" : "") + ">" + esc(o) + "</option>"; }).join("") + "</select>";
   }
-
-  function shortLabel(id) {
-    return { training: "Training", incidents: "Incidents", inspections: "Inspect", workorders: "Orders", inventory: "Stock", scheduling: "Schedule", photos: "Photos",
-      offline: "Sync", reports: "Reports", permits: "Permits", forms: "Forms", portal: "Portal", payments: "Pay", invoices: "Invoices", records: "Records",
-      volunteers: "Volunteers", donations: "Giving", events: "Events", accounts: "People", licensing: "Licenses", content: "Content", notifications: "Alerts" }[id] || MOD[id].label;
-  }
-
-  function ring(pct) {
-    var r = 17, c = 2 * Math.PI * r;
-    return '<svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="' + r + '" fill="none" stroke="#e3e5df" stroke-width="6"/>' +
-      '<circle cx="22" cy="22" r="' + r + '" fill="none" stroke="#2a7560" stroke-width="6" stroke-linecap="round" stroke-dasharray="' + c + '" stroke-dashoffset="' + (c * (1 - pct)) + '" transform="rotate(-90 22 22)"/>' +
-      '<text x="22" y="26" text-anchor="middle" font-size="11" font-weight="600" fill="#1a221e">' + Math.round(pct * 100) + '%</text></svg>';
-  }
-  function rows(items) { return '<div class="rows">' + items.map(function (r) { return '<div class="row"><span>' + r[0] + '</span><span>' + r[1] + '</span></div>'; }).join("") + "</div>"; }
-  function pill(t, k) { return '<span class="pill ' + (k || "") + '">' + t + "</span>"; }
-
-  function widget(id, n, a) {
-    var w = el("div", "w");
-    var cur, due, h;
-    switch (id) {
-      case "training":
-        cur = Math.max(0, Math.round(n * 0.86)); due = n - cur;
-        w.innerHTML = "<h4>Training <small>this year</small></h4><div class=\"ring\">" + ring(n ? cur / n : 0) +
-          rows([["Current", cur + " of " + fmt(n)], ["Due in 30 days", pill(String(Math.max(due, n > 3 ? 1 : 0)), due ? "warn" : "ok")], ["Overdue", pill(String(Math.round(due * 0.4)), due > 2 ? "bad" : "ok")]]) + "</div>";
-        break;
-      case "incidents":
-        h = Math.max(1, Math.round(n / 12));
-        w.innerHTML = "<h4>Incident reports <small>open " + h + "</small></h4>" + rows([
-          ["Vehicle, Unit 14", pill("Investigating", "warn")], ["Near miss, trench", pill("Statements", "warn")], ["Injury, hand", pill("Closed", "ok")]]);
-        break;
-      case "inspections":
-        w.innerHTML = "<h4>Inspections <small>this week</small></h4><div class=\"check\"><span class=\"done\">Shop, general industry (137 items)</span><span class=\"done\">Trench at Oak St</span><span>Bucket truck, Unit 7</span><span>Annual audit, " + Math.max(1, Math.round(n / 15)) + " findings open</span></div>";
-        break;
-      case "workorders":
-        w.innerHTML = "<h4>Work orders</h4><div class=\"cols\"><div class=\"col\"><b>New " + (Math.round(n / 5) + 2) + "</b><i></i><i></i></div><div class=\"col\"><b>In progress " + (Math.round(n / 8) + 1) + "</b><i></i></div><div class=\"col\"><b>Done " + (Math.round(n / 3) + 4) + "</b><i></i><i></i><i></i></div></div>";
-        break;
-      case "inventory":
-        w.innerHTML = "<h4>Inventory <small>reorder 2</small></h4>" + rows([["Hydrant caps", '<div class="bar" style="width:60px"><i style="width:70%"></i></div>'], ["Cold patch, tons", '<div class="bar" style="width:60px"><i class="amber" style="width:22%"></i></div>'], ["Sign posts", '<div class="bar" style="width:60px"><i style="width:85%"></i></div>']]);
-        break;
-      case "scheduling":
-        w.innerHTML = "<h4>This week <small>" + fmt(n) + " on the schedule</small></h4><div class=\"week\"><span>M<i class=\"on\"></i></span><span>T<i class=\"on\"></i></span><span>W<i class=\"hot\"></i></span><span>T<i class=\"on\"></i></span><span>F<i class=\"on\"></i></span><span>S<i></i></span><span>S<i></i></span></div>";
-        break;
-      case "photos":
-        w.innerHTML = "<h4>Photos and diagrams</h4><div class=\"tiles\"><i></i><i></i><i class=\"diagram\"></i></div>";
-        break;
-      case "offline":
-        w.innerHTML = "<h4>Field sync</h4>" + rows([["Saved on device", "3 records"], ["Last sync", "11 min ago"], ["Signal", pill("None", "warn")]]);
-        break;
-      case "reports":
-        w.className += " wide";
-        var bars = [40, 55, 48, 70, 62, 85, 78, 90].map(function (v) { return '<i style="height:' + v + '%"></i>'; }).join("");
-        w.innerHTML = "<h4>Roll-up for leadership <small>last 8 weeks</small></h4><div class=\"chart\">" + bars + "</div>";
-        break;
-      case "permits":
-        w.innerHTML = "<h4>Permits <small>queue " + (Math.round(n / 4) + 3) + "</small></h4>" + rows([["Fence, 412 Elm", pill("Review", "warn")], ["Driveway, 9 Oak", pill("Approved", "ok")], ["Sign, Main St", pill("Fee due")]]);
-        break;
-      case "forms":
-        w.innerHTML = "<h4>Online forms</h4><div class=\"field\" data-label=\"Name\"></div><div class=\"field\" data-label=\"Address\"></div><div class=\"field\" data-label=\"What do you need?\"></div>";
-        break;
-      case "portal":
-        w.innerHTML = "<h4>Portal</h4><div class=\"login\"><div class=\"field\" data-label=\"Email\"></div><div class=\"field\" data-label=\"Password\"></div><div class=\"btnm\">Sign in</div></div>";
-        break;
-      case "payments":
-        var pay = state.aud === "city" ? [["Permit fee", "$75.00 " + pill("Paid", "ok")], ["Water bill", "$112.40 " + pill("Paid", "ok")], ["Rental deposit", "$250.00 " + pill("Pending", "warn")]]
-          : [["Monthly plan", "$29.00 " + pill("Paid", "ok")], ["Setup fee", "$149.00 " + pill("Paid", "ok")], ["Invoice 1042", "$480.00 " + pill("Pending", "warn")]];
-        w.innerHTML = "<h4>Payments <small>today</small></h4>" + rows(pay);
-        break;
-      case "invoices":
-        w.innerHTML = "<h4>Invoices <small>" + (Math.round(n / 2) + 3) + " open</small></h4>" + rows([["#1042, panel upgrade", "$1,850 " + pill("Sent")], ["#1041, service call", "$240 " + pill("Paid", "ok")], ["Estimate, Hart job", "$6,200 " + pill("Draft")]]);
-        break;
-      case "records":
-        w.innerHTML = "<h4>Records</h4>" + rows([["Council minutes, Oct", "PDF"], ["Ordinance 26-14", "PDF"], ["Easement, Lot 9", "Scan"]]);
-        break;
-      case "volunteers":
-        w.innerHTML = "<h4>Volunteers <small>" + fmt(n) + " active</small></h4>" + rows([["Hours this month", fmt(n * 6)], ["Saturday cleanup", pill(Math.round(n * 0.3) + " signed up", "ok")], ["Background checks", pill("2 pending", "warn")]]);
-        break;
-      case "donations":
-        var goal = 25000, got = Math.min(goal, 4200 + n * 140);
-        w.innerHTML = "<h4>Fall campaign</h4><div class=\"big\">" + money(got) + "</div><div class=\"bar\"><i style=\"width:" + Math.round(got / goal * 100) + "%\"></i></div>" + rows([["Goal", money(goal)], ["Receipts sent", pill("Automatic", "ok")]]);
-        break;
-      case "events":
-        w.innerHTML = "<h4>Events</h4>" + rows([["Coat drive, Sat", Math.round(n * 0.5) + " going"], ["Board meeting, Tue", "7 going"], ["Reminder", pill("Sent", "ok")]]);
-        break;
-      case "accounts":
-        w.innerHTML = "<h4>People <small>" + fmt(n) + "</small></h4>" + rows([["Admins", "2"], ["Members", fmt(Math.max(0, n - 2))], ["Invites", pill("3 open", "warn")]]);
-        break;
-      case "licensing":
-        w.innerHTML = "<h4>Licenses</h4><div class=\"big\">" + fmt(Math.max(1, Math.round(n / 5))) + " customers</div>" + rows([["Seats in use", fmt(n)], ["Renewals this month", pill("4", "ok")]]);
-        break;
-      case "content":
-        w.innerHTML = "<h4>Content</h4>" + rows([["Getting started guide", pill("Published", "ok")], ["Pricing page", pill("Draft")], ["Release notes 1.2", pill("Scheduled", "warn")]]);
-        break;
-      case "notifications":
-        w.innerHTML = "<h4>Notifications</h4>" + rows([["Due in 7 days", "Email, " + fmt(Math.max(1, Math.round(n * 0.1)))], ["Signed statement", "Text, 1"], ["Weekly roll-up", "Email, 3"]]);
-        break;
-      default:
-        w.innerHTML = "<h4>" + esc(MOD[id].label) + "</h4>";
-    }
-    return w;
-  }
+  function range(name, min, max, step, value, attrs) { return '<input class="rng" type="range" name="' + name + '" min="' + min + '" max="' + max + '" step="' + step + '" value="' + value + '"' + (attrs || "") + ">"; }
+  function bar(pct, cls) { return '<div class="bar"><i class="' + (cls || "") + '" style="width:' + Math.max(0, Math.min(100, pct)) + '%"></i></div>'; }
+  function head(title, right) { return '<div class="mh"><h3>' + esc(title) + "</h3>" + (right || "") + "</div>"; }
+  function note(text) { return '<p class="note">' + esc(text) + "</p>"; }
+  function progress(pct, label) { return '<div class="prog"><span>' + esc(label) + "</span>" + bar(pct) + "</div>"; }
 
   /* =====================================================================
-     2. Painless Project Management: the roll-up from the real rules
+     1. Public works: work orders for a streets crew
      ===================================================================== */
-  var pm = document.getElementById("demo-pm");
-  if (pm) {
-    var approved = pm.querySelector("[data-approved]"), spent = pm.querySelector("[data-spent]"), forecast = pm.querySelector("[data-forecast]");
-    var done = pm.querySelector("[data-done]"), nextDue = pm.querySelector("[data-next]"), lastUp = pm.querySelector("[data-last]");
-    var help = pm.querySelector("[data-help]"), where = pm.querySelector("[data-where]");
-    [approved, spent, forecast, done, nextDue, lastUp].forEach(function (r) { wireRange(r, pmUpdate); });
-    help.addEventListener("change", pmUpdate);
-    where.addEventListener("input", pmUpdate);
-    pmUpdate();
-  }
-  function pmUpdate() {
-    var A = Number(approved.value), S = Number(spent.value), F = Number(forecast.value);
-    var D = Number(done.value), N = Number(nextDue.value), L = Number(lastUp.value);
-    if (S > A * 1.5) { S = A * 1.5; spent.value = S; fill(spent); }
-    pm.querySelector("[data-approved-v]").textContent = money(A);
-    pm.querySelector("[data-spent-v]").textContent = money(S) + " (" + Math.round(S / A * 100) + "%)";
-    pm.querySelector("[data-forecast-v]").textContent = money(F) + " (" + Math.round(F / A * 100) + "%)";
-    pm.querySelector("[data-done-v]").textContent = D + " of 8";
-    pm.querySelector("[data-next-v]").textContent = N < 0 ? Math.abs(N) + (N === -1 ? " day overdue" : " days overdue") : N === 0 ? "due today" : "due in " + N + (N === 1 ? " day" : " days");
-    pm.querySelector("[data-last-v]").textContent = L === 0 ? "today" : L + (L === 1 ? " day ago" : " days ago");
-
-    // The product's rules: an overdue milestone turns schedule amber, red past 14 days;
-    // a forecast over approved turns budget amber, red past 110 percent; quiet after 14 days.
-    var sched = D >= 8 ? "g" : N < -14 ? "r" : N < 0 ? "a" : "g";
-    var budget = F > A * 1.1 ? "r" : F > A ? "a" : "g";
-    var quiet = L > 14;
-    var needs = help.checked;
-    var name = { g: "On track", a: "Watch", r: "Off track" };
-    var rag = pm.querySelector("[data-rag]");
-    rag.innerHTML = '<span class="' + sched + '">Schedule: ' + name[sched] + '</span><span class="' + budget + '">Budget: ' + name[budget] + "</span>" +
-      (quiet ? '<span class="a">Quiet ' + L + " days</span>" : "") + (needs ? '<span class="r">Needs help</span>' : "");
-    var ms = pm.querySelector("[data-ms]");
-    ms.innerHTML = "";
-    for (var i = 0; i < 8; i++) ms.appendChild(el("i", i < D ? "done" : (i === D && N < 0) ? "late" : ""));
-
-    var s = "Fleet telematics rollout is " + (sched === "g" && budget === "g" && !needs ? "on track" : sched === "r" || budget === "r" ? "off track" : "being watched") + ": " +
-      D + " of 8 milestones done, " + Math.round(S / A * 100) + "% of the approved budget spent, forecast " +
-      (F > A ? money(F - A) + " over" : F < A ? money(A - F) + " under" : "at") + " approved";
-    if (N < 0 && D < 8) s += ", next milestone " + Math.abs(N) + " days overdue";
-    if (quiet) s += ". No update in " + L + " days";
-    if (needs) s += ". Help requested" + (where.value.trim() ? ": " + where.value.trim() : "");
-    pm.querySelector("[data-summary]").textContent = s + ".";
-  }
+  var WorkOrders = {
+    name: function () { return "Streets work orders"; },
+    who: function () { return "Streets Division"; },
+    section: "Streets",
+    views: function () { return [{ id: "board", label: "Board" }, { id: "new", label: "New request", tab: "New" }, { id: "report", label: "This week", tab: "Week" }]; },
+    init: function () {
+      function o(id, type, addr, pri, status, age, crew) { return { id: id, type: type, addr: addr, pri: pri, status: status, age: age, crew: crew || "" }; }
+      return { view: "board", filter: "new", next: 1043, orders: [
+        o(1042, "Pothole", "400 block of W Main St", "Urgent", "new", 0),
+        o(1041, "Streetlight out", "Pole 17, Liberty and 3rd", "Normal", "new", 1),
+        o(1040, "Catch basin clogged", "Elm and 5th", "Low", "new", 2),
+        o(1038, "Stop sign down", "Ash and Grove", "Urgent", "doing", 1, "Crew 2"),
+        o(1036, "Sidewalk heave", "212 N Park Ave", "Low", "doing", 5, "Crew 1"),
+        o(1034, "Tree limb in road", "Spring Rd at the creek", "Normal", "done", 3, "Crew 2"),
+        o(1033, "Hydrant leaking", "9 Oak Ln", "Urgent", "done", 4, "Crew 1"),
+        o(1031, "Pothole", "County Rd 6 eastbound, mile 3", "Normal", "done", 6, "Crew 2")
+      ] };
+    },
+    types: ["Pothole", "Streetlight out", "Stop sign down", "Sidewalk heave", "Catch basin clogged", "Tree limb in road", "Hydrant leaking", "Something else"],
+    card: function (o) {
+      var pri = o.pri === "Urgent" ? "bad" : o.pri === "Normal" ? "" : "quiet";
+      var age = o.age === 0 ? "opened today" : "open " + plural(o.age, "day", "days");
+      var action = o.status === "new" ? btn("start", "Start", "small", ' data-id="' + o.id + '"') : o.status === "doing" ? btn("done", "Done", "small", ' data-id="' + o.id + '"') : "";
+      return '<div class="card"><div class="ch"><b>#' + o.id + " " + esc(o.type) + "</b>" + pill(o.pri, pri) + "</div><div class=\"addr\">" + esc(o.addr) + '</div><div class="cf"><span>' + (o.crew ? esc(o.crew) + ", " : "") + age + "</span>" + action + "</div></div>";
+    },
+    render: function (st, view, phone) {
+      var byStatus = function (s) { return st.orders.filter(function (o) { return o.status === s; }); };
+      var n = byStatus("new").length, d = byStatus("doing").length, f = byStatus("done").length;
+      if (view === "board") {
+        var summary = '<span class="sum">' + n + " new, " + d + " in progress, " + f + " done this week</span>";
+        if (phone) {
+          var tabs = ["new", "doing", "done"].map(function (s) { return '<button type="button" class="chip' + (st.filter === s ? " on" : "") + '" data-act="filter" data-f="' + s + '">' + ({ "new": "New " + n, doing: "In progress " + d, done: "Done " + f })[s] + "</button>"; }).join("");
+          return head("Board", btn("export", "Export", "ghost small")) + '<div class="chips">' + tabs + "</div>" + '<div class="stack">' + (byStatus(st.filter).map(WorkOrders.card).join("") || '<p class="empty">Nothing here.</p>') + "</div>";
+        }
+        return head("Board", summary + btn("export", "Export CSV", "ghost small")) +
+          '<div class="kan">' + [["new", "New"], ["doing", "In progress"], ["done", "Done"]].map(function (c) {
+            return '<div class="kcol"><div class="kh">' + c[1] + " <span>" + byStatus(c[0]).length + "</span></div>" + (byStatus(c[0]).map(WorkOrders.card).join("") || '<p class="empty">Empty</p>') + "</div>";
+          }).join("") + "</div>";
+      }
+      if (view === "new") {
+        return head("New request") + note("The same form the website and the front desk use, so the crew sees one list.") +
+          '<form class="frm" data-act="add">' +
+          field("What is it?", select("type", WorkOrders.types, "Pothole")) +
+          field("Where?", input("addr", "", ' placeholder="Address or intersection" required')) +
+          field("Priority", select("pri", ["Normal", "Urgent", "Low"], "Normal")) +
+          '<div class="fa"><button type="submit" class="b">Add to the board</button></div></form>';
+      }
+      // report
+      var open = st.orders.filter(function (o) { return o.status !== "done"; });
+      var avg = open.length ? (open.reduce(function (a, o) { return a + o.age; }, 0) / open.length) : 0;
+      var types = {}; st.orders.forEach(function (o) { types[o.type] = (types[o.type] || 0) + 1; });
+      var keys = Object.keys(types).sort(function (a, b) { return types[b] - types[a]; });
+      var max = types[keys[0]] || 1;
+      return head("This week", btn("export", "Export CSV", "ghost small")) +
+        '<div class="stats">' + stat("Requests", st.orders.length) + stat("Closed", f) + stat("Still open", open.length) + stat("Avg days open", avg.toFixed(1)) + "</div>" +
+        '<div class="box"><h4>By type</h4>' + keys.map(function (k) { return '<div class="brow"><span>' + esc(k) + "</span>" + bar(types[k] / max * 100) + "<b>" + types[k] + "</b></div>"; }).join("") + "</div>" +
+        note("This is the page the director gets by email on Friday afternoon. Nobody has to write it.");
+    },
+    act: function (st, act, el, form) {
+      var byId = function (id) { return st.orders.filter(function (o) { return o.id === Number(id); })[0]; };
+      if (act === "filter") { st.filter = el.getAttribute("data-f"); return true; }
+      if (act === "start") { var o = byId(el.getAttribute("data-id")); o.status = "doing"; o.crew = st.orders.filter(function (x) { return x.crew === "Crew 1"; }).length <= st.orders.filter(function (x) { return x.crew === "Crew 2"; }).length ? "Crew 1" : "Crew 2"; st.msg = "#" + o.id + " assigned to " + o.crew + ". They see it on the truck tablet."; return true; }
+      if (act === "done") { var d = byId(el.getAttribute("data-id")); d.status = "done"; st.msg = "#" + d.id + " closed. The person who reported it gets a text."; return true; }
+      if (act === "add") {
+        var addr = form.addr.value.trim(); if (!addr) { form.addr.focus(); return false; }
+        st.orders.unshift({ id: st.next, type: form.type.value, addr: addr, pri: form.pri.value, status: "new", age: 0, crew: "" });
+        st.msg = "#" + st.next + " is on the board under New."; st.next++; st.view = "board"; st.filter = "new"; return true;
+      }
+      if (act === "export") {
+        var rows = [["Number", "Type", "Location", "Priority", "Status", "Crew", "Days open"]].concat(st.orders.map(function (o) { return [o.id, o.type, o.addr, o.pri, { "new": "New", doing: "In progress", done: "Done" }[o.status], o.crew, o.age]; }));
+        st.msg = download("work-orders.csv", csv(rows), "text/csv") ? "work-orders.csv downloaded, " + st.orders.length + " rows." : "Your browser blocked the download."; return true;
+      }
+      return false;
+    }
+  };
 
   /* =====================================================================
-     3. IntelliSafe: the binder and the platform
+     2. Local government: a permit desk residents can use from a phone
      ===================================================================== */
-  var cmp = document.getElementById("compare");
-  if (cmp) {
-    var cut = cmp.querySelector(".cut");
-    function setCut() { cmp.style.setProperty("--cut", cut.value + "%"); }
-    cut.addEventListener("input", setCut);
-    setCut();
-  }
+  var FEES = { Deck: { base: 75, perSqft: 0.25 }, Fence: { base: 50 }, Sign: { base: 100 }, Driveway: { base: 60 }, "Garage sale": { base: 0 } };
+  function permitFee(type, sqft) { var r = FEES[type]; return r.base + (r.perSqft ? r.perSqft * sqft : 0); }
+  var Permits = {
+    name: function () { return "Permit desk"; },
+    who: function () { return "Clerk's office"; },
+    section: "Permits",
+    views: function () { return [{ id: "apply", label: "Apply (resident)", tab: "Apply" }, { id: "queue", label: "Queue (clerk)", tab: "Queue" }, { id: "fees", label: "Fee table", tab: "Fees" }]; },
+    init: function () {
+      return { view: "apply", type: "Deck", sqft: 240, next: 143, collected: 50, receipt: null, apps: [
+        { n: "2026-0139", type: "Fence", addr: "118 Birch Ct", who: "M. Alvarez", fee: 50, status: "Approved", permit: "P-26-0139" },
+        { n: "2026-0140", type: "Deck", addr: "42 Lakeview Dr", who: "T. Brennan", fee: 135, sqft: 240, status: "Received" },
+        { n: "2026-0141", type: "Sign", addr: "300 Main St", who: "Hart Electric", fee: 100, status: "Needs info", note: "Site plan missing" },
+        { n: "2026-0142", type: "Garage sale", addr: "7 Pine St", who: "D. Kowalski", fee: 0, status: "Approved", permit: "P-26-0142" }
+      ] };
+    },
+    render: function (st, view, phone) {
+      var waiting = st.apps.filter(function (a) { return a.status === "Received"; }).length;
+      if (view === "apply") {
+        if (st.receipt) {
+          var r = st.receipt;
+          return head("Application received") + '<div class="receipt"><div class="rn">' + esc(r.n) + "</div><dl><dt>Permit</dt><dd>" + esc(r.type) + (r.sqft ? ", " + fmt(r.sqft) + " sq ft" : "") + "</dd><dt>Address</dt><dd>" + esc(r.addr) + "</dd><dt>Fee</dt><dd>" + money2(r.fee) + (r.fee ? ", due when approved" : "") + "</dd><dt>Status</dt><dd>" + pill("Received", "warn") + "</dd></dl></div>" +
+            note("The clerk sees it in the queue now. You get an email at every step, and a copy of the permit when it is issued.") +
+            '<div class="fa">' + btn("another", "Apply for another", "ghost") + btn("view", "See the clerk's queue", "ghost", ' data-v="queue"') + "</div>";
+        }
+        var isDeck = st.type === "Deck";
+        return head("Apply for a permit") + note("Residents see this page. No account, no PDF to print.") +
+          '<form class="frm" data-act="submit">' +
+          field("Permit type", select("type", Object.keys(FEES), st.type, ' data-change="type"')) +
+          (isDeck ? field("Deck size: <output data-sqft-out>" + fmt(st.sqft) + "</output> sq ft", range("sqft", 40, 1200, 10, st.sqft, ' data-live="sqft"'), "raw") : "") +
+          field("Property address", input("addr", st.addr || "", ' placeholder="Street address" required data-live="addr"')) +
+          field("Your name", input("who", st.who || "", ' placeholder="First and last name" required data-live="who"')) +
+          '<div class="fee">Fee <b data-fee>' + money2(permitFee(st.type, st.sqft)) + "</b></div>" +
+          '<div class="fa"><button type="submit" class="b">Submit application</button></div></form>';
+      }
+      if (view === "queue") {
+        var rows = st.apps.map(function (a, i) {
+          var status = a.status === "Approved" ? pill("Approved", "ok") : a.status === "Needs info" ? pill("Needs info", "bad") : pill("Received", "warn");
+          var actions = a.status === "Received" ? btn("approve", "Approve", "small", ' data-i="' + i + '"') + btn("info", "Needs info", "ghost small", ' data-i="' + i + '"') : a.permit ? '<span class="mono">' + esc(a.permit) + "</span>" : '<span class="dim">' + esc(a.note || "Applicant emailed") + "</span>";
+          return "<tr><td>" + esc(a.n) + '</td><td>' + esc(a.type) + (a.sqft ? '<span class="dim"> ' + fmt(a.sqft) + " sq ft</span>" : "") + '</td><td class="xw">' + esc(a.addr) + '<span class="dim"> ' + esc(a.who) + "</span></td><td>" + money2(a.fee) + "</td><td>" + status + '</td><td class="ta">' + actions + "</td></tr>";
+        }).join("");
+        return head("Queue", '<span class="sum">' + plural(waiting, "application", "applications") + " waiting, " + money(st.collected) + " collected this week</span>") +
+          '<table class="tbl"><thead><tr><th>Number</th><th>Permit</th><th class="xw">Address</th><th>Fee</th><th>Status</th><th></th></tr></thead><tbody>' + rows + "</tbody></table>" +
+          note("Approve issues the permit number, records the fee, and emails the resident. Needs info sends them a note and holds the spot in line.");
+      }
+      // fees
+      return head("Fee table") +
+        '<table class="tbl"><thead><tr><th>Permit</th><th>Fee</th><th class="xw">Who reviews it</th></tr></thead><tbody>' +
+        [["Deck", "$75 plus $0.25 per sq ft", "Building"], ["Fence", "$50", "Zoning"], ["Sign", "$100", "Zoning"], ["Driveway", "$60", "Engineering"], ["Garage sale", "No fee", "Clerk"]].map(function (r) { return "<tr><td>" + r[0] + "</td><td>" + r[1] + '</td><td class="xw">' + r[2] + "</td></tr>"; }).join("") +
+        "</tbody></table>" + '<div class="stats">' + stat("Collected this week", money(st.collected)) + stat("Waiting", waiting) + stat("Approved", st.apps.filter(function (a) { return a.status === "Approved"; }).length) + "</div>" +
+        note("When council changes a fee, the clerk edits this table. The form and the queue follow.");
+    },
+    live: function (st, el, main) {
+      var k = el.getAttribute("data-live");
+      if (k === "addr" || k === "who") { st[k] = el.value; return; }
+      if (k === "sqft") {
+        st.sqft = Number(el.value);
+        var out = main.querySelector("[data-sqft-out]"), fee = main.querySelector("[data-fee]");
+        if (out) out.textContent = fmt(st.sqft);
+        if (fee) fee.textContent = money2(permitFee(st.type, st.sqft));
+      }
+    },
+    act: function (st, act, el, form) {
+      if (act === "type") { st.type = el.value; return true; }
+      if (act === "submit") {
+        var addr = form.addr.value.trim(), who = form.who.value.trim();
+        if (!addr) { form.addr.focus(); return false; } if (!who) { form.who.focus(); return false; }
+        var a = { n: "2026-0" + st.next, type: st.type, addr: addr, who: who, fee: permitFee(st.type, st.sqft), status: "Received" };
+        if (st.type === "Deck") a.sqft = st.sqft;
+        st.next++; st.apps.push(a); st.receipt = a; st.addr = ""; st.who = ""; return true;
+      }
+      if (act === "another") { st.receipt = null; return true; }
+      if (act === "approve") { var ap = st.apps[Number(el.getAttribute("data-i"))]; ap.status = "Approved"; ap.permit = "P-26-" + ap.n.slice(5); st.collected += ap.fee; st.msg = "Permit " + ap.permit + " issued" + (ap.fee ? ", " + money2(ap.fee) + " recorded" : "") + ". " + ap.who + " has it by email."; return true; }
+      if (act === "info") { var ni = st.apps[Number(el.getAttribute("data-i"))]; ni.status = "Needs info"; ni.note = "Asked for a site plan"; st.msg = ni.who + " was asked for a site plan. The application keeps its place in line."; return true; }
+      return false;
+    }
+  };
 
   /* =====================================================================
-     4. Part 107 Prep: a question from the bank
+     3. Small business: estimates that go out before you leave the driveway
      ===================================================================== */
-  var QUESTIONS = [
-    { cat: "Regulations", q: "Under Part 107, what is the maximum groundspeed for a small unmanned aircraft?", a: ["87 miles per hour", "100 miles per hour", "120 miles per hour"], c: 1,
-      x: "The limit is 100 miles per hour, which is 87 knots. The two numbers describe the same speed in different units, and the exam likes to mix them.", ref: "14 CFR 107.51(a)" },
-    { cat: "Airspace", q: "You want to fly near a towered airport inside Class D airspace. What do you need before takeoff?", a: ["Nothing; Class D is uncontrolled for drones", "A phone call to the tower", "FAA authorization, through LAANC or DroneZone"], c: 2,
-      x: "Operations in Class B, C, D, or the surface area of Class E airspace need prior FAA authorization. A call to the tower is not an authorization.", ref: "14 CFR 107.41" },
-    { cat: "Weather", q: "A METAR reports BKN012. What does that tell you?", a: ["Broken clouds with bases at 120 feet", "Broken clouds with bases at 1,200 feet", "Broken clouds with bases at 12,000 feet"], c: 1,
-      x: "Cloud heights in a METAR are in hundreds of feet above ground level, so 012 is 1,200 feet. You must stay 500 feet below the clouds, so that puts your ceiling at 700 feet AGL, which is above the 400-foot limit anyway.", ref: "14 CFR 107.51(d); AC 00-45" },
-    { cat: "Operations", q: "What is the minimum flight visibility for a Part 107 operation without a waiver?", a: ["1 statute mile", "3 statute miles", "5 statute miles"], c: 1,
-      x: "Three statute miles, measured from the control station. Less than that needs a waiver.", ref: "14 CFR 107.51(c)" },
-    { cat: "Regulations", q: "You move. How long do you have to tell the FAA your new mailing address before you may no longer exercise your certificate?", a: ["10 days", "30 days", "90 days"], c: 1,
-      x: "Thirty days. After that, the certificate privileges pause until the FAA has the new address.", ref: "14 CFR 107.77" },
-    { cat: "Operations", q: "How many hours must pass between consuming alcohol and acting as remote pilot in command?", a: ["4 hours", "8 hours", "12 hours"], c: 1,
-      x: "Eight hours, and no operating with a blood alcohol level of 0.04 or above, the same rule that applies to manned pilots.", ref: "14 CFR 107.27 and 91.17" }
+  var Estimates = {
+    name: function () { return "Hart Electric estimates"; },
+    who: function () { return "Hart Electric"; },
+    section: "Office",
+    views: function () { return [{ id: "new", label: "New estimate", tab: "New" }, { id: "recent", label: "Recent" }]; },
+    init: function () {
+      return { view: "new", customer: "Lakeside Dental", job: "Panel upgrade and six new circuits", tax: 7.25, disc: 0, next: 1043,
+        lines: [{ d: "200 A panel, parts and labor", q: 1, r: 1850 }, { d: "20 A circuit, each", q: 6, r: 240 }, { d: "Permit and inspection", q: 1, r: 180 }],
+        saved: [{ n: 1042, cust: "Oak St Bakery", job: "Walk-in cooler circuit", total: 1420, st: "Sent" }, { n: 1041, cust: "Hart residence", job: "Service upgrade", total: 6200, st: "Accepted" }, { n: 1040, cust: "Northside Clinic", job: "Exam room outlets", total: 980, st: "Draft" }] };
+    },
+    totals: function (st) {
+      var sub = st.lines.reduce(function (a, l) { return a + (Number(l.q) || 0) * (Number(l.r) || 0); }, 0);
+      var disc = Math.min(sub, Number(st.disc) || 0), tax = (sub - disc) * st.tax / 100;
+      return { sub: sub, disc: disc, tax: tax, total: sub - disc + tax };
+    },
+    text: function (st) {
+      var t = Estimates.totals(st);
+      return ["Hart Electric, estimate #" + st.next, "For: " + st.customer, "Job: " + st.job, "Date: " + longDate(new Date()), ""].concat(st.lines.map(function (l) { return (l.d || "Item") + "  " + l.q + " x " + money2(l.r) + " = " + money2(l.q * l.r); }))
+        .concat(["", "Subtotal " + money2(t.sub), st.disc ? "Discount " + money2(t.disc) : null, "Tax " + st.tax + "% " + money2(t.tax), "Total " + money2(t.total), "", "Valid for 30 days. Reply to this message to accept."]).filter(function (x) { return x !== null; }).join("\n");
+    },
+    render: function (st, view, phone) {
+      if (view === "new") {
+        var t = Estimates.totals(st);
+        var lines = st.lines.map(function (l, i) {
+          return '<tr><td>' + input("d", l.d, ' placeholder="Description" data-live="d" data-i="' + i + '"') + "</td><td>" + input("q", l.q, ' type="number" min="0" step="1" data-live="q" data-i="' + i + '"') + "</td><td>" + input("r", l.r, ' type="number" min="0" step="0.01" data-live="r" data-i="' + i + '"') + '</td><td class="num" data-lt="' + i + '">' + money2(l.q * l.r) + '</td><td>' + btn("rm", "×", "x", ' data-i="' + i + '" aria-label="Remove line"') + "</td></tr>";
+        }).join("");
+        return head("New estimate", '<span class="sum">#' + st.next + ", " + longDate(new Date()) + "</span>") +
+          '<div class="two">' + field("Customer", input("customer", st.customer, ' data-live="customer"')) + field("Job", input("job", st.job, ' data-live="job"')) + "</div>" +
+          '<table class="tbl lines"><thead><tr><th>Item</th><th class="num">Qty</th><th class="num">Rate</th><th class="num">Amount</th><th></th></tr></thead><tbody>' + lines + "</tbody></table>" +
+          '<div class="fa left">' + btn("addline", "Add a line", "ghost small") + "</div>" +
+          '<div class="two tot"><div>' + field("Tax rate: <output data-tax-out>" + st.tax + "</output>%", range("tax", 0, 10, 0.25, st.tax, ' data-live="tax"'), "raw") + field("Discount", input("disc", st.disc || "", ' type="number" min="0" step="1" placeholder="0" data-live="disc"')) + "</div>" +
+          '<div class="totals"><div><span>Subtotal</span><b data-sub>' + money2(t.sub) + '</b></div><div><span>Discount</span><b data-discv>' + money2(t.disc) + '</b></div><div><span>Tax</span><b data-taxv>' + money2(t.tax) + '</b></div><div class="grand"><span>Total</span><b data-total>' + money2(t.total) + "</b></div></div></div>" +
+          '<div class="fa">' + btn("save", "Save", "") + btn("copy", "Copy for the customer", "ghost") + btn("csv", "Download CSV", "ghost") + "</div>";
+      }
+      var acc = st.saved.filter(function (s) { return s.st === "Accepted"; }).reduce(function (a, s) { return a + s.total; }, 0);
+      var out = st.saved.filter(function (s) { return s.st === "Sent"; }).reduce(function (a, s) { return a + s.total; }, 0);
+      return head("Recent estimates", '<span class="sum">' + money(acc) + " accepted, " + money(out) + " waiting on a yes</span>") +
+        '<table class="tbl"><thead><tr><th>#</th><th>Customer</th><th class="xw">Job</th><th class="num">Total</th><th>Status</th></tr></thead><tbody>' +
+        st.saved.map(function (s, i) { var k = s.st === "Accepted" ? "ok" : s.st === "Sent" ? "warn" : ""; return '<tr class="rowb" data-act="cycle" data-i="' + i + '" tabindex="0"><td>' + s.n + "</td><td>" + esc(s.cust) + '</td><td class="xw dim">' + esc(s.job) + '</td><td class="num">' + money2(s.total) + "</td><td>" + pill(s.st, k) + "</td></tr>"; }).join("") +
+        "</tbody></table>" + note("Tap a row to move it along: draft, sent, accepted. Accepted estimates become invoices with one more tap.");
+    },
+    live: function (st, el, main) {
+      var k = el.getAttribute("data-live"), i = Number(el.getAttribute("data-i"));
+      if (k === "customer" || k === "job") { st[k] = el.value; return; }
+      if (k === "d") { st.lines[i].d = el.value; return; }
+      if (k === "q" || k === "r") st.lines[i][k] = Number(el.value) || 0;
+      if (k === "tax") { st.tax = Number(el.value); var o = main.querySelector("[data-tax-out]"); if (o) o.textContent = st.tax; }
+      if (k === "disc") st.disc = Number(el.value) || 0;
+      var t = Estimates.totals(st), set = function (sel, v) { var e = main.querySelector(sel); if (e) e.textContent = v; };
+      if (k === "q" || k === "r") set('[data-lt="' + i + '"]', money2(st.lines[i].q * st.lines[i].r));
+      set("[data-sub]", money2(t.sub)); set("[data-discv]", money2(t.disc)); set("[data-taxv]", money2(t.tax)); set("[data-total]", money2(t.total));
+    },
+    act: function (st, act, el) {
+      if (act === "addline") { st.lines.push({ d: "", q: 1, r: 0 }); return true; }
+      if (act === "rm") { st.lines.splice(Number(el.getAttribute("data-i")), 1); if (!st.lines.length) st.lines.push({ d: "", q: 1, r: 0 }); return true; }
+      if (act === "save") { var t = Estimates.totals(st); st.saved.unshift({ n: st.next, cust: st.customer || "New customer", job: st.job || "Untitled job", total: t.total, st: "Draft" }); st.msg = "Estimate #" + st.next + " saved as a draft. Open Recent to send it."; st.next++; return true; }
+      if (act === "copy") { st.msg = copyText(Estimates.text(st)) ? "Copied. Paste it into a text or an email." : "Your browser blocked the clipboard."; return true; }
+      if (act === "csv") { var tt = Estimates.totals(st); var rows = [["Item", "Qty", "Rate", "Amount"]].concat(st.lines.map(function (l) { return [l.d, l.q, l.r, (l.q * l.r).toFixed(2)]; })).concat([["Subtotal", "", "", tt.sub.toFixed(2)], ["Discount", "", "", tt.disc.toFixed(2)], ["Tax " + st.tax + "%", "", "", tt.tax.toFixed(2)], ["Total", "", "", tt.total.toFixed(2)]]); st.msg = download("estimate-" + st.next + ".csv", csv(rows), "text/csv") ? "estimate-" + st.next + ".csv downloaded." : "Your browser blocked the download."; return true; }
+      if (act === "cycle") { var s = st.saved[Number(el.getAttribute("data-i"))]; s.st = s.st === "Draft" ? "Sent" : s.st === "Sent" ? "Accepted" : "Draft"; st.msg = "#" + s.n + " marked " + s.st.toLowerCase() + (s.st === "Sent" ? ". The customer gets a link to accept." : s.st === "Accepted" ? ". Ready to invoice." : "."); return true; }
+      return false;
+    }
+  };
+
+  /* =====================================================================
+     4. Nonprofit: volunteer shifts that fill themselves
+     ===================================================================== */
+  var Volunteers = {
+    name: function () { return "Northside Pantry volunteers"; },
+    who: function () { return "Volunteer coordinator"; },
+    section: "Volunteers",
+    views: function () { return [{ id: "shifts", label: "Shifts" }, { id: "people", label: "People and hours", tab: "People" }]; },
+    init: function () {
+      return { view: "shifts", signing: null, waitlist: [], shifts: [
+        { id: 1, name: "Food pantry sorting", day: 6, time: "9 to noon", hours: 3, need: 4, people: ["Maria G.", "Devon P."] },
+        { id: 2, name: "Delivery drivers", day: 0, time: "1 to 4", hours: 3, need: 2, people: ["Lee T."] },
+        { id: 3, name: "Intake desk", day: 2, time: "6 to 8", hours: 2, need: 3, people: [] },
+        { id: 4, name: "Coat drive setup", day: 4, time: "5 to 8", hours: 3, need: 4, people: ["Ana R.", "Sam K.", "Priya N.", "Jo B."] }
+      ], hours: [["Maria G.", 12], ["Devon P.", 9], ["Lee T.", 6], ["Ana R.", 5], ["Chris O.", 4], ["Sam K.", 3], ["Priya N.", 3], ["Jo B.", 2]] };
+    },
+    render: function (st, view, phone) {
+      if (view === "shifts") {
+        var open = st.shifts.reduce(function (a, s) { return a + Math.max(0, s.need - s.people.length); }, 0);
+        return head("This week's shifts", '<span class="sum">' + plural(open, "spot", "spots") + " still open</span>") +
+          '<div class="stack g2">' + st.shifts.map(function (s) {
+            var full = s.people.length >= s.need;
+            var chips = s.people.map(function (p) { return '<span class="av" title="' + esc(p) + '">' + esc(initials(p)) + "</span>"; }).join("");
+            var form = st.signing === s.id ? '<form class="inline" data-act="join" data-id="' + s.id + '">' + input("name", "", ' placeholder="Your name" required autofocus') + '<button type="submit" class="b small">' + (full ? "Join the waitlist" : "Add me") + "</button>" + btn("cancel", "Cancel", "ghost small") + "</form>" : "";
+            return '<div class="card shift"><div class="ch"><b>' + esc(s.name) + "</b>" + (full ? pill("Full", "ok") : pill((s.need - s.people.length) + " open", "warn")) + '</div><div class="addr">' + shortDate(nextWeekday(s.day)) + ", " + s.time + ", " + plural(s.hours, "hour", "hours") + "</div>" +
+              '<div class="cf"><span class="avs">' + chips + (s.people.length ? "" : '<span class="dim">Nobody yet</span>') + "</span>" + (st.signing === s.id ? "" : btn("signup", full ? "Waitlist" : "Sign up", (full ? "ghost " : "") + "small", ' data-id="' + s.id + '"')) + "</div>" + form + bar(s.people.length / s.need * 100, full ? "" : "amber") + "</div>";
+          }).join("") + "</div>" + (st.waitlist.length ? note("Waitlist: " + st.waitlist.join(", ") + ". They are texted if a spot opens.") : note("Sign-ups get a reminder the day before, and the coordinator gets a list the morning of."));
+      }
+      var scheduled = {}; st.shifts.forEach(function (s) { s.people.forEach(function (p) { scheduled[p] = (scheduled[p] || 0) + s.hours; }); });
+      var names = {}; st.hours.forEach(function (h) { names[h[0]] = { h: h[1], up: 0 }; }); Object.keys(scheduled).forEach(function (p) { if (!names[p]) names[p] = { h: 0, up: 0 }; names[p].up = scheduled[p]; });
+      var list = Object.keys(names).sort(function (a, b) { return (names[b].h + names[b].up) - (names[a].h + names[a].up); });
+      var totalH = list.reduce(function (a, p) { return a + names[p].h; }, 0), totalUp = list.reduce(function (a, p) { return a + names[p].up; }, 0);
+      return head("People and hours", btn("export", "Export CSV", "ghost small")) +
+        '<div class="stats">' + stat("Volunteers", list.length) + stat("Hours this month", totalH) + stat("Hours scheduled", totalUp) + "</div>" +
+        '<table class="tbl"><thead><tr><th>Name</th><th class="num">This month</th><th class="num">Scheduled</th></tr></thead><tbody>' +
+        list.map(function (p) { return "<tr><td>" + esc(p) + '</td><td class="num">' + names[p].h + '</td><td class="num">' + names[p].up + "</td></tr>"; }).join("") + "</tbody></table>" +
+        note("The export is the hours report your board and your grant reports ask for.");
+    },
+    act: function (st, act, el, form) {
+      if (act === "signup") { st.signing = Number(el.getAttribute("data-id")); return true; }
+      if (act === "cancel") { st.signing = null; return true; }
+      if (act === "join") {
+        var name = form.name.value.trim(); if (!name) { form.name.focus(); return false; }
+        var s = st.shifts.filter(function (x) { return x.id === Number(form.getAttribute("data-id")); })[0];
+        if (s.people.length >= s.need) { st.waitlist.push(name); st.msg = name + " is on the waitlist for " + s.name + "."; }
+        else { s.people.push(name); st.msg = name + " is signed up for " + s.name + ". A reminder goes out the day before."; }
+        st.signing = null; return true;
+      }
+      if (act === "export") {
+        var rows = [["Name", "Hours this month", "Hours scheduled"]];
+        var sched = {}; st.shifts.forEach(function (sh) { sh.people.forEach(function (p) { sched[p] = (sched[p] || 0) + sh.hours; }); });
+        st.hours.forEach(function (h) { rows.push([h[0], h[1], sched[h[0]] || 0]); });
+        Object.keys(sched).forEach(function (p) { if (!st.hours.some(function (h) { return h[0] === p; })) rows.push([p, 0, sched[p]]); });
+        st.msg = download("volunteer-hours.csv", csv(rows), "text/csv") ? "volunteer-hours.csv downloaded." : "Your browser blocked the download."; return true;
+      }
+      return false;
+    }
+  };
+
+  /* =====================================================================
+     5. Learning platform: a course player with a quiz and a certificate
+     ===================================================================== */
+  var LESSONS = [
+    { id: "l1", title: "What phishing looks like", short: "Spotting it", body: ["Phishing is a message that pretends to come from someone you trust so that you will click a link, open a file, pay something, or hand over a password. It arrives by email, text, and chat, and it is usually in a hurry.", "The tells: urgency (your account closes today), a sender address that is almost right, a link whose real destination does not match its text, and an attachment you were not expecting."] },
+    { id: "l2", title: "Check before you click", short: "Checking links", body: ["Hover over a link, or press and hold it on a phone, to see where it really goes. Read the sender's full address, not just the display name.", "If a message asks for a password, a gift card, or a wire transfer, stop. No real request arrives that way. When in doubt, close the message and go to the site yourself."] },
+    { id: "l3", title: "Report it", short: "Reporting it", body: ["Reporting is the whole game. Use the report button in your mail app or forward the message to your IT contact, then delete it.", "If you already clicked or typed a password, say so right away. The fix takes minutes when it is reported the same hour and weeks when it is not. Nobody gets in trouble for reporting."] }
   ];
-  var qd = document.getElementById("demo-107");
-  if (qd) {
-    var dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
-    var qi = dayOfYear % QUESTIONS.length, answered = 0, correct = 0;
-    var goal = 5;
-    var qCat = qd.querySelector("[data-q-cat]"), qText = qd.querySelector("[data-q-text]"), qOpts = qd.querySelector("[data-q-opts]"), qExp = qd.querySelector("[data-q-explain]"), qNext = qd.querySelector("[data-q-next]");
-    var goalN = qd.querySelector("[data-goal-n]"), goalRing = qd.querySelector("[data-goal-ring]"), score = qd.querySelector("[data-score]");
+  var QUIZ = [
+    { q: "An email from “IT Support” says your password expires in one hour and gives a link to reset it. What is the best first step?", a: ["Click the link and reset it quickly", "Check the sender's full address and where the link really goes", "Reply and ask whether it is real"], c: 1, x: "Check first. Urgency plus a link is the classic combination, and the reply would go to the attacker." },
+    { q: "Which of these is the strongest sign that a message is phishing?", a: ["It has the company logo", "It arrived on a Monday morning", "It asks you to buy gift cards and send the codes"], c: 2, x: "Logos are easy to copy. A request for gift cards, a wire, or a password is the sign." },
+    { q: "You clicked a link in a suspicious email and typed your password. What now?", a: ["Change the password and tell nobody", "Report it right away, then change the password", "Wait and see whether anything happens"], c: 1, x: "Report first so the account can be watched and other staff warned, then change the password." }
+  ];
+  var Course = {
+    name: function () { return "Phishing basics for staff"; },
+    who: function () { return "Staff training"; },
+    section: "Course",
+    views: function (st) {
+      return LESSONS.map(function (l, i) { return { id: l.id, label: (i + 1) + ". " + l.short, tab: "Lesson " + (i + 1), done: st.done[l.id] }; })
+        .concat([{ id: "quiz", label: "4. Quiz", tab: "Quiz", done: st.passed }, { id: "cert", label: "Certificate", tab: "Certificate", locked: !st.passed }]);
+    },
+    init: function () { return { view: "l1", done: { l1: false, l2: false, l3: false }, qi: 0, score: 0, answered: null, finished: false, passed: false, name: "", cert: null }; },
+    steps: function (st) { return (st.done.l1 ? 1 : 0) + (st.done.l2 ? 1 : 0) + (st.done.l3 ? 1 : 0) + (st.passed ? 1 : 0); },
+    certSvg: function (st) {
+      var w = 640, h = 440;
+      return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + " " + h + '" width="' + w + '" height="' + h + '" font-family="Georgia, serif">' +
+        '<rect width="' + w + '" height="' + h + '" fill="#fbfbf8"/><rect x="14" y="14" width="' + (w - 28) + '" height="' + (h - 28) + '" fill="none" stroke="#12352b" stroke-width="3"/><rect x="22" y="22" width="' + (w - 44) + '" height="' + (h - 44) + '" fill="none" stroke="#d4a84b" stroke-width="1"/>' +
+        '<text x="320" y="92" text-anchor="middle" font-size="13" letter-spacing="4" fill="#7f5f1b">CERTIFICATE OF COMPLETION</text>' +
+        '<text x="320" y="150" text-anchor="middle" font-size="30" fill="#12352b">Phishing basics for staff</text>' +
+        '<text x="320" y="196" text-anchor="middle" font-size="13" fill="#5e675f">is awarded to</text>' +
+        '<text x="320" y="246" text-anchor="middle" font-size="34" font-style="italic" fill="#1a221e">' + esc(st.cert.name) + "</text>" +
+        '<line x1="160" y1="262" x2="480" y2="262" stroke="#cbcfc6"/>' +
+        '<text x="320" y="300" text-anchor="middle" font-size="14" fill="#3a443f">Completed on ' + esc(st.cert.date) + " with a score of " + st.cert.score + " of " + QUIZ.length + "</text>" +
+        '<text x="320" y="372" text-anchor="middle" font-size="11" fill="#5e675f">Certificate ' + esc(st.cert.id) + " · Sample certificate from a Tompkins Software Systems demo</text></svg>";
+    },
+    render: function (st, view, phone) {
+      var prog = progress(Course.steps(st) / 4 * 100, Course.steps(st) + " of 4 steps");
+      var li = LESSONS.map(function (l) { return l.id; }).indexOf(view);
+      if (li >= 0) {
+        var l = LESSONS[li];
+        return prog + '<div class="eyebrow">Lesson ' + (li + 1) + " of " + LESSONS.length + "</div><h3 class=\"lt\">" + esc(l.title) + "</h3>" + l.body.map(function (p) { return '<p class="lp">' + esc(p) + "</p>"; }).join("") +
+          '<div class="fa left">' + (st.done[l.id] ? pill("Completed", "ok") + btn("view", li < 2 ? "Next lesson" : "Go to the quiz", "ghost", ' data-v="' + (li < 2 ? LESSONS[li + 1].id : "quiz") + '"') : btn("complete", li < 2 ? "Mark complete and continue" : "Mark complete and start the quiz", "", ' data-id="' + l.id + '"')) + "</div>";
+      }
+      if (view === "quiz") {
+        var lessonsLeft = LESSONS.filter(function (x) { return !st.done[x.id]; }).length;
+        if (lessonsLeft) return prog + head("Quiz") + note("Finish the " + plural(lessonsLeft, "lesson", "lessons") + " first. The quiz is three questions and you need two right.") + '<div class="fa left">' + btn("view", "Back to the lessons", "ghost", ' data-v="' + LESSONS.filter(function (x) { return !st.done[x.id]; })[0].id + '"') + "</div>";
+        if (st.finished) {
+          return prog + head("Quiz result") + '<div class="stats">' + stat("Score", st.score + " of " + QUIZ.length) + stat("Result", st.passed ? pill("Passed", "ok") : pill("Not yet", "bad")) + "</div>" +
+            (st.passed ? note("Passed. Your certificate is ready.") + '<div class="fa left">' + btn("view", "Get the certificate", "", ' data-v="cert"') + "</div>" : note("You need two of three. The lessons are short; take another look and try again.") + '<div class="fa left">' + btn("retake", "Try again", "") + "</div>");
+        }
+        var Q = QUIZ[st.qi];
+        var opts = Q.a.map(function (t, i) { var cls = st.answered === null ? "" : i === Q.c ? " right" : i === st.answered ? " wrong" : ""; return '<button type="button" class="opt' + cls + '" data-act="answer" data-i="' + i + '"' + (st.answered === null ? "" : " disabled") + ">" + esc(t) + "</button>"; }).join("");
+        return prog + '<div class="eyebrow">Question ' + (st.qi + 1) + " of " + QUIZ.length + '</div><p class="qq">' + esc(Q.q) + '</p><div class="opts">' + opts + "</div>" +
+          (st.answered === null ? "" : '<div class="explain"><b>' + (st.answered === Q.c ? "Right." : "Not quite.") + "</b> " + esc(Q.x) + "</div>" + '<div class="fa left">' + btn("qnext", st.qi < QUIZ.length - 1 ? "Next question" : "See the result", "") + "</div>");
+      }
+      // certificate
+      if (!st.passed) return prog + head("Certificate") + note("Locked until the quiz is passed.");
+      if (st.cert) return prog + head("Certificate", btn("certdl", "Download", "small")) + '<div class="cert">' + Course.certSvg(st) + "</div>" + note("Downloads as an SVG that prints on one page. In a real deployment it is also emailed to the learner and their supervisor, and the training record keeps the date.");
+      return prog + head("Certificate") + note("Passed. Type the name that should appear on it.") + '<form class="frm" data-act="issue">' + field("Name on the certificate", input("name", st.name, ' placeholder="First and last name" required')) + '<div class="fa"><button type="submit" class="b">Issue the certificate</button></div></form>';
+    },
+    act: function (st, act, el, form) {
+      if (act === "complete") { st.done[el.getAttribute("data-id")] = true; var i = LESSONS.map(function (l) { return l.id; }).indexOf(el.getAttribute("data-id")); st.view = i < 2 ? LESSONS[i + 1].id : "quiz"; return true; }
+      if (act === "answer") { if (st.answered !== null) return false; st.answered = Number(el.getAttribute("data-i")); if (st.answered === QUIZ[st.qi].c) st.score++; return true; }
+      if (act === "qnext") { st.answered = null; if (st.qi < QUIZ.length - 1) st.qi++; else { st.finished = true; st.passed = st.score >= 2; } return true; }
+      if (act === "retake") { st.qi = 0; st.score = 0; st.answered = null; st.finished = false; return true; }
+      if (act === "issue") { var name = form.name.value.trim(); if (!name) { form.name.focus(); return false; } st.name = name; st.cert = { name: name, date: longDate(new Date()), score: st.score, id: "PB-" + new Date().getFullYear() + "-" + String(hash(name + isoDate(new Date())) % 100000).padStart(5, "0") }; return true; }
+      if (act === "certdl") { st.msg = download("certificate-" + st.cert.name.toLowerCase().replace(/[^a-z0-9]+/g, "-") + ".svg", Course.certSvg(st), "image/svg+xml") ? "Certificate downloaded." : "Your browser blocked the download."; return true; }
+      return false;
+    },
+    locked: function (st, view) { return view === "cert" && !st.passed; }
+  };
 
-    function showQ() {
-      var Q = QUESTIONS[qi];
-      qCat.textContent = Q.cat;
-      qText.textContent = Q.q;
-      qOpts.innerHTML = "";
-      Q.a.forEach(function (t, i) {
-        var b = el("button", "q-opt", esc(t)); b.type = "button";
-        b.addEventListener("click", function () { answer(i); });
-        qOpts.appendChild(b);
-      });
-      qExp.hidden = true; qNext.hidden = true;
+  /* =====================================================================
+     6. My own idea: the back office an app needs once it is a product
+     ===================================================================== */
+  function tierMult(seats) { return seats >= 50 ? 0.7 : seats >= 10 ? 0.85 : 1; }
+  var Console = {
+    name: function (st) { return (st.app || "Your app") + " admin"; },
+    who: function () { return "Owner"; },
+    section: "Admin",
+    views: function () { return [{ id: "overview", label: "Overview" }, { id: "customers", label: "Customers" }, { id: "plans", label: "Plans" }]; },
+    init: function () {
+      var st = { view: "overview", app: "Trailhead", price: 12, newSeats: 10, next: 6, customers: [
+        { name: "Riverside Park District", seats: 25, since: "Aug 2026" }, { name: "Hart Electric", seats: 8, since: "Sep 2026" }, { name: "Prairie Trails Council", seats: 60, since: "Sep 2026" }, { name: "Northside Clinic", seats: 12, since: "Oct 2026" }, { name: "Blue Ridge Tours", seats: 5, since: "Oct 2026", trial: true }
+      ] };
+      st.customers.forEach(function (c, i) { c.key = licenseKey(st.app + c.name + i); });
+      return st;
+    },
+    monthly: function (st, c) { return c.trial ? 0 : c.seats * st.price * tierMult(c.seats); },
+    mrr: function (st) { return st.customers.reduce(function (a, c) { return a + Console.monthly(st, c); }, 0); },
+    render: function (st, view, phone) {
+      var seats = st.customers.reduce(function (a, c) { return a + c.seats; }, 0), trials = st.customers.filter(function (c) { return c.trial; }).length;
+      if (view === "overview") {
+        return head("Overview") + '<div class="two">' + field("App name", input("app", st.app, ' data-live="app" maxlength="24"')) + field("Price per seat per month: $<output data-price-out>" + st.price + "</output>", range("price", 3, 60, 1, st.price, ' data-live="price"'), "raw") + "</div>" +
+          '<div class="stats">' + stat("Customers", st.customers.length) + stat("Seats", '<span data-seats>' + fmt(seats) + "</span>") + stat("Monthly revenue", '<span data-mrr>' + money(Console.mrr(st)) + "</span>") + stat("Trials", trials) + "</div>" +
+          note("This is the part people forget to plan for: who bought it, how many seats, what they owe, and the key that unlocks it. We set this up so you can sell what you own.");
+      }
+      if (view === "customers") {
+        var rows = st.customers.map(function (c, i) {
+          return "<tr><td>" + esc(c.name) + '<span class="dim xw"> since ' + esc(c.since) + '</span></td><td class="num">' + c.seats + '</td><td class="num">' + (c.trial ? pill("Trial", "warn") : money(Console.monthly(st, c))) + '</td><td class="xw"><span class="mono">' + c.key + "</span></td><td class=\"ta\">" + btn("copykey", "Copy key", "ghost small", ' data-i="' + i + '"') + "</td></tr>";
+        }).join("");
+        return head("Customers", btn("exportcust", "Export CSV", "ghost small")) +
+          '<table class="tbl"><thead><tr><th>Customer</th><th class="num">Seats</th><th class="num">Monthly</th><th class="xw">License key</th><th></th></tr></thead><tbody>' + rows + "</tbody></table>" +
+          '<form class="frm boxed" data-act="addcust"><h4>Add a customer</h4><div class="two">' + field("Organization", input("name", "", ' placeholder="Who is buying" required')) + field("Seats: <output data-seats-out>" + st.newSeats + "</output>", range("seats", 1, 200, 1, st.newSeats, ' data-live="newSeats"'), "raw") + "</div>" +
+          '<label class="ck"><input type="checkbox" name="trial"> 30-day trial, no charge yet</label><div class="fa"><button type="submit" class="b">Create the license</button></div></form>';
+      }
+      var tiers = [["1 to 9 seats", 1, "Monthly, card on file"], ["10 to 49 seats", 0.85, "Monthly, card or invoice"], ["50 seats and up", 0.7, "Annual invoice, purchase orders accepted"]];
+      return head("Plans") + '<table class="tbl"><thead><tr><th>Plan</th><th class="num">Per seat</th><th class="xw">Billing</th></tr></thead><tbody>' +
+        tiers.map(function (t) { return "<tr><td>" + t[0] + '</td><td class="num">' + money2(st.price * t[1]) + '</td><td class="xw">' + t[2] + "</td></tr>"; }).join("") + "</tbody></table>" +
+        note("Change the price on the Overview page and these follow. Discounts are 15 percent at 10 seats and 30 percent at 50. The terms are written down once and the system enforces them.");
+    },
+    live: function (st, el, main, screen) {
+      var k = el.getAttribute("data-live");
+      if (k === "app") { st.app = el.value.trim(); var nm = screen.querySelector("[data-appname]"); if (nm) nm.textContent = Console.name(st); }
+      if (k === "price") { st.price = Number(el.value); var o = main.querySelector("[data-price-out]"), m = main.querySelector("[data-mrr]"); if (o) o.textContent = st.price; if (m) m.textContent = money(Console.mrr(st)); }
+      if (k === "newSeats") { st.newSeats = Number(el.value); var so = main.querySelector("[data-seats-out]"); if (so) so.textContent = st.newSeats; }
+    },
+    act: function (st, act, el, form) {
+      if (act === "addcust") {
+        var name = form.name.value.trim(); if (!name) { form.name.focus(); return false; }
+        var c = { name: name, seats: st.newSeats, since: new Date().toLocaleDateString("en-US", { month: "short", year: "numeric" }), trial: form.trial.checked };
+        c.key = licenseKey(st.app + name + st.next); st.next++; st.customers.unshift(c);
+        st.msg = "License " + c.key + " created for " + name + (c.trial ? " as a trial." : ", " + money(Console.monthly(st, c)) + " a month."); return true;
+      }
+      if (act === "copykey") { var ck = st.customers[Number(el.getAttribute("data-i"))]; st.msg = copyText(ck.key) ? "Key for " + ck.name + " copied." : "Your browser blocked the clipboard."; return true; }
+      if (act === "exportcust") { var rows = [["Customer", "Seats", "Monthly", "Status", "Since", "License key"]].concat(st.customers.map(function (c) { return [c.name, c.seats, Console.monthly(st, c).toFixed(2), c.trial ? "Trial" : "Active", c.since, c.key]; })); st.msg = download("customers.csv", csv(rows), "text/csv") ? "customers.csv downloaded." : "Your browser blocked the download."; return true; }
+      return false;
     }
-    function answer(i) {
-      var Q = QUESTIONS[qi];
-      var btns = qOpts.querySelectorAll(".q-opt");
-      btns.forEach(function (b, j) { b.disabled = true; if (j === Q.c) b.classList.add("right"); else if (j === i) b.classList.add("wrong"); });
-      qExp.innerHTML = (i === Q.c ? "<strong>Right.</strong> " : "<strong>Not quite.</strong> ") + esc(Q.x) + '<span class="ref">' + esc(Q.ref) + "</span>";
-      qExp.hidden = false; qNext.hidden = false;
-      answered = Math.min(goal, answered + 1); if (i === Q.c) correct++;
-      drawGoal();
-    }
-    function drawGoal() {
-      var pct = answered / goal, r = 50, c = 2 * Math.PI * r;
-      goalRing.innerHTML = '<circle cx="60" cy="60" r="' + r + '" fill="none" stroke="#e3e5df" stroke-width="10"/>' +
-        '<circle cx="60" cy="60" r="' + r + '" fill="none" stroke="#2a7560" stroke-width="10" stroke-linecap="round" stroke-dasharray="' + c + '" stroke-dashoffset="' + (c * (1 - pct)) + '" transform="rotate(-90 60 60)" style="transition:stroke-dashoffset .5s ease"/>';
-      goalN.textContent = answered + " of " + goal;
-      score.textContent = answered ? correct + " right so far" : "Answer one to start the day";
-      if (answered >= goal) score.textContent = "Daily goal done. " + correct + " of " + goal + " right.";
-    }
-    qNext.addEventListener("click", function () { qi = (qi + 1) % QUESTIONS.length; showQ(); });
-    showQ(); drawGoal();
+  };
+
+  /* =====================================================================
+     The shell: who it is for, the device, and the start-from-this form
+     ===================================================================== */
+  var AUD = [
+    { id: "works", label: "Public works", kind: "Work orders", app: WorkOrders, ask: "Want a work order board like this for your department?", hint: "For example: photos from the truck, and a public map of what is open", title: "Work orders for a streets crew", why: "Requests come in from the website, the front desk, and the phone. The board is the one list the crew works from, and the Friday report writes itself.", topic: "build" },
+    { id: "gov", label: "Local government", kind: "Permit desk", app: Permits, ask: "Want a permit desk like this for your office?", hint: "For example: online payment, and inspections scheduled from the permit", title: "A permit desk residents can use from a phone", why: "Apply, see the fee, get the permit by email. The clerk works one queue instead of a stack of PDFs, and the fee table is theirs to edit.", topic: "build" },
+    { id: "biz", label: "Small business", kind: "Estimates", app: Estimates, ask: "Want estimates like this for your business?", hint: "For example: customer signatures, and an export for the bookkeeper", title: "Estimates that go out before you leave the driveway", why: "Line items, tax, a copy the customer can read on a phone, and a list of what is still waiting on a yes.", topic: "build" },
+    { id: "np", label: "Nonprofit", kind: "Volunteer shifts", app: Volunteers, ask: "Want volunteer sign-ups like this for your organization?", hint: "For example: background check status, and text reminders", title: "Volunteer shifts that fill themselves", why: "Open spots, sign-ups, reminders, and the hours report your board asks for, without a shared spreadsheet that nobody trusts.", topic: "build" },
+    { id: "learn", label: "Learning platform", kind: "Course player", app: Course, ask: "Want a course player like this for your learners?", hint: "For example: our own videos, and a report for managers", title: "A course player with a quiz and a certificate", why: "Lessons, a pass mark, and a certificate the learner downloads. The sample course is three short lessons on spotting phishing; yours would be your content.", topic: "build" },
+    { id: "idea", label: "My own idea", kind: "Licensing console", app: Console, ask: "Have an idea that needs this behind it?", hint: "For example: what it does and who would pay for it", title: "The back office your idea needs once it is a product", why: "Name the app, set a price per seat, add a customer, and the license key is generated. This is what we set up so you can sell what you own.", topic: "idea" }
+  ];
+  var byId = {}; AUD.forEach(function (a) { byId[a.id] = a; });
+
+  var hero = document.getElementById("try");
+  if (!hero) return;
+  var screen = hero.querySelector("[data-screen]"), device = hero.querySelector("[data-device]"), devSeg = hero.querySelector("[data-devseg]");
+  var audSeg = hero.querySelector("[data-aud]"), titleEl = hero.querySelector("[data-title]"), whyEl = hero.querySelector("[data-why]"), kindEl = hero.querySelector("[data-kind]");
+  var resetBtn = hero.querySelector("[data-reset]"), startForm = hero.querySelector("[data-start]"), startLabel = hero.querySelector("[data-start-label]"), needEl = hero.querySelector("[data-need]");
+  var state = { aud: "works", device: window.innerWidth < 760 ? "phone" : "desktop" };
+  var states = {};
+  function current() { return byId[state.aud]; }
+  function st() { if (!states[state.aud]) states[state.aud] = current().app.init(); return states[state.aud]; }
+
+  function clock() { return new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }); }
+
+  function draw(animate, fromUser) {
+    var a = current(), app = a.app, s = st(), phone = state.device === "phone";
+    var views = app.views(s);
+    var nav = views.map(function (v) {
+      var on = s.view === v.id ? " on" : "", lock = v.locked ? " locked" : "", done = v.done ? " done" : "";
+      return '<button type="button" class="nv' + on + lock + done + '" data-act="view" data-v="' + v.id + '"' + (v.locked ? ' aria-disabled="true"' : "") + "><span>" + esc(phone && v.tab ? v.tab : v.label) + "</span></button>";
+    }).join("");
+    var html = '<div class="app-top"><span class="dots"><i></i><i></i><i></i></span><span class="app-name" data-appname>' + esc(app.name(s)) + '</span><span class="who">' + esc(app.who(s)) + '</span><span class="clock" data-clock>' + clock() + "</span></div>";
+    html += '<div class="app-body">' + (phone ? "" : '<nav class="app-side" aria-label="' + esc(app.section) + '"><div class="side-head">' + esc(app.section) + "</div>" + nav + "</nav>");
+    html += '<div class="app-main" data-main>' + app.render(s, s.view, phone) + (s.msg ? '<div class="toast" role="status">' + esc(s.msg) + "</div>" : "") + "</div></div>";
+    if (phone) html += '<nav class="app-tabs" aria-label="' + esc(app.section) + '">' + nav + "</nav>";
+    screen.innerHTML = html;
+    if (s.msg) { s.msg = null; var t = screen.querySelector(".toast"); setTimeout(function () { if (t && t.parentNode) t.parentNode.removeChild(t); }, 3200); }
+    var auto = screen.querySelector("[autofocus]"); if (auto && fromUser) { try { auto.focus({ preventScroll: true }); } catch (e) { auto.focus(); } }
+    if (animate && !reduceMotion) { screen.classList.remove("boot"); void screen.offsetWidth; screen.classList.add("boot"); }
+    fitScreen();
   }
+
+  function fitScreen() {
+    device.className = "device " + state.device;
+    if (state.device === "desktop") {
+      var scale = Math.min(1, device.clientWidth / 720);
+      screen.style.transform = "scale(" + scale + ")";
+      device.style.height = Math.round(450 * scale) + "px";
+    } else { screen.style.transform = ""; device.style.height = ""; }
+  }
+
+  function setAud(id, animate) {
+    state.aud = id;
+    var a = current();
+    titleEl.textContent = a.title; whyEl.textContent = a.why; if (kindEl) kindEl.textContent = a.kind;
+    startLabel.textContent = a.ask; needEl.placeholder = a.hint;
+    draw(animate);
+  }
+
+  // Events inside the screen: clicks, form submits, live inputs, and selects.
+  screen.addEventListener("click", function (e) {
+    var el = e.target.closest("[data-act]"); if (!el || el.tagName === "FORM") return;
+    var act = el.getAttribute("data-act"), s = st(), app = current().app;
+    if (act === "view") {
+      var v = el.getAttribute("data-v");
+      if (app.locked && app.locked(s, v)) { s.msg = "Pass the quiz first."; draw(false, true); return; }
+      s.view = v; draw(false, true); return;
+    }
+    if (app.act(s, act, el, null)) draw(false, true);
+  });
+  screen.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    var el = e.target.closest("tr[data-act]"); if (!el) return;
+    e.preventDefault(); var s = st(); if (current().app.act(s, el.getAttribute("data-act"), el, null)) draw(false, true);
+  });
+  screen.addEventListener("submit", function (e) {
+    var form = e.target.closest("form[data-act]"); if (!form) return;
+    e.preventDefault(); var s = st();
+    if (current().app.act(s, form.getAttribute("data-act"), form, form)) draw(false, true);
+  });
+  screen.addEventListener("input", function (e) {
+    var el = e.target; if (!el.hasAttribute("data-live")) return;
+    var app = current().app; if (app.live) app.live(st(), el, screen.querySelector("[data-main]"), screen);
+    if (el.type === "range") fill(el);
+  });
+  screen.addEventListener("change", function (e) {
+    var el = e.target; if (!el.hasAttribute("data-change")) return;
+    if (current().app.act(st(), el.getAttribute("data-change"), el, null)) draw(false, true);
+  });
+  function fill(r) { var min = Number(r.min || 0), max = Number(r.max || 100), v = Number(r.value); r.style.setProperty("--fill", ((v - min) / (max - min) * 100) + "%"); }
+  new MutationObserver(function () { Array.prototype.forEach.call(screen.querySelectorAll(".rng"), fill); }).observe(screen, { childList: true, subtree: true });
+
+  // Who it is for
+  audSeg.addEventListener("change", function (e) { if (e.target.name === "aud") setAud(e.target.value, true); });
+  devSeg.addEventListener("change", function (e) { if (e.target.name === "device") { state.device = e.target.value; draw(); } });
+  resetBtn.addEventListener("click", function () { states[state.aud] = current().app.init(); states[state.aud].msg = "Sample data restored."; draw(true); });
+  window.addEventListener("resize", fitScreen);
+  setInterval(function () { var c = screen.querySelector("[data-clock]"); if (c) c.textContent = clock(); }, 30000);
+
+  // Start from this: opens the contact page with the message drafted.
+  startForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var a = current(), need = needEl.value.trim();
+    var draft = "I tried the " + a.kind.toLowerCase() + " sample for " + a.label.toLowerCase() + " on your site." + (need ? " Our version would need: " + need : " Here is what we need: ");
+    window.location.href = startForm.getAttribute("action") + "?topic=" + a.topic + "&draft=" + encodeURIComponent(draft);
+  });
+
+  // Boot
+  devSeg.querySelector('input[value="' + state.device + '"]').checked = true;
+  var startAud = (location.hash.match(/^#try-(\w+)$/) || [])[1];
+  if (startAud && byId[startAud]) audSeg.querySelector('input[value="' + startAud + '"]').checked = true; else startAud = "works";
+  setAud(startAud, true);
 })();
