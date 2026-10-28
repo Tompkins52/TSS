@@ -14,7 +14,7 @@ scripts: assets/js/home.js
     <div class="try-grid">
       <div class="try-left">
         <h1 id="try-title">Pick who you are. Use the tool.</h1>
-        <p class="try-intro">Six working sample apps, one for each kind of organization we build for. Add things, change things, download the export. Nothing you type leaves this page.</p>
+        <p class="try-intro">Six working sample apps, one for each kind of organization we build for. Add things, change things, download the export, pick the colors and the type. Nothing you type leaves this page.</p>
         <fieldset class="auds" data-aud>
           <legend class="visually-hidden">Who is it for?</legend>
           <label><input type="radio" name="aud" value="works" checked><span class="al">Public works</span><span class="ak">Work orders</span></label>
@@ -37,7 +37,8 @@ scripts: assets/js/home.js
             <label><input type="radio" name="device" value="desktop" checked><span>Desktop</span></label>
             <label><input type="radio" name="device" value="phone"><span>Phone</span></label>
           </fieldset>
-          <span class="device-note">Sample data. Nothing is saved or sent.</span>
+          <label class="pick"><span>Palette</span><select data-palette aria-label="Color palette"></select></label>
+          <label class="pick"><span>Font</span><select data-font aria-label="Font"></select></label>
           <button class="reset" type="button" data-reset>Reset</button>
         </div>
         <div class="device desktop" data-device>
@@ -45,6 +46,7 @@ scripts: assets/js/home.js
             <noscript><p style="padding:1rem">The sample apps need JavaScript. Everything else on the site works without it.</p></noscript>
           </div>
         </div>
+        <p class="device-caption">Sample data. Each app keeps its own palette and font while you are here. Nothing is saved or sent.</p>
         <form class="start" data-start action="{{root}}contact.html" method="get">
           <label for="need"><span data-start-label>Want work orders like this for your department?</span> Say what your version would need and we will write back within three business days.</label>
           <div class="start-row">
@@ -117,12 +119,17 @@ scripts: assets/js/home.js
       </article>
     </div>
     <div class="probono">
-      <div>
+      <a class="shot" href="{{root}}products/phantom-soldier.html" aria-label="Phantom Soldier, what we built">
+        <span class="chrome" aria-hidden="true"><i></i><i></i><i></i></span>
+        <img src="{{root}}assets/img/products/ps-home.webp" alt="The phantomsoldier.org home page" width="1100" height="687" loading="lazy">
+        <img class="ph" src="{{root}}assets/img/products/ps-phone.webp" alt="" width="390" height="844" loading="lazy">
+      </a>
+      <div class="probono-copy">
         <span class="badge badge-brass">Pro bono</span>
         <h3>Phantom Soldier</h3>
         <p>Veteran stories, told as songs. We built and maintain phantomsoldier.org for Project Veteran Overwatch at no charge: a page for every song and the story behind it, a story intake form, a Veterans Service Officer finder, and printable flyers. PVO owns it.</p>
+        <div class="actions"><a class="btn btn-outline btn-small" href="{{root}}products/phantom-soldier.html">What we built</a><a class="btn btn-outline btn-small" href="https://phantomsoldier.org/" rel="noopener">Visit phantomsoldier.org</a></div>
       </div>
-      <div class="actions"><a class="btn btn-outline btn-small" href="{{root}}products/phantom-soldier.html">What we built</a><a class="btn btn-outline btn-small" href="https://phantomsoldier.org/" rel="noopener">Visit phantomsoldier.org</a></div>
     </div>
   </div>
 </section>

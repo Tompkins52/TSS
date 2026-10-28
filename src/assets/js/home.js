@@ -488,15 +488,48 @@
   ];
   var byId = {}; AUD.forEach(function (a) { byId[a.id] = a; });
 
+  /* Palettes and fonts the visitor can pick for each sample app. Applied as CSS variables on the screen. */
+  var PALETTES = [
+    { id: "evergreen", label: "Evergreen and brass", top: "#12352b", side: "#0c241d", accent: "#184a3c", accentDark: "#12352b", soft: "#dfeae3", hi: "#d4a84b", bg: "#f4f5f1" },
+    { id: "navy", label: "Navy and amber", top: "#1b2a4a", side: "#111c33", accent: "#24407a", accentDark: "#1b2f5c", soft: "#dfe6f3", hi: "#f0b44c", bg: "#f3f4f7" },
+    { id: "slate", label: "Slate and teal", top: "#2f3e46", side: "#1f2a30", accent: "#2a7f80", accentDark: "#1f6364", soft: "#d9eeee", hi: "#8fd8cc", bg: "#f4f6f6" },
+    { id: "oxblood", label: "Oxblood and gold", top: "#5c1a1f", side: "#3b1013", accent: "#8b2a30", accentDark: "#6a1f24", soft: "#f3e0e1", hi: "#e3b85b", bg: "#f7f4f1" },
+    { id: "graphite", label: "Graphite and lime", top: "#2b2b2b", side: "#1a1a1a", accent: "#3f3f3f", accentDark: "#262626", soft: "#e6e6e6", hi: "#b5e03d", bg: "#f5f5f5" },
+    { id: "paper", label: "Paper and blue", top: "#ffffff", topInk: "#1a221e", topMuted: "#6b7280", side: "#f1f2ee", sideInk: "#1a221e", sideMuted: "#5e675f", sideOn: "rgba(0, 0, 0, 0.05)", accent: "#1f5c9b", accentDark: "#174a7e", soft: "#dde9f6", hi: "#1f5c9b", bg: "#fafafa" }
+  ];
+  var FONTS = [
+    { id: "sans", label: "Public Sans", body: '"Public Sans", "Helvetica Neue", Arial, sans-serif', head: '"Source Serif 4", Georgia, serif', size: "12px" },
+    { id: "serif", label: "Source Serif", body: '"Source Serif 4", Georgia, serif', head: '"Source Serif 4", Georgia, serif', size: "12.5px" },
+    { id: "system", label: "System", body: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif', head: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif', size: "12px" },
+    { id: "mono", label: "Monospace", body: 'ui-monospace, "SF Mono", Menlo, Consolas, monospace', head: 'ui-monospace, "SF Mono", Menlo, Consolas, monospace', size: "11px" }
+  ];
+  function find(list, id) { for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i]; return list[0]; }
+
   var hero = document.getElementById("try");
   if (!hero) return;
   var screen = hero.querySelector("[data-screen]"), device = hero.querySelector("[data-device]"), devSeg = hero.querySelector("[data-devseg]");
   var audSeg = hero.querySelector("[data-aud]"), titleEl = hero.querySelector("[data-title]"), whyEl = hero.querySelector("[data-why]"), kindEl = hero.querySelector("[data-kind]");
   var resetBtn = hero.querySelector("[data-reset]"), startForm = hero.querySelector("[data-start]"), startLabel = hero.querySelector("[data-start-label]"), needEl = hero.querySelector("[data-need]");
+  var paletteSel = hero.querySelector("[data-palette]"), fontSel = hero.querySelector("[data-font]");
   var state = { aud: "works", device: window.innerWidth < 760 ? "phone" : "desktop" };
-  var states = {};
+  var states = {}, themes = {};
   function current() { return byId[state.aud]; }
   function st() { if (!states[state.aud]) states[state.aud] = current().app.init(); return states[state.aud]; }
+  function theme() { if (!themes[state.aud]) themes[state.aud] = { palette: "evergreen", font: "sans" }; return themes[state.aud]; }
+
+  PALETTES.forEach(function (p) { var o = document.createElement("option"); o.value = p.id; o.textContent = p.label; paletteSel.appendChild(o); });
+  FONTS.forEach(function (f) { var o = document.createElement("option"); o.value = f.id; o.textContent = f.label; fontSel.appendChild(o); });
+  function applyTheme() {
+    var t = theme(), p = find(PALETTES, t.palette), f = find(FONTS, t.font), cs = screen.style;
+    cs.setProperty("--ui-top", p.top); cs.setProperty("--ui-top-ink", p.topInk || "#ffffff"); cs.setProperty("--ui-top-muted", p.topMuted || "rgba(255, 255, 255, 0.7)");
+    cs.setProperty("--ui-side", p.side); cs.setProperty("--ui-side-ink", p.sideInk || "#ffffff"); cs.setProperty("--ui-side-muted", p.sideMuted || "rgba(255, 255, 255, 0.72)"); cs.setProperty("--ui-side-on", p.sideOn || "rgba(255, 255, 255, 0.06)");
+    cs.setProperty("--ui-accent", p.accent); cs.setProperty("--ui-accent-dark", p.accentDark); cs.setProperty("--ui-accent-soft", p.soft); cs.setProperty("--ui-hi", p.hi); cs.setProperty("--ui-bg", p.bg);
+    cs.setProperty("--ui-font", f.body); cs.setProperty("--ui-font-head", f.head); cs.setProperty("--ui-size", f.size);
+    paletteSel.value = t.palette; fontSel.value = t.font;
+    fitScreen();
+  }
+  paletteSel.addEventListener("change", function () { theme().palette = paletteSel.value; applyTheme(); });
+  fontSel.addEventListener("change", function () { theme().font = fontSel.value; applyTheme(); });
 
   function clock() { return new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }); }
 
@@ -507,7 +540,7 @@
       var on = s.view === v.id ? " on" : "", lock = v.locked ? " locked" : "", done = v.done ? " done" : "";
       return '<button type="button" class="nv' + on + lock + done + '" data-act="view" data-v="' + v.id + '"' + (v.locked ? ' aria-disabled="true"' : "") + "><span>" + esc(phone && v.tab ? v.tab : v.label) + "</span></button>";
     }).join("");
-    var html = '<div class="app-top"><span class="dots"><i></i><i></i><i></i></span><span class="app-name" data-appname>' + esc(app.name(s)) + '</span><span class="who">' + esc(app.who(s)) + '</span><span class="clock" data-clock>' + clock() + "</span></div>";
+    var html = '<div class="app-top"><span class="app-name" data-appname>' + esc(app.name(s)) + '</span><span class="who">' + esc(app.who(s)) + '</span><span class="clock" data-clock>' + clock() + "</span></div>";
     html += '<div class="app-body">' + (phone ? "" : '<nav class="app-side" aria-label="' + esc(app.section) + '"><div class="side-head">' + esc(app.section) + "</div>" + nav + "</nav>");
     html += '<div class="app-main" data-main>' + app.render(s, s.view, phone) + (s.msg ? '<div class="toast" role="status">' + esc(s.msg) + "</div>" : "") + "</div></div>";
     if (phone) html += '<nav class="app-tabs" aria-label="' + esc(app.section) + '">' + nav + "</nav>";
@@ -532,6 +565,7 @@
     var a = current();
     titleEl.textContent = a.title; whyEl.textContent = a.why; if (kindEl) kindEl.textContent = a.kind;
     startLabel.textContent = a.ask; needEl.placeholder = a.hint;
+    applyTheme();
     draw(animate);
   }
 
@@ -579,7 +613,8 @@
   startForm.addEventListener("submit", function (e) {
     e.preventDefault();
     var a = current(), need = needEl.value.trim();
-    var draft = "I tried the " + a.kind.toLowerCase() + " sample for " + a.label.toLowerCase() + " on your site." + (need ? " Our version would need: " + need : " Here is what we need: ");
+    var t = theme(), look = (t.palette !== "evergreen" || t.font !== "sans") ? " Look: " + find(PALETTES, t.palette).label.toLowerCase() + ", " + find(FONTS, t.font).label + " type." : "";
+    var draft = "I tried the " + a.kind.toLowerCase() + " sample for " + a.label.toLowerCase() + " on your site." + look + (need ? " Our version would need: " + need : " Here is what we need: ");
     window.location.href = startForm.getAttribute("action") + "?topic=" + a.topic + "&draft=" + encodeURIComponent(draft);
   });
 

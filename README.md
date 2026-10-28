@@ -11,10 +11,12 @@ src/
   pages/          one file per page: a metadata comment, then the page body
   pages/products/ one page per product
   partials/       head.html (doctype, head, header, nav) and footer.html
-  assets/         css, js, fonts, img
+  assets/         css, js, fonts, img (img/products holds the product screens)
   static/         files copied to the site root as is (manifest, .nojekyll)
 build.py          assembles src/ into dist/ and writes sitemap.xml and robots.txt
+tools/refresh_screens.py      captures the product screens from the live products
 .github/workflows/pages.yml   builds and deploys to GitHub Pages on every push to main
+.github/workflows/screens.yml refreshes the product screens once a day
 ```
 
 Each page starts with a comment block the build script reads:
@@ -37,7 +39,7 @@ Inside a page, write `{{root}}` in front of any link to another page or asset (`
 The home page is interactive and lives in three files: `src/pages/index.html` (markup), `src/assets/css/home.css` (styles), and `src/assets/js/home.js` (behavior). Nothing is sent anywhere; everything runs in the visitor's browser and is gone when the tab closes.
 
 - **Six sample apps** (`#try`). The visitor picks who they are and gets a working sample app in a device frame: work orders (public works), a permit desk (local government), an estimate builder (small business), volunteer shifts (nonprofit), a course player with a quiz and a certificate (learning platform), and a licensing console (my own idea). Each app is an object in `home.js` with `views`, `init` (the sample data), `render`, `act` (clicks and form submits), and optionally `live` (inputs that update numbers without redrawing). The shell at the bottom of the file draws the top bar, the side navigation or phone tabs, and the main area, and wires events by delegation. Exports are real CSV and SVG downloads built in the browser.
-- **Desktop and phone.** The desktop screen is drawn at 720 by 450 pixels and scaled to fit its column; the phone frame is 320 wide. Narrow viewports start on the phone layout. Reset restores the sample data for the current app.
+- **Desktop and phone, palette and font.** The desktop screen is drawn at 720 by 450 pixels and scaled to fit its column; the phone frame is 320 wide. Narrow viewports start on the phone layout. The palette and font pickers set CSS variables on the screen (`--ui-top`, `--ui-accent`, `--ui-font`, and so on; the defaults are at the top of the `.screen` rule in `home.css`); the choices are in `PALETTES` and `FONTS` in `home.js`, and each app keeps its own choice for the visit. A non-default look is mentioned in the drafted contact message. Reset restores the sample data for the current app and keeps the look.
 - **Start from this.** The box under the device opens the contact page with the topic and a message prefilled through URL parameters (`?topic=build|idea&draft=...`); `site.js` reads them.
 - To add an audience, add an entry to `AUD` (label, kind, title, why, ask, hint, topic, app) and a matching radio in `index.html`. To change sample data, edit the `init` function of the app.
 
@@ -49,7 +51,13 @@ Each product page starts with the real screens (`src/assets/img/products/`, WebP
 - **IntelliSafe** (`#demo-safe`). A drag-to-compare between a paper sign-in sheet (inline SVG) and a compliance matrix. The handle is a native range input, so it works with a keyboard.
 - **Part 107 Prep** (`#demo-107`). The question of the day rotates by day of year through the `QUESTIONS` list. Add questions there; each has a category, the choices, the correct index, an explanation, and the regulation it comes from.
 
-To refresh the screenshots, open each product locally, capture at 1280 by 800 (desktop) and 390 by 844 at 2x (phone), resize to 1100 and 390 wide, and save as WebP in `src/assets/img/products/` under the same names.
+### The screens keep themselves current
+
+`.github/workflows/screens.yml` runs `tools/refresh_screens.py` once a day (and on demand from the Actions tab). The script opens each live product in a headless browser, captures the same screens the site shows, and compares each one with the file in the repository. The comparison is visual: both images are shrunk and blurred, and the result is the percent of the picture that moved, so a changed date or a timer does not count, while a new layout, a new color, or a missing section does (the threshold is 2 percent; the practice exams are captured with a fixed random sequence so they show the same questions every day). When a screen has changed, the workflow commits the new file as `github-actions[bot]` and starts the deploy workflow, so the site follows the products without anyone touching it. A product that is down, or that answers with something other than its own page, is skipped and listed in the run summary rather than replaced. "Force" on a manual run recaptures everything.
+
+To add a screen: capture it in `SCREENS` in `tools/refresh_screens.py` (a file name, a product, desktop or phone, and a recipe) and reference the file from a page. To run it locally: `pip install playwright pillow`, `playwright install chromium`, then `python3 tools/refresh_screens.py --dry-run`. The `SCREENS_SAFE`, `SCREENS_PM`, `SCREENS_P107`, and `SCREENS_PS` environment variables point it at local copies.
+
+Text on the site (status labels, feature lists, release notes) is still written by hand; the workflow only keeps the pictures honest.
 
 ## Build and preview locally
 

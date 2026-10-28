@@ -1,0 +1,56 @@
+name: Refresh product screens
+
+# Once a day, open each live product, capture the screens the site shows, and
+# compare them with the files in src/assets/img/products. If a product looks
+# different, the new screens are committed and the site is rebuilt. A product
+# that is down or answers with the wrong page is skipped, never replaced.
+# Run it by hand from the Actions tab; "force" recaptures every screen.
+
+on:
+  schedule:
+    - cron: "17 10 * * *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Recapture every screen, changed or not"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: screens
+  cancel-in-progress: false
+
+jobs:
+  screens:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install the browser
+        run: |
+          pip install --quiet playwright pillow
+          playwright install --with-deps chromium
+      - name: Capture and compare
+        run: python3 tools/refresh_screens.py --report "$GITHUB_STEP_SUMMARY" ${{ inputs.force && '--force' || '' }}
+      - name: Commit the new screens and redeploy
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -z "$(git status --porcelain -- src/assets/img/products)" ]; then
+            echo "Every screen still matches. Nothing to do."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/assets/img/products
+          git commit -m "Refresh product screens, $(date -u +%Y-%m-%d)" -m "$(git diff --cached --name-only | sed 's|src/assets/img/products/||')"
+          git push
+          gh workflow run pages.yml --ref main
+          echo "New screens committed; the site is rebuilding." >> "$GITHUB_STEP_SUMMARY"
