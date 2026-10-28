@@ -278,13 +278,14 @@ code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-si
 
 /* ---------- Dark bands: hero and page heads ---------- */
 .band-dark {
-  background:
-    linear-gradient(0deg, rgba(243, 244, 238, 0.035) 1px, transparent 1px) 0 0 / 100% 48px,
-    linear-gradient(90deg, rgba(243, 244, 238, 0.035) 1px, transparent 1px) 0 0 / 48px 100%,
-    linear-gradient(180deg, var(--green-900), var(--green-950));
+  background: linear-gradient(180deg, var(--green-900), var(--green-950));
   color: var(--text-on-dark);
   position: relative;
+  overflow: hidden;
 }
+/* The survey map that runs through the site: contour lines drawn once (assets/img/contours.svg) */
+.band-dark::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: url("../img/contours.svg") center / cover no-repeat; opacity: 0.22; }
+.band-dark > .wrap { position: relative; }
 .band-dark::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px;
   background: linear-gradient(90deg, var(--brass-500), var(--brass-300) 40%, var(--brass-500));

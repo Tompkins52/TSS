@@ -183,6 +183,15 @@
           var actions = a.status === "Received" ? btn("approve", "Approve", "small", ' data-i="' + i + '"') + btn("info", "Needs info", "ghost small", ' data-i="' + i + '"') : a.permit ? '<span class="mono">' + esc(a.permit) + "</span>" : '<span class="dim">' + esc(a.note || "Applicant emailed") + "</span>";
           return "<tr><td>" + esc(a.n) + '</td><td>' + esc(a.type) + (a.sqft ? '<span class="dim"> ' + fmt(a.sqft) + " sq ft</span>" : "") + '</td><td class="xw">' + esc(a.addr) + '<span class="dim"> ' + esc(a.who) + "</span></td><td>" + money2(a.fee) + "</td><td>" + status + '</td><td class="ta">' + actions + "</td></tr>";
         }).join("");
+        if (phone) {
+          var cards = st.apps.map(function (a, i) {
+            var status = a.status === "Approved" ? pill("Approved", "ok") : a.status === "Needs info" ? pill("Needs info", "bad") : pill("Received", "warn");
+            var actions = a.status === "Received" ? btn("approve", "Approve", "small", ' data-i="' + i + '"') + btn("info", "Needs info", "ghost small", ' data-i="' + i + '"') : a.permit ? '<span class="mono">' + esc(a.permit) + "</span>" : '<span class="dim">' + esc(a.note || "Applicant emailed") + "</span>";
+            return '<div class="card"><div class="ch"><b>' + esc(a.n) + " " + esc(a.type) + (a.sqft ? ", " + fmt(a.sqft) + " sq ft" : "") + "</b>" + status + '</div><div class="addr">' + esc(a.addr) + ", " + esc(a.who) + '</div><div class="cf"><span>' + money2(a.fee) + "</span><span>" + actions + "</span></div></div>";
+          }).join("");
+          return head("Queue", '<span class="sum">' + plural(waiting, "application", "applications") + " waiting, " + money(st.collected) + " collected</span>") + '<div class="stack">' + cards + "</div>" +
+            note("Approve issues the permit number, records the fee, and emails the resident. Needs info sends them a note and holds the spot in line.");
+        }
         return head("Queue", '<span class="sum">' + plural(waiting, "application", "applications") + " waiting, " + money(st.collected) + " collected this week</span>") +
           '<table class="tbl"><thead><tr><th>Number</th><th>Permit</th><th class="xw">Address</th><th>Fee</th><th>Status</th><th></th></tr></thead><tbody>' + rows + "</tbody></table>" +
           note("Approve issues the permit number, records the fee, and emails the resident. Needs info sends them a note and holds the spot in line.");
@@ -498,11 +507,34 @@
     { id: "paper", label: "Paper and blue", top: "#ffffff", topInk: "#1a221e", topMuted: "#6b7280", side: "#f1f2ee", sideInk: "#1a221e", sideMuted: "#5e675f", sideOn: "rgba(0, 0, 0, 0.05)", accent: "#1f5c9b", accentDark: "#174a7e", soft: "#dde9f6", hi: "#1f5c9b", bg: "#fafafa" }
   ];
   var FONTS = [
-    { id: "sans", label: "Public Sans", body: '"Public Sans", "Helvetica Neue", Arial, sans-serif', head: '"Source Serif 4", Georgia, serif', size: "12px" },
-    { id: "serif", label: "Source Serif", body: '"Source Serif 4", Georgia, serif', head: '"Source Serif 4", Georgia, serif', size: "12.5px" },
-    { id: "system", label: "System", body: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif', head: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif', size: "12px" },
-    { id: "mono", label: "Monospace", body: 'ui-monospace, "SF Mono", Menlo, Consolas, monospace', head: 'ui-monospace, "SF Mono", Menlo, Consolas, monospace', size: "11px" }
+    { id: "sans", label: "Public Sans", kind: "Sans, the site's own", body: '"Public Sans", "Helvetica Neue", Arial, sans-serif', head: '"Source Serif 4", Georgia, serif', size: "12px" },
+    { id: "inter", label: "Inter", kind: "Sans, plain and modern", body: 'Inter, "Helvetica Neue", Arial, sans-serif', head: 'Inter, "Helvetica Neue", Arial, sans-serif', size: "12px" },
+    { id: "plex", label: "IBM Plex Sans", kind: "Sans, technical", body: '"IBM Plex Sans", "Helvetica Neue", Arial, sans-serif', head: '"IBM Plex Sans", "Helvetica Neue", Arial, sans-serif', size: "12px" },
+    { id: "atkinson", label: "Atkinson Hyperlegible", kind: "Sans, built for low vision", body: '"Atkinson Hyperlegible", Arial, sans-serif', head: '"Atkinson Hyperlegible", Arial, sans-serif', size: "12px" },
+    { id: "nunito", label: "Nunito", kind: "Sans, rounded and friendly", body: 'Nunito, "Trebuchet MS", sans-serif', head: 'Nunito, "Trebuchet MS", sans-serif', size: "12.5px" },
+    { id: "barlow", label: "Barlow", kind: "Sans, narrow and industrial", body: 'Barlow, "Arial Narrow", sans-serif', head: 'Barlow, "Arial Narrow", sans-serif', size: "12.5px" },
+    { id: "grotesk", label: "Space Grotesk", kind: "Sans, a little odd", body: '"Space Grotesk", "Helvetica Neue", Arial, sans-serif', head: '"Space Grotesk", "Helvetica Neue", Arial, sans-serif', size: "12px" },
+    { id: "serif", label: "Source Serif", kind: "Serif, the site's own", body: '"Source Serif 4", Georgia, serif', head: '"Source Serif 4", Georgia, serif', size: "12.5px" },
+    { id: "lora", label: "Lora", kind: "Serif, warm", body: 'Lora, Georgia, serif', head: 'Lora, Georgia, serif', size: "12px" },
+    { id: "merriweather", label: "Merriweather", kind: "Serif, sturdy", body: 'Merriweather, Georgia, serif', head: 'Merriweather, Georgia, serif', size: "11.5px" },
+    { id: "mono", label: "JetBrains Mono", kind: "Monospace", body: '"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace', head: '"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace', size: "11px" },
+    { id: "system", label: "System", kind: "Whatever the device uses", body: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif', head: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif', size: "12px" }
   ];
+  /* A palette made from one color the visitor picks. */
+  function hexToHsl(hex) {
+    var m = /^#?([0-9a-f]{6})$/i.exec(hex); if (!m) return { h: 160, s: 50, l: 14 };
+    var r = parseInt(m[1].slice(0, 2), 16) / 255, g = parseInt(m[1].slice(2, 4), 16) / 255, b = parseInt(m[1].slice(4, 6), 16) / 255;
+    var max = Math.max(r, g, b), min = Math.min(r, g, b), l = (max + min) / 2, h = 0, s = 0, d = max - min;
+    if (d) { s = l > 0.5 ? d / (2 - max - min) : d / (max + min); h = max === r ? ((g - b) / d + (g < b ? 6 : 0)) : max === g ? (b - r) / d + 2 : (r - g) / d + 4; h *= 60; }
+    return { h: Math.round(h), s: Math.round(s * 100), l: Math.round(l * 100) };
+  }
+  function hsl(h, s, l) { return "hsl(" + Math.round(h) + " " + Math.round(s) + "% " + Math.round(l) + "%)"; }
+  function derivePalette(hex) {
+    var c = hexToHsl(hex), h = c.h, s = c.s < 8 ? 0 : Math.min(c.s, 72);
+    var hi = s === 0 ? "#d4a84b" : hsl((h + 45) % 360, 70, 62);
+    if (c.l > 62) return { id: "custom", label: "your color " + hex, top: "#ffffff", topInk: "#1a221e", topMuted: "#6b7280", side: hsl(h, Math.min(s, 30), 95), sideInk: "#1a221e", sideMuted: "#5e675f", sideOn: "rgba(0, 0, 0, 0.05)", accent: hsl(h, s, 34), accentDark: hsl(h, s, 26), soft: hsl(h, Math.max(30, s), 92), hi: hsl(h, s, 34), bg: hsl(h, 15, 97) };
+    return { id: "custom", label: "your color " + hex, top: hsl(h, s, Math.min(c.l, 24)), side: hsl(h, s, 13), accent: hsl(h, s, 34), accentDark: hsl(h, s, 26), soft: hsl(h, Math.max(25, s * 0.6), 92), hi: hi, bg: hsl(h, 12, 96.5) };
+  }
   function find(list, id) { for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i]; return list[0]; }
 
   var hero = document.getElementById("try");
@@ -510,26 +542,58 @@
   var screen = hero.querySelector("[data-screen]"), device = hero.querySelector("[data-device]"), devSeg = hero.querySelector("[data-devseg]");
   var audSeg = hero.querySelector("[data-aud]"), titleEl = hero.querySelector("[data-title]"), whyEl = hero.querySelector("[data-why]"), kindEl = hero.querySelector("[data-kind]");
   var resetBtn = hero.querySelector("[data-reset]"), startForm = hero.querySelector("[data-start]"), startLabel = hero.querySelector("[data-start-label]"), needEl = hero.querySelector("[data-need]");
-  var paletteSel = hero.querySelector("[data-palette]"), fontSel = hero.querySelector("[data-font]");
+  var swatches = hero.querySelector("[data-swatches]"), fontBtn = hero.querySelector("[data-fontbtn]"), fontMenu = hero.querySelector("[data-fontmenu]"), fontName = hero.querySelector("[data-fontname]");
   var state = { aud: "works", device: window.innerWidth < 760 ? "phone" : "desktop" };
   var states = {}, themes = {};
   function current() { return byId[state.aud]; }
   function st() { if (!states[state.aud]) states[state.aud] = current().app.init(); return states[state.aud]; }
-  function theme() { if (!themes[state.aud]) themes[state.aud] = { palette: "evergreen", font: "sans" }; return themes[state.aud]; }
+  function theme() { if (!themes[state.aud]) themes[state.aud] = { palette: "evergreen", font: "sans", custom: "#1b3a6b" }; return themes[state.aud]; }
+  function palette() { var t = theme(); return t.palette === "custom" ? derivePalette(t.custom) : find(PALETTES, t.palette); }
 
-  PALETTES.forEach(function (p) { var o = document.createElement("option"); o.value = p.id; o.textContent = p.label; paletteSel.appendChild(o); });
-  FONTS.forEach(function (f) { var o = document.createElement("option"); o.value = f.id; o.textContent = f.label; fontSel.appendChild(o); });
+  // The swatches: one per palette, then one that opens the device's own color picker.
+  PALETTES.forEach(function (p) {
+    var l = document.createElement("label"); l.className = "sw";
+    l.innerHTML = '<input type="radio" name="palette" value="' + p.id + '"' + (p.id === "evergreen" ? " checked" : "") + ' aria-label="' + esc(p.label) + '"><i style="--a:' + p.top + ';--b:' + p.hi + '"></i><span class="tip">' + esc(p.label) + "</span>";
+    swatches.appendChild(l);
+  });
+  var customSw = document.createElement("label"); customSw.className = "sw custom";
+  customSw.innerHTML = '<input type="color" value="#1b3a6b" data-custom aria-label="Your own color"><i></i><span class="tip">Your own color</span>';
+  swatches.appendChild(customSw);
+  var customIn = customSw.querySelector("[data-custom]");
+  swatches.addEventListener("change", function (e) { if (e.target.name === "palette") { theme().palette = e.target.value; applyTheme(); } });
+  customIn.addEventListener("input", function () { var t = theme(); t.custom = customIn.value; t.palette = "custom"; applyTheme(); });
+
+  // The font menu: every typeface shown in itself, so the choice is visible before it is made.
+  FONTS.forEach(function (f) {
+    var b = document.createElement("button"); b.type = "button"; b.setAttribute("role", "option"); b.setAttribute("data-font", f.id);
+    b.innerHTML = '<span class="aa" style="font-family:' + f.head.replace(/"/g, "&quot;") + '">Aa</span><span><span class="fn" style="font-family:' + f.body.replace(/"/g, "&quot;") + '">' + esc(f.label) + '</span><span class="fd">' + esc(f.kind) + "</span></span>";
+    b.addEventListener("click", function () { theme().font = f.id; applyTheme(); closeFonts(); fontBtn.focus(); });
+    fontMenu.appendChild(b);
+  });
+  function openFonts() { fontMenu.hidden = false; fontBtn.setAttribute("aria-expanded", "true"); var sel = fontMenu.querySelector('[aria-selected="true"]'); if (sel) sel.focus(); }
+  function closeFonts() { fontMenu.hidden = true; fontBtn.setAttribute("aria-expanded", "false"); }
+  fontBtn.addEventListener("click", function () { if (fontMenu.hidden) openFonts(); else closeFonts(); });
+  document.addEventListener("click", function (e) { if (!fontMenu.hidden && !fontMenu.contains(e.target) && e.target !== fontBtn && !fontBtn.contains(e.target)) closeFonts(); });
+  document.addEventListener("keydown", function (e) {
+    if (fontMenu.hidden) return;
+    if (e.key === "Escape") { closeFonts(); fontBtn.focus(); }
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); var opts = Array.prototype.slice.call(fontMenu.querySelectorAll("button")), i = opts.indexOf(document.activeElement); opts[(i + (e.key === "ArrowDown" ? 1 : -1) + opts.length) % opts.length].focus(); }
+  });
+
   function applyTheme() {
-    var t = theme(), p = find(PALETTES, t.palette), f = find(FONTS, t.font), cs = screen.style;
+    var t = theme(), p = palette(), f = find(FONTS, t.font), cs = screen.style;
     cs.setProperty("--ui-top", p.top); cs.setProperty("--ui-top-ink", p.topInk || "#ffffff"); cs.setProperty("--ui-top-muted", p.topMuted || "rgba(255, 255, 255, 0.7)");
     cs.setProperty("--ui-side", p.side); cs.setProperty("--ui-side-ink", p.sideInk || "#ffffff"); cs.setProperty("--ui-side-muted", p.sideMuted || "rgba(255, 255, 255, 0.72)"); cs.setProperty("--ui-side-on", p.sideOn || "rgba(255, 255, 255, 0.06)");
     cs.setProperty("--ui-accent", p.accent); cs.setProperty("--ui-accent-dark", p.accentDark); cs.setProperty("--ui-accent-soft", p.soft); cs.setProperty("--ui-hi", p.hi); cs.setProperty("--ui-bg", p.bg);
     cs.setProperty("--ui-font", f.body); cs.setProperty("--ui-font-head", f.head); cs.setProperty("--ui-size", f.size);
-    paletteSel.value = t.palette; fontSel.value = t.font;
+    var radio = swatches.querySelector('input[name="palette"][value="' + t.palette + '"]');
+    Array.prototype.forEach.call(swatches.querySelectorAll('input[name="palette"]'), function (r) { r.checked = false; });
+    if (radio) radio.checked = true;
+    customSw.classList.toggle("on", t.palette === "custom"); customSw.querySelector("i").style.background = t.palette === "custom" ? p.top : ""; if (customIn.value !== t.custom) customIn.value = t.custom;
+    fontName.textContent = f.label;
+    Array.prototype.forEach.call(fontMenu.querySelectorAll("button"), function (b) { b.setAttribute("aria-selected", b.getAttribute("data-font") === t.font ? "true" : "false"); });
     fitScreen();
   }
-  paletteSel.addEventListener("change", function () { theme().palette = paletteSel.value; applyTheme(); });
-  fontSel.addEventListener("change", function () { theme().font = fontSel.value; applyTheme(); });
 
   function clock() { return new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }); }
 
@@ -544,10 +608,12 @@
     html += '<div class="app-body">' + (phone ? "" : '<nav class="app-side" aria-label="' + esc(app.section) + '"><div class="side-head">' + esc(app.section) + "</div>" + nav + "</nav>");
     html += '<div class="app-main" data-main>' + app.render(s, s.view, phone) + (s.msg ? '<div class="toast" role="status">' + esc(s.msg) + "</div>" : "") + "</div></div>";
     if (phone) html += '<nav class="app-tabs" aria-label="' + esc(app.section) + '">' + nav + "</nav>";
-    screen.innerHTML = html;
+    // The built app, and on a switch, the same app as a blueprint on top of it, wiped away left to right.
+    var plan = animate && !reduceMotion;
+    screen.innerHTML = '<div class="layer real">' + html + "</div>" + (plan ? '<div class="layer plan" aria-hidden="true" inert>' + html.replace(/ (data-[a-z-]+|name|aria-label|title|placeholder)="[^"]*"/g, "").replace(/ (data-[a-z-]+|required|autofocus|checked|disabled|tabindex="0")(?=[ >])/g, "") + '</div><div class="scan" aria-hidden="true"></div>' : "");
+    if (plan) setTimeout(function () { Array.prototype.forEach.call(screen.querySelectorAll(".plan, .scan"), function (e) { if (e.parentNode) e.parentNode.removeChild(e); }); }, 1400);
     if (s.msg) { s.msg = null; var t = screen.querySelector(".toast"); setTimeout(function () { if (t && t.parentNode) t.parentNode.removeChild(t); }, 3200); }
-    var auto = screen.querySelector("[autofocus]"); if (auto && fromUser) { try { auto.focus({ preventScroll: true }); } catch (e) { auto.focus(); } }
-    if (animate && !reduceMotion) { screen.classList.remove("boot"); void screen.offsetWidth; screen.classList.add("boot"); }
+    var auto = screen.querySelector(".real [autofocus]"); if (auto && fromUser) { try { auto.focus({ preventScroll: true }); } catch (e) { auto.focus(); } }
     fitScreen();
   }
 
@@ -560,10 +626,13 @@
     } else { screen.style.transform = ""; device.style.height = ""; }
   }
 
+  var headEl = hero.querySelector("[data-head]");
   function setAud(id, animate) {
     state.aud = id;
     var a = current();
-    titleEl.textContent = a.title; whyEl.textContent = a.why; if (kindEl) kindEl.textContent = a.kind;
+    if (animate && !reduceMotion && headEl) { headEl.classList.add("swap"); setTimeout(function () { titleEl.textContent = a.title; whyEl.textContent = a.why; headEl.classList.remove("swap"); }, 220); }
+    else { titleEl.textContent = a.title; whyEl.textContent = a.why; }
+    if (kindEl) kindEl.textContent = a.kind;
     startLabel.textContent = a.ask; needEl.placeholder = a.hint;
     applyTheme();
     draw(animate);
@@ -592,7 +661,7 @@
   });
   screen.addEventListener("input", function (e) {
     var el = e.target; if (!el.hasAttribute("data-live")) return;
-    var app = current().app; if (app.live) app.live(st(), el, screen.querySelector("[data-main]"), screen);
+    var app = current().app; if (app.live) app.live(st(), el, screen.querySelector(".real [data-main]"), screen);
     if (el.type === "range") fill(el);
   });
   screen.addEventListener("change", function (e) {
@@ -607,16 +676,45 @@
   devSeg.addEventListener("change", function (e) { if (e.target.name === "device") { state.device = e.target.value; draw(); } });
   resetBtn.addEventListener("click", function () { states[state.aud] = current().app.init(); states[state.aud].msg = "Sample data restored."; draw(true); });
   window.addEventListener("resize", fitScreen);
-  setInterval(function () { var c = screen.querySelector("[data-clock]"); if (c) c.textContent = clock(); }, 30000);
+  setInterval(function () { var c = screen.querySelector(".real [data-clock]"); if (c) c.textContent = clock(); }, 30000);
 
   // Start from this: opens the contact page with the message drafted.
   startForm.addEventListener("submit", function (e) {
     e.preventDefault();
     var a = current(), need = needEl.value.trim();
-    var t = theme(), look = (t.palette !== "evergreen" || t.font !== "sans") ? " Look: " + find(PALETTES, t.palette).label.toLowerCase() + ", " + find(FONTS, t.font).label + " type." : "";
+    var t = theme(), look = (t.palette !== "evergreen" || t.font !== "sans") ? " Look: " + palette().label.toLowerCase() + ", " + find(FONTS, t.font).label + " type." : "";
     var draft = "I tried the " + a.kind.toLowerCase() + " sample for " + a.label.toLowerCase() + " on your site." + look + (need ? " Our version would need: " + need : " Here is what we need: ");
     window.location.href = startForm.getAttribute("action") + "?topic=" + a.topic + "&draft=" + encodeURIComponent(draft);
   });
+
+  // The headline arrives a word at a time; the map drifts as the page scrolls; sections draw in as they arrive.
+  var h1 = hero.querySelector("[data-words]");
+  if (h1 && !reduceMotion) {
+    var n = 0;
+    Array.prototype.forEach.call(h1.childNodes, function (node) {
+      if (node.nodeType === 3) {
+        var frag = document.createDocumentFragment();
+        node.textContent.split(/(\s+)/).forEach(function (part) { if (!part) return; if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; } var w = document.createElement("span"); w.className = "w"; w.style.setProperty("--i", n++); w.textContent = part; frag.appendChild(w); });
+        h1.replaceChild(frag, node);
+      } else if (node.nodeType === 1) {
+        var inner = node.textContent; node.textContent = "";
+        inner.split(/(\s+)/).forEach(function (part) { if (!part) return; if (/^\s+$/.test(part)) { node.appendChild(document.createTextNode(part)); return; } var w2 = document.createElement("span"); w2.className = "w"; w2.style.setProperty("--i", n++); w2.textContent = part; node.appendChild(w2); });
+      }
+    });
+    h1.classList.add("words");
+  }
+  var topo = hero.querySelector("[data-topo]");
+  if (topo && !reduceMotion) {
+    var ticking = false;
+    var drift = function () { topo.style.transform = "translate3d(0," + Math.round(window.scrollY * 0.18) + "px,0)"; ticking = false; };
+    window.addEventListener("scroll", function () { if (!ticking) { ticking = true; window.requestAnimationFrame(drift); } }, { passive: true });
+    drift();
+  }
+  var seenEls = document.querySelectorAll("[data-seen], .prod, .probono");
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) { entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("seen"); io.unobserve(en.target); } }); }, { rootMargin: "0px 0px -12% 0px", threshold: 0.15 });
+    Array.prototype.forEach.call(seenEls, function (e) { io.observe(e); });
+  } else { Array.prototype.forEach.call(seenEls, function (e) { e.classList.add("seen"); }); }
 
   // Boot
   devSeg.querySelector('input[value="' + state.device + '"]').checked = true;
