@@ -83,6 +83,21 @@
     "Thanks. We read every message and reply within three business days."
   );
 
+  /* ---- Contact form prefilled from the drafting table ---------------------- */
+  var contactForm = document.querySelector("form[data-form=contact]");
+  if (contactForm && window.URLSearchParams) {
+    var params = new URLSearchParams(window.location.search);
+    var draft = params.get("draft"), topic = params.get("topic");
+    var msg = contactForm.querySelector("textarea[name=message]");
+    var sel = contactForm.querySelector("select[name=topic]");
+    if (draft && msg && !msg.value) msg.value = draft;
+    if (topic && sel) {
+      var want = topic === "idea" ? "An idea I want built" : "Custom build";
+      Array.prototype.forEach.call(sel.options, function (o) { if (o.text.indexOf(want) === 0) sel.value = o.value || o.text; });
+    }
+    if (draft && msg) msg.style.minHeight = "16rem";
+  }
+
   /* ---- Footer year ----------------------------------------------------------- */
   var year = document.querySelector("[data-year]");
   if (year) year.textContent = String(new Date().getFullYear());

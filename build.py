@@ -109,6 +109,12 @@ def main():
                 meta["noindex"] = "true"
             if meta.get("noindex") == "true":
                 extra_head += '\n<meta name="robots" content="noindex">'
+            # Optional per-page stylesheet(s) and script(s), comma separated, relative to the site root.
+            for sheet in [s.strip() for s in meta.get("styles", "").split(",") if s.strip()]:
+                extra_head += '\n<link rel="stylesheet" href="%s%s">' % (root, sheet)
+            extra_scripts = ""
+            for script in [s.strip() for s in meta.get("scripts", "").split(",") if s.strip()]:
+                extra_scripts += '\n<script src="%s%s" defer></script>' % (root, script)
             values = {
                 "root": root,
                 "base_url": base,
@@ -116,6 +122,8 @@ def main():
                 "page_title": html.escape(page_title, quote=True),
                 "description": html.escape(meta["description"], quote=True),
                 "extra_head": extra_head,
+                "extra_scripts": extra_scripts,
+                "body_class": meta.get("body_class", ""),
                 "revision": revision,
             }
             page = mark_active_nav(render(head_t, values), meta.get("nav")) + render(body, values) + render(foot_t, values)

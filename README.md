@@ -28,7 +28,19 @@ priority: 0.8         sitemap priority (optional)
 -->
 ```
 
+Optional keys: `body_class` (a class on `<body>`, the home page uses `home`), `styles` and `scripts` (comma-separated files under the site root, loaded on that page only), `redirect` (the page has moved; sends visitors on and stays out of the sitemap), and `noindex`.
+
 Inside a page, write `{{root}}` in front of any link to another page or asset (`{{root}}about.html`, `{{root}}assets/img/mark.svg`). The build replaces it with the right relative prefix, so pages in subfolders work and the site runs from a subpath or a root domain without changes.
+
+## The home page
+
+The home page is interactive and lives in three files: `src/pages/index.html` (markup), `src/assets/css/home.css` (styles for the drafting table and the demos), and `src/assets/js/home.js` (behavior). Nothing is sent anywhere; everything runs in the visitor's browser.
+
+- **The drafting table** (`#table`). Audience, people slider, module chips, and platform controls drive a live app preview (desktop or phone frame) and a draft charter. "Send this charter" opens the contact page with the topic and message prefilled through URL parameters (`?topic=build|idea&draft=...`); `site.js` reads them. Audiences, modules, and the preview widgets are the `AUD`, `MOD`, and `widget()` tables at the top of `home.js`. Build size is a rough point count (modules plus platform plus crew size); the typical week ranges are in `buildSize()`. No prices appear anywhere; the charter says the price is fixed and set in the charter.
+- **Painless Project Management demo** (`#demo-pm`). Sliders feed the product's own roll-up rules (overdue milestone: amber, red past 14 days; forecast over approved: amber, red past 110 percent; quiet after 14 days without an update).
+- **IntelliSafe demo** (`#demo-safe`). A drag-to-compare between a paper sign-in sheet (inline SVG) and a compliance matrix. The handle is a native range input, so it works with a keyboard.
+- **Part 107 Prep demo** (`#demo-107`). The question of the day rotates by day of year through the `QUESTIONS` list in `home.js`. Add questions there; each has a category, the choices, the correct index, an explanation, and the regulation it comes from.
+- The drafting crosshair and the draw-in animations switch off for visitors who prefer reduced motion, and the crosshair only appears on devices with a mouse.
 
 ## Build and preview locally
 

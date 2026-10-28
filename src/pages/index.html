@@ -1,178 +1,288 @@
 <!--
 title: Home
-title_full: Tompkins Software Systems | Software for public works and local government
-description: Tompkins Software Systems is a veteran-owned Illinois software company. We build practical software for public works departments, local government, small businesses, and nonprofits, and we help people with an idea build and license a platform of their own.
+title_full: Tompkins Software Systems | Software for public works, local government, and small business
+description: Describe the tool your crew needs and watch it take shape. Tompkins Software Systems is a veteran-owned Illinois company that builds practical software for public works, local government, small businesses, nonprofits, and people with an idea. Try the products right on this page.
 nav: home
 jsonld: organization
 priority: 1.0
+body_class: home
+styles: assets/css/home.css
+scripts: assets/js/home.js
 -->
-<section class="hero band-dark on-dark">
-  <div class="wrap hero-grid">
-    <div class="hero-copy">
-      <span class="eyebrow">Tompkins Software Systems LLC</span>
-      <h1>Software for the people who keep things running.</h1>
-      <p class="lede">We build practical software for public works departments, local government, small businesses, and nonprofits. Small tools that do one job well, priced for budgets that have to justify every line item. Have an idea of your own? We can help you build it and license it.</p>
-      <div class="actions">
-        <a class="btn btn-brass" href="{{root}}products.html">See our products</a>
-        <a class="btn btn-ghost" href="{{root}}customers.html">Who we work with</a>
+<section class="table" id="table" aria-labelledby="table-title">
+  <div class="wrap">
+    <div class="table-grid">
+      <div class="table-left">
+        <h1 id="table-title">Tell us what your crew needs. Watch it take shape.</h1>
+        <p class="table-intro">This is a drafting table. Set who it is for, how many people will use it, and what it has to do. The screen draws the tool as you go, and the sheet under it is the charter we would start from. Or skip ahead and <a href="#demos">try the products we have already built</a>.</p>
+
+        <div class="controls">
+          <fieldset class="control seg" data-aud>
+            <legend>Who is it for?</legend>
+            <div class="control-label" style="width:100%"><span>Who is it for?</span></div>
+            <label><input type="radio" name="aud" value="works" checked><span>Public works</span></label>
+            <label><input type="radio" name="aud" value="city"><span>City hall</span></label>
+            <label><input type="radio" name="aud" value="biz"><span>Small business</span></label>
+            <label><input type="radio" name="aud" value="np"><span>Nonprofit</span></label>
+            <label><input type="radio" name="aud" value="idea"><span>My own idea</span></label>
+          </fieldset>
+
+          <div class="control">
+            <label class="control-label" for="people"><span>How many people will use it?</span><output data-people-out for="people">25 crew members</output></label>
+            <input class="range" id="people" type="range" min="0" max="11" value="6" step="1" data-people aria-describedby="people-ends">
+            <div class="range-ends" id="people-ends"><span>Just me</span><span>500 people</span></div>
+          </div>
+
+          <div class="control">
+            <div class="control-label"><span>What does it need to do?</span><output data-count></output></div>
+            <div class="chips" data-chips role="group" aria-label="What it needs to do"></div>
+          </div>
+
+          <fieldset class="control seg" data-plat>
+            <legend>Where does it run?</legend>
+            <div class="control-label" style="width:100%"><span>Where does it run?</span></div>
+            <label><input type="radio" name="plat" value="browser" checked><span>Any browser</span></label>
+            <label><input type="radio" name="plat" value="server"><span>Your own server</span></label>
+            <label><input type="radio" name="plat" value="hosted"><span>We host it</span></label>
+            <label><input type="radio" name="plat" value="app"><span>Phone app</span></label>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="table-right">
+        <div class="preview">
+          <div class="preview-bar">
+            <fieldset class="seg" data-device>
+              <legend>Preview on</legend>
+              <label><input type="radio" name="device" value="desktop" checked><span>Desktop</span></label>
+              <label><input type="radio" name="device" value="phone"><span>Phone</span></label>
+            </fieldset>
+            <span class="preview-note">Sample data. Every number changes with the people slider.</span>
+          </div>
+          <div class="device desktop" data-preview>
+            <div class="screen" role="img" aria-label="A live preview of the tool you are describing"></div>
+          </div>
+        </div>
+
+        <div class="charter" data-charter aria-live="polite">
+          <div class="charter-head"><h2>Draft charter</h2><span>One page. The same one we start every build with.</span></div>
+          <dl>
+            <dt>Project</dt><dd data-c-name></dd>
+            <dt>For</dt><dd data-c-for></dd>
+            <dt>What it does</dt><dd><ul data-c-does></ul></dd>
+            <dt>Runs</dt><dd data-c-runs></dd>
+            <dt>Build size</dt><dd><span class="size" data-c-size><b></b><span></span></span></dd>
+            <dt>Price</dt><dd>Fixed. Set in the charter, before any work starts.</dd>
+            <dt>Ownership</dt><dd data-c-own></dd>
+          </dl>
+          <p class="next">What happens next: a 30-minute conversation, then this charter finished and priced, then a two-minute written update every week until it is delivered. Nothing here is recorded until you send it.</p>
+          <div class="charter-actions">
+            <a class="btn btn-primary btn-small" data-send href="contact.html">Send this charter</a>
+            <button class="btn btn-outline btn-small" type="button" data-copy>Copy it</button>
+            <span class="copied" data-copied hidden>Copied.</span>
+          </div>
+        </div>
       </div>
     </div>
-    <aside class="fact-panel" aria-labelledby="glance">
-      <h2 id="glance">At a glance</h2>
-      <dl>
-        <dt>Company</dt><dd>Tompkins Software Systems LLC</dd>
-        <dt>Organized</dt><dd>October 21, 2026, Illinois</dd>
-        <dt>Based in</dt><dd>Illinois</dd>
-        <dt>Ownership</dt><dd>Veteran-owned</dd>
-        <dt>Products</dt><dd>Four in use today</dd>
-        <dt>We serve</dt><dd>Public works, local government, small businesses, nonprofits, and people with an idea</dd>
-        <dt>Platforms</dt><dd>Web today; iOS and Android apps in preparation</dd>
-      </dl>
-    </aside>
   </div>
 </section>
 
-<section class="section">
+<section class="demos" id="demos" aria-labelledby="demos-title">
   <div class="wrap">
-    <div class="section-head">
-      <span class="num">01</span>
-      <h2>What we do</h2>
-      <p>Four kinds of work, all of it hands-on. We write the software, we run the projects, and we answer the support requests.</p>
+    <div class="demos-head">
+      <h2 id="demos-title">Try what we have already built</h2>
+      <p>Three products, running right here with their real rules. Nothing to install, nothing recorded. Each one opens in full from its own page.</p>
     </div>
-    <div class="grid grid-2">
-      <article class="card">
-        <span class="card-kicker">Products</span>
-        <h3>Software we publish and support</h3>
-        <p>Safety training, incident investigation, and inspections for public works, a one-page way to run projects, and a study app for the FAA drone license. Each one started as a tool we needed ourselves.</p>
-        <a class="card-link" href="{{root}}products.html">Browse the products</a>
-      </article>
-      <article class="card">
-        <span class="card-kicker">Custom builds</span>
-        <h3>Tools built for one department or one business</h3>
-        <p>When off-the-shelf software is priced for an organization ten times your size, we scope a smaller tool that fits the way your people actually work, with a written charter and a fixed price.</p>
-        <a class="card-link" href="{{root}}customers.html#how-to-buy">How an engagement works</a>
-      </article>
-      <article class="card">
-        <span class="card-kicker">Your idea</span>
-        <h3>A platform of your own, built and licensed</h3>
-        <p>You have the idea and the know-how in your field; we handle the software. We help you scope it, build it, publish it, and set up the licensing so you can sell it under your own name.</p>
-        <a class="card-link" href="{{root}}customers.html#your-idea">How that works</a>
-      </article>
-      <article class="card">
-        <span class="card-kicker">Pro bono</span>
-        <h3>Free work for veteran-serving nonprofits</h3>
-        <p>We set aside time every year to build for nonprofits that serve veterans. The organization owns what we build, including the code and the store accounts.</p>
-        <a class="card-link" href="{{root}}customers.html#nonprofits">The pro bono program</a>
-      </article>
-    </div>
-  </div>
-</section>
 
-<section class="section section-tint">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="num">02</span>
-      <h2>Products</h2>
-      <p>Three products and one pro bono build, all in use today. Status labels tell you exactly where each one stands.</p>
-    </div>
-    <div class="grid grid-2">
-      <article class="card">
-        <div class="card-meta"><span class="badge badge-ok">Available</span><span class="badge">Web and self-hosted</span></div>
-        <h3>IntelliSafe</h3>
-        <p>Annual OSHA training in nineteen modules, eight-section incident reports with diagrams and signed statements, and site inspections and annual audits for public works crews. Licensed by IntelliSafe Systems LLC and developed by Tompkins Software Systems.</p>
-        <a class="card-link" href="{{root}}products/intellisafe.html">Product details</a>
-      </article>
-      <article class="card">
-        <div class="card-meta"><span class="badge badge-ok">Available</span><span class="badge">Web</span></div>
+    <div class="demo" id="demo-pm">
+      <div class="demo-copy">
         <h3>Painless Project Management</h3>
-        <p>A one-page way to run a project without becoming a project manager. Charter it, run it with up to eight milestones and a two-minute weekly update, and report it in a roll-up sorted by who needs help.</p>
-        <a class="card-link" href="{{root}}products/painless-project-management.html">Product details</a>
-      </article>
-      <article class="card">
-        <div class="card-meta"><span class="badge badge-ok">Web: available</span><span class="badge badge-brass">Apps: in preparation</span></div>
-        <h3>Part 107 Prep</h3>
-        <p>A free study site and a mobile app for the FAA remote pilot certificate. More than 200 original practice questions, timed practice exams, a daily goal, spaced review, and nothing stored anywhere but your own phone.</p>
-        <a class="card-link" href="{{root}}products/part-107-prep.html">Product details</a>
-      </article>
-      <article class="card">
-        <div class="card-meta"><span class="badge badge-ok">Live</span><span class="badge badge-brass">Pro bono</span></div>
-        <h3>Phantom Soldier</h3>
-        <p>Veteran stories, told as songs. We built and maintain phantomsoldier.org for Project Veteran Overwatch at no charge: a page for every song and the story behind it, a story intake form, crisis resources on every page, and printable flyers. PVO owns the site.</p>
-        <a class="card-link" href="{{root}}products/phantom-soldier.html">What we built</a>
-      </article>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="num">03</span>
-      <h2>Who we work with</h2>
-      <p>Departments, businesses, nonprofits, and individuals who need working software more than they need a sales process.</p>
-    </div>
-    <ul class="sectors">
-      <li><strong>Public works departments</strong><span>Electric, water and sewer, streets, fleet, environmental services. Crews that train once a year and report incidents when they happen.</span></li>
-      <li><strong>Municipal and county government</strong><span>City halls, clerks, park districts, and special districts that need a tool for one job and a price they can approve.</span></li>
-      <li><strong>Small businesses</strong><span>Contractors, training providers, and shops that need one tool built right, without an enterprise price tag.</span></li>
-      <li><strong>Nonprofits</strong><span>Veteran-serving nonprofits through our pro bono program; other nonprofits at reduced rates.</span></li>
-      <li><strong>People with an idea</strong><span>Enthusiasts and experts who want to turn an idea into a platform they own and license. We build; you keep the name and the rights.</span></li>
-      <li><strong>Learners</strong><span>Drone pilots studying for the Part 107 test with our free study site and app.</span></li>
-    </ul>
-    <div class="actions">
-      <a class="btn btn-outline" href="{{root}}customers.html">More about our customers</a>
-    </div>
-  </div>
-</section>
-
-<section class="section section-green">
-  <div class="wrap split">
-    <div>
-      <div class="section-head">
-        <span class="num">04</span>
-        <h2>Veteran-owned</h2>
-        <p>Tompkins Software Systems is 100 percent veteran-owned. That shapes how we work more than how we market: a written plan before the work starts, a short status every week, and an honest after-action review when it ends.</p>
+        <div class="status"><span class="badge badge-ok">Available</span><span class="badge">Web, nothing to install</span></div>
+        <p>A one-page way to run a project without becoming a project manager. Move the sliders and the roll-up on the right rewrites itself using the product's own rules: an overdue milestone turns schedule amber and red after 14 days, a forecast over approved turns budget amber and red past 110 percent, and a project nobody has updated in two weeks is flagged as quiet.</p>
+        <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/painless-project-management.html">The full product</a></div>
       </div>
-      <a class="btn btn-primary" href="{{root}}veteran-owned.html">What veteran-owned means here</a>
+      <div class="panel">
+        <div class="panel-head"><span>Fleet telematics rollout</span><span class="muted">Weekly update</span></div>
+        <div class="panel-body pm-grid">
+          <div class="pm-controls">
+            <div><label for="pm-approved">Approved budget <span class="val" data-approved-v></span></label><input class="range light" id="pm-approved" type="range" min="20000" max="500000" step="5000" value="120000" data-approved></div>
+            <div><label for="pm-spent">Spent to date <span class="val" data-spent-v></span></label><input class="range light" id="pm-spent" type="range" min="0" max="750000" step="5000" value="70000" data-spent></div>
+            <div><label for="pm-forecast">Forecast at completion <span class="val" data-forecast-v></span></label><input class="range light" id="pm-forecast" type="range" min="0" max="750000" step="5000" value="118000" data-forecast></div>
+            <div><label for="pm-done">Milestones done <span class="val" data-done-v></span></label><input class="range light" id="pm-done" type="range" min="0" max="8" step="1" value="5" data-done></div>
+            <div><label for="pm-next">Next milestone <span class="val" data-next-v></span></label><input class="range light" id="pm-next" type="range" min="-30" max="30" step="1" value="6" data-next></div>
+            <div><label for="pm-last">Last weekly update <span class="val" data-last-v></span></label><input class="range light" id="pm-last" type="range" min="0" max="30" step="1" value="3" data-last></div>
+            <div class="pm-help"><label><input type="checkbox" data-help> I need help</label> <input type="text" placeholder="Where?" data-where style="width:9rem;padding:.3em .5em;font-size:.88rem"></div>
+          </div>
+          <div class="pm-roll">
+            <h4>Roll-up</h4>
+            <div class="rag" data-rag></div>
+            <div class="pm-milestones" data-ms aria-hidden="true"></div>
+            <p class="pm-summary" data-summary></p>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="sidebar-note">
-      <h3>For procurement</h3>
-      <ul>
-        <li>Illinois limited liability company, organized October 21, 2026</li>
-        <li>Documentation of veteran ownership available on request</li>
-        <li>Purchase orders accepted; W-9 on request</li>
-        <li>No subscriptions required for any product</li>
-      </ul>
+
+    <div class="demo" id="demo-safe">
+      <div class="demo-copy">
+        <h3>IntelliSafe</h3>
+        <div class="status"><span class="badge badge-ok">Available</span><span class="badge">Licensed by IntelliSafe Systems LLC</span></div>
+        <p>Annual OSHA training in nineteen modules, eight-section incident reports with signed statements, and site inspections for public works crews. Drag the handle. On the left is how most departments prove training today. On the right is the same information in IntelliSafe, where the reminders send themselves and the overdue list is never a surprise.</p>
+        <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/intellisafe.html">The full product</a></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><span>Annual training, Electric Services</span><span class="muted">Drag to compare</span></div>
+        <div class="compare" id="compare" style="--cut:50%">
+          <div class="pane before">
+            <span class="pane-label">The binder</span>
+            <div class="binder">
+              <svg viewBox="0 0 520 330" role="img" aria-label="A paper sign-in sheet with handwritten names">
+                <rect x="20" y="8" width="480" height="314" rx="6" fill="#4a4036"/>
+                <rect x="200" y="0" width="120" height="26" rx="6" fill="#2f2822"/>
+                <rect x="40" y="30" width="440" height="286" fill="#f7f3e8"/>
+                <text x="60" y="58" font-family="Georgia, serif" font-size="15" font-weight="700" fill="#2f2822">Annual Safety Training Sign-In Sheet</text>
+                <text x="60" y="76" font-family="Georgia, serif" font-size="10" fill="#6b6256">Electric Services, Lockout/Tagout, Oct 2026. Page 3 of ?</text>
+                <g stroke="#cfc7b6" stroke-width="1">
+                  <line x1="60" y1="96" x2="460" y2="96"/><line x1="60" y1="124" x2="460" y2="124"/><line x1="60" y1="152" x2="460" y2="152"/>
+                  <line x1="60" y1="180" x2="460" y2="180"/><line x1="60" y1="208" x2="460" y2="208"/><line x1="60" y1="236" x2="460" y2="236"/>
+                  <line x1="60" y1="264" x2="460" y2="264"/><line x1="60" y1="292" x2="460" y2="292"/>
+                  <line x1="250" y1="88" x2="250" y2="300"/><line x1="370" y1="88" x2="370" y2="300"/>
+                </g>
+                <g font-family="Georgia, serif" font-size="9" fill="#6b6256"><text x="64" y="92">Name</text><text x="256" y="92">Signature</text><text x="376" y="92">Date</text></g>
+                <g fill="none" stroke="#2b3a8c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M68 116 c6-14 12-8 18-2 c4 4 10-6 16-4 c8 3 14 1 22-6 c2 6 8 8 16 4"/>
+                  <path d="M258 118 c10-18 18-6 24-10 c8-5 14 6 22 2 c6-3 12-8 20 0"/>
+                  <path d="M68 144 c8-10 14-2 20 0 c6 2 12-8 18-4 c6 4 14 2 20-2 c6-4 10 4 16 2"/>
+                  <path d="M258 146 c6-12 16-4 22-8 c8-6 18 4 26 2"/>
+                  <path d="M68 172 c4-12 10-6 16-2 c6 4 10-10 18-6 c8 4 12 2 18-2 c8-5 12 6 20 2"/>
+                  <path d="M258 174 c8-14 20-2 30-6 c6-3 10 4 18 2"/>
+                  <path d="M68 200 c10-12 16-4 22 0 c8 6 12-6 20-4 c6 2 12 0 18-4"/>
+                  <path d="M68 228 c6-12 14-6 20-2 c6 4 12-8 18-4 c8 6 16 2 24-2"/>
+                  <path d="M258 230 c10-12 18-4 26-6 c8-2 12 6 20 2"/>
+                </g>
+                <g font-family="Georgia, serif" font-size="10" fill="#2b3a8c"><text x="378" y="118">10/3</text><text x="378" y="146">10/3</text><text x="378" y="174">10/4</text><text x="378" y="230">10/9</text></g>
+                <text x="258" y="202" font-family="Georgia, serif" font-size="9" fill="#a3372b" font-style="italic">signature missing</text>
+                <text x="66" y="258" font-family="Georgia, serif" font-size="9" fill="#a3372b" font-style="italic">3 crew out sick, redo next week?</text>
+                <path d="M300 282 c20-14 40-4 56 2" fill="none" stroke="#8a5a2b" stroke-width="7" stroke-linecap="round" opacity="0.18"/>
+              </svg>
+            </div>
+          </div>
+          <div class="pane after">
+            <span class="pane-label">IntelliSafe</span>
+            <div class="matrix">
+              <div class="w">
+                <h4>Compliance, Electric Services <small>Lockout/Tagout and 4 more</small></h4>
+                <table>
+                  <thead><tr><th>Crew member</th><th>LOTO</th><th>Fall</th><th>HazCom</th><th>Pole top</th><th>Bucket</th></tr></thead>
+                  <tbody>
+                    <tr><td>Alvarez, R.</td><td><i></i></td><td><i></i></td><td><i></i></td><td><i></i></td><td><i></i></td></tr>
+                    <tr><td>Brennan, T.</td><td><i></i></td><td><i class="due"></i></td><td><i></i></td><td><i></i></td><td><i></i></td></tr>
+                    <tr><td>Carter, J.</td><td><i class="late"></i></td><td><i></i></td><td><i></i></td><td><i class="due"></i></td><td><i></i></td></tr>
+                    <tr><td>Kowalski, D.</td><td><i></i></td><td><i></i></td><td><i></i></td><td><i></i></td><td><i class="due"></i></td></tr>
+                    <tr><td>Nguyen, P.</td><td><i></i></td><td><i></i></td><td><i class="late"></i></td><td><i></i></td><td><i></i></td></tr>
+                    <tr><td>Okafor, S.</td><td><i></i></td><td><i></i></td><td><i></i></td><td><i></i></td><td><i></i></td></tr>
+                  </tbody>
+                </table>
+                <div class="foot"><span class="pill ok">26 current</span><span class="pill warn">3 due in 30 days</span><span class="pill bad">2 overdue, reminders sent today</span><span>Certificates on file. Export to Excel.</span></div>
+              </div>
+            </div>
+          </div>
+          <input class="cut" type="range" min="0" max="100" value="50" aria-label="Compare the binder with IntelliSafe">
+          <div class="handle" aria-hidden="true"></div>
+        </div>
+        <div class="compare-ends"><span>Sign-in sheets and a supervisor who remembers to ask</span><span>Reminders at 30 days, 7 days, and every week overdue</span></div>
+      </div>
+    </div>
+
+    <div class="demo" id="demo-107">
+      <div class="demo-copy">
+        <h3>Part 107 Prep</h3>
+        <div class="status"><span class="badge badge-ok">Web: available</span><span class="badge badge-brass">Apps: in preparation</span></div>
+        <p>A free study site and a mobile app for the FAA remote pilot certificate. Today's question comes from the same bank of more than 200 original questions, each with an explanation and the rule it comes from. The ring is the daily goal from the app. Your answers stay in this tab and nowhere else.</p>
+        <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/part-107-prep.html">The full product</a></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><span>Question of the day</span><span class="muted">From the Part 107 bank</span></div>
+        <div class="panel-body q-grid">
+          <div>
+            <div class="q-cat" data-q-cat></div>
+            <p class="q-text" data-q-text></p>
+            <div class="q-opts" data-q-opts></div>
+            <div class="q-explain" data-q-explain hidden></div>
+            <button class="btn btn-outline btn-small q-next" type="button" data-q-next hidden>Next question</button>
+          </div>
+          <div class="goal">
+            <svg viewBox="0 0 120 120" data-goal-ring aria-hidden="true"></svg>
+            <div class="n" data-goal-n>0 of 5</div>
+            <div class="l">Daily goal</div>
+            <div class="streak" data-score></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo" id="demo-ps">
+      <div class="demo-copy">
+        <h3>Phantom Soldier</h3>
+        <div class="status"><span class="badge badge-ok">Live</span><span class="badge badge-brass">Pro bono</span></div>
+        <p>Veteran stories, told as songs. We built and maintain phantomsoldier.org for Project Veteran Overwatch at no charge: a page for every song and the story behind it, a story intake form, a Veterans Service Officer finder, and printable flyers. PVO owns the site.</p>
+        <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/phantom-soldier.html">What we built</a><a class="btn btn-outline btn-small" href="https://phantomsoldier.org/" rel="noopener">Visit phantomsoldier.org</a></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><span>Songs on the site</span><span class="muted">Every one started as a true story</span></div>
+        <div class="panel-body ps">
+          <ul class="ps-songs">
+            <li><span>I Can't See the Glass</span><span>New single</span></li>
+            <li><span>Hard to Break</span><span>Single</span></li>
+            <li><span>Still Here</span><span>The first song</span></li>
+            <li><span>All the Wrong Reasons</span><span>Single</span></li>
+          </ul>
+          <p class="muted small" style="margin:0">On Spotify, YouTube Music, Apple Music, and Amazon Music. Everything the music earns goes to veteran suicide prevention.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="section">
+<section class="ways" aria-labelledby="ways-title">
   <div class="wrap">
-    <div class="section-head">
-      <span class="num">05</span>
-      <h2>Recent updates</h2>
-    </div>
-    <ol class="timeline">
+    <h2 id="ways-title">Three ways to work with us</h2>
+    <ul class="ways-list">
       <li>
-        <time datetime="2026-10-21">October 21, 2026</time>
-        <h3>Tompkins Software Systems LLC organized in Illinois</h3>
-        <p>The Illinois Secretary of State files the Articles of Organization and the company exists. It takes over publishing and support for the products that had been built independently.</p>
+        <h3>Use a product</h3>
+        <p>IntelliSafe, Painless Project Management, and Part 107 Prep are in use today. Try them above, then open the full version. Department licensing and hosting are quoted per organization.</p>
+        <a href="{{root}}products.html">All products</a>
       </li>
       <li>
-        <time datetime="2026-10-17">October 17, 2026</time>
-        <h3>Company website published at tompkinssoftwaresystems.com</h3>
-        <p>Products, policies, and procurement information in one place. Contact channels and the newsletter open shortly.</p>
+        <h3>Have one built</h3>
+        <p>When off-the-shelf software is priced for an organization ten times your size, we scope a smaller tool that fits the way your people work. A one-page charter, a fixed price, a written update every week.</p>
+        <a href="{{root}}customers.html#how-to-buy">How an engagement works</a>
       </li>
       <li>
-        <time datetime="2026-10-15">October 15, 2026</time>
-        <h3>Part 107 Prep 1.1: the mobile app, with daily goals and spaced review</h3>
-        <p>The iOS and Android app arrives with all progress kept on the phone, a daily goal, a forgiving streak, spaced review, and exam resume. Store submission is next.</p>
+        <h3>Bring an idea and license it</h3>
+        <p>You know your field. We build the platform, publish it on the web and in the app stores, and set up the licensing so you can sell it under your own name. You keep the rights.</p>
+        <a href="{{root}}customers.html#your-idea">How that works</a>
       </li>
-    </ol>
-    <div class="actions">
-      <a class="btn btn-outline" href="{{root}}updates.html">All updates</a>
-    </div>
+    </ul>
+  </div>
+</section>
+
+<section class="vet">
+  <div class="wrap">
+    <p><strong>100 percent veteran-owned.</strong> That shapes how we work more than how we market: a written plan before the work starts, a short status every week, an honest after-action review when it ends. Purchase orders accepted, W-9 on request, and no subscription is required for any product.</p>
+    <a class="btn btn-primary" href="{{root}}veteran-owned.html">For procurement</a>
+  </div>
+</section>
+
+<section class="latest">
+  <div class="wrap">
+    <h2>Latest</h2>
+    <ul>
+      <li><time datetime="2026-10-23">October 23</time><span>Public Works Safety Training becomes IntelliSafe, with nineteen modules, eight-section incident reports, and site inspections.</span></li>
+      <li><time datetime="2026-10-21">October 21</time><span>Tompkins Software Systems LLC is organized in Illinois and takes over publishing and support for the products.</span></li>
+      <li><time datetime="2026-10-15">October 15</time><span>Part 107 Prep 1.1 brings the mobile app, with daily goals and spaced review. Store submission is next.</span></li>
+    </ul>
+    <a href="{{root}}updates.html">All updates</a>
   </div>
 </section>
 
