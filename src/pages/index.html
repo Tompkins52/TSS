@@ -1,13 +1,13 @@
 <!--
 title: Home
 title_full: Tompkins Software Systems | Software for public works, local government, small business, nonprofits, and learning platforms
-description: Pick who you are and use a working sample app built for organizations like yours. Tompkins Software Systems is a veteran-owned Illinois company that builds practical software for public works, local government, small businesses, nonprofits, learning platforms, and people with an idea.
+description: Pick who you are and use a working sample app built for organizations like yours. Tompkins Software Systems is a veteran-owned Illinois company that builds practical software for public works, local government, park districts, small businesses, fleets, property managers, nonprofits, membership organizations, sports leagues, learning platforms, and people with an idea.
 nav: home
 jsonld: organization
 priority: 1.0
 body_class: home
 styles: assets/css/home.css
-scripts: assets/js/home.js
+scripts: assets/js/sfx.js, assets/js/home.js
 -->
 <section class="try" id="try" aria-labelledby="try-title">
   <div class="topo" aria-hidden="true" data-topo></div>
@@ -16,13 +16,18 @@ scripts: assets/js/home.js
       <div class="try-left">
         <div class="sec-label" data-seen><span class="n">01</span>Try it</div>
         <h1 id="try-title" data-words>Pick who you are. <em>Use the tool.</em></h1>
-        <p class="try-intro">Six working sample apps, one for each kind of organization we build for. Add things, change things, download the export, pick the colors and the type. Nothing you type leaves this page.</p>
+        <p class="try-intro">Eleven working sample apps, one for each kind of organization we build for. Add things, change things, download the export, pick the colors and the type. Nothing you type leaves this page.</p>
         <fieldset class="auds" data-aud>
           <legend class="visually-hidden">Who is it for?</legend>
           <label><input type="radio" name="aud" value="works" checked><span class="al">Public works</span><span class="ak">Work orders</span></label>
           <label><input type="radio" name="aud" value="gov"><span class="al">Local government</span><span class="ak">Permit desk</span></label>
+          <label><input type="radio" name="aud" value="park"><span class="al">Park district</span><span class="ak">Reservations</span></label>
           <label><input type="radio" name="aud" value="biz"><span class="al">Small business</span><span class="ak">Estimates</span></label>
+          <label><input type="radio" name="aud" value="fleet"><span class="al">Fleet and trucking</span><span class="ak">Pre-trip inspections</span></label>
+          <label><input type="radio" name="aud" value="hoa"><span class="al">Property and HOAs</span><span class="ak">Resident requests</span></label>
           <label><input type="radio" name="aud" value="np"><span class="al">Nonprofit</span><span class="ak">Volunteer shifts</span></label>
+          <label><input type="radio" name="aud" value="club"><span class="al">Membership organization</span><span class="ak">Members and dues</span></label>
+          <label><input type="radio" name="aud" value="league"><span class="al">Sports league</span><span class="ak">Season scheduler</span></label>
           <label><input type="radio" name="aud" value="learn"><span class="al">Learning platform</span><span class="ak">Course player</span></label>
           <label><input type="radio" name="aud" value="idea"><span class="al">My own idea</span><span class="ak">Licensing console</span></label>
         </fieldset>
@@ -46,6 +51,7 @@ scripts: assets/js/home.js
             <button type="button" class="fontbtn" data-fontbtn aria-expanded="false" aria-haspopup="listbox"><span>Font</span><b data-fontname>Public Sans</b></button>
             <div class="fontmenu" data-fontmenu role="listbox" aria-label="Font" hidden></div>
           </div>
+          <button class="reset sound" type="button" data-sound aria-pressed="false" title="Sounds for clicks, saves, and stamps. Off until you turn them on."><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M2 6h3l4-3v10l-4-3H2z" fill="currentColor"/><path class="wave" d="M11 5.5a3.5 3.5 0 0 1 0 5M12.8 3.5a6 6 0 0 1 0 9" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg><span class="visually-hidden" data-sound-label>Sound off</span></button>
           <button class="reset" type="button" data-reset>Reset</button>
         </div>
         <div class="device desktop" data-device>
@@ -147,6 +153,18 @@ scripts: assets/js/home.js
         <div class="actions"><a class="btn btn-outline btn-small" href="{{root}}products/phantom-soldier.html">What we built</a><a class="btn btn-outline btn-small" href="https://phantomsoldier.org/" rel="noopener">Visit phantomsoldier.org</a></div>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="gift" aria-labelledby="gift-title">
+  <div class="wrap gift-grid">
+    <div class="gift-copy">
+      <div class="sec-label" data-seen><span class="n">04</span>A gift for every small business</div>
+      <h2 id="gift-title">TSS Invoice Creator. Free, and yours to keep.</h2>
+      <p>Line items, sales tax, freight, the customer's PO number, progress billing (invoice 2 of 3), payment instructions, and a print button. Your business details and your next invoice number are remembered on your device. Nothing is sent to us.</p>
+      <div class="actions"><a class="btn btn-primary" href="{{root}}invoice-creator.html">Make an invoice</a><a class="btn btn-outline" href="{{root}}invoice-creator.html#help-title">What belongs on one</a></div>
+    </div>
+    <a class="gift-paper" href="{{root}}invoice-creator.html" aria-hidden="true" tabindex="-1"><div class="gp-top"><b>INVOICE</b><span>INV-1043</span></div><div class="gp-line"></div><div class="gp-line short"></div><div class="gp-rows"><span>Subtotal</span><span>$3,838.00</span><span>Sales tax (7.25%)</span><span>$139.74</span><span>Freight</span><span>$48.50</span><span>Deposit received</span><span>-$1,500.00</span><span class="due">Balance due</span><span class="due">$2,526.24</span></div><div class="gp-foot">Invoice 2 of 3 on PO 4471 · $2,074 remaining</div></a>
   </div>
 </section>
 

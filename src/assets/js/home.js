@@ -44,6 +44,23 @@
     var ok = false; try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
     document.body.removeChild(ta); return ok;
   }
+  function sfx(name) { if (window.TSSound) window.TSSound.play(name); }
+  /* Numbers in the stat tiles count up when a view opens. */
+  function countUp(root) {
+    if (!root || reduceMotion) return;
+    Array.prototype.forEach.call(root.querySelectorAll(".stat .v"), function (v) {
+      var target = v.children.length === 1 && v.children[0].tagName === "SPAN" ? v.children[0] : v;
+      var m = /^(\$?)(\d[\d,]*)(\.\d+)?$/.exec(target.textContent.trim()); if (!m) return;
+      var prefix = m[1], n = Number(m[2].replace(/,/g, "")), dec = m[3] || "", t0 = null;
+      if (!n) return;
+      var step = function (ts) {
+        if (!t0) t0 = ts; var k = Math.min(1, (ts - t0) / 520); k = 1 - Math.pow(1 - k, 3);
+        target.textContent = prefix + fmt(Math.round(n * k)) + dec;
+        if (k < 1) window.requestAnimationFrame(step);
+      };
+      window.requestAnimationFrame(step);
+    });
+  }
   function initials(name) { return name.split(/\s+/).map(function (p) { return p.charAt(0); }).join("").toUpperCase().slice(0, 2); }
 
   /* ---------- HTML snippets used by every app ---------- */
@@ -51,9 +68,9 @@
   function stat(label, value, sub) { return '<div class="stat"><span class="v">' + value + '</span><span class="l">' + esc(label) + "</span>" + (sub ? '<span class="s">' + esc(sub) + "</span>" : "") + "</div>"; }
   function btn(act, label, cls, extra) { return '<button type="button" class="b' + (cls ? " " + cls : "") + '" data-act="' + act + '"' + (extra || "") + ">" + esc(label) + "</button>"; }
   function field(label, inner, cls) { return '<label class="f' + (cls ? " " + cls : "") + '"><span>' + (cls === "raw" ? label : esc(label)) + "</span>" + inner + "</label>"; }
-  function input(name, value, attrs) { return '<input class="in" name="' + name + '" value="' + esc(value) + '"' + (attrs || "") + ">"; }
-  function select(name, opts, value, attrs) {
-    return '<select class="in" name="' + name + '"' + (attrs || "") + ">" + opts.map(function (o) { return '<option' + (o === value ? " selected" : "") + ">" + esc(o) + "</option>"; }).join("") + "</select>";
+  function input(name, value, attrs, cls) { return '<input class="in' + (cls ? " " + cls : "") + '" name="' + name + '" value="' + esc(value) + '"' + (attrs || "") + ">"; }
+  function select(name, opts, value, attrs, cls) {
+    return '<select class="in' + (cls ? " " + cls : "") + '" name="' + name + '"' + (attrs || "") + ">" + opts.map(function (o) { return '<option' + (o === value ? " selected" : "") + ">" + esc(o) + "</option>"; }).join("") + "</select>";
   }
   function range(name, min, max, step, value, attrs) { return '<input class="rng" type="range" name="' + name + '" min="' + min + '" max="' + max + '" step="' + step + '" value="' + value + '"' + (attrs || "") + ">"; }
   function bar(pct, cls) { return '<div class="bar"><i class="' + (cls || "") + '" style="width:' + Math.max(0, Math.min(100, pct)) + '%"></i></div>'; }
@@ -485,6 +502,318 @@
   };
 
   /* =====================================================================
+     7. Park district: reservations with a real conflict check
+     ===================================================================== */
+  var HOURS = []; for (var hh = 6; hh <= 22; hh++) HOURS.push(hh);
+  function hourLabel(h) { return h === 12 ? "noon" : h < 12 ? h + " am" : (h - 12) + " pm"; }
+  var Reservations = {
+    name: function () { return "Park district reservations"; },
+    who: function () { return "Front desk"; },
+    section: "Reservations",
+    views: function () { return [{ id: "week", label: "This week" }, { id: "book", label: "Book a space" }, { id: "rates", label: "Rates" }]; },
+    spaces: [["Community room A", 40], ["Community room B", 30], ["Pavilion", 50], ["Ball field 1", 25], ["Ball field 2", 25]],
+    init: function () {
+      return { view: "week", day: 0, pick: null, fees: 290, next: 7, bookings: [
+        { id: 1, space: "Community room A", day: 0, start: 18, end: 20, who: "Garden club", status: "Confirmed" },
+        { id: 2, space: "Pavilion", day: 5, start: 13, end: 15, who: "Hart family reunion", status: "Confirmed" },
+        { id: 3, space: "Ball field 1", day: 5, start: 9, end: 11, who: "Hawks vs Comets", status: "Confirmed" },
+        { id: 4, space: "Community room B", day: 2, start: 10, end: 12, who: "Toddler story time", status: "Held" },
+        { id: 5, space: "Ball field 2", day: 6, start: 14, end: 16, who: "Rapids practice", status: "Held" },
+        { id: 6, space: "Community room A", day: 3, start: 19, end: 21, who: "HOA annual meeting", status: "Confirmed" }
+      ] };
+    },
+    rate: function (space) { for (var i = 0; i < Reservations.spaces.length; i++) if (Reservations.spaces[i][0] === space) return Reservations.spaces[i][1]; return 0; },
+    dayDate: function (d) { var mon = nextWeekday(1); mon.setDate(mon.getDate() + d); return mon; },
+    render: function (st, view, phone) {
+      var days = [0, 1, 2, 3, 4, 5, 6];
+      if (view === "week") {
+        var held = st.bookings.filter(function (b) { return b.status === "Held"; }).length;
+        var sum = '<span class="sum">' + plural(st.bookings.length, "booking", "bookings") + ", " + plural(held, "hold", "holds") + " waiting on a deposit, " + money(st.fees) + " collected</span>";
+        if (phone) {
+          var chips = days.map(function (d) { return '<button type="button" class="chip' + (st.day === d ? " on" : "") + '" data-act="day" data-d="' + d + '">' + Reservations.dayDate(d).toLocaleDateString("en-US", { weekday: "short" }) + "</button>"; }).join("");
+          var list = st.bookings.filter(function (b) { return b.day === st.day; }).sort(function (a, b) { return a.start - b.start; });
+          return head("This week", sum) + '<div class="chips wrap">' + chips + "</div>" + '<div class="stack">' + (list.map(Reservations.card).join("") || '<p class="empty">Nothing booked ' + shortDate(Reservations.dayDate(st.day)) + ". Tap Book a space.</p>") + "</div>";
+        }
+        var headRow = "<tr><th></th>" + days.map(function (d) { return "<th>" + Reservations.dayDate(d).toLocaleDateString("en-US", { weekday: "short", day: "numeric" }) + "</th>"; }).join("") + "</tr>";
+        var rows = Reservations.spaces.map(function (sp) {
+          return "<tr><th>" + esc(sp[0]) + "</th>" + days.map(function (d) {
+            var here = st.bookings.filter(function (b) { return b.space === sp[0] && b.day === d; }).sort(function (a, b) { return a.start - b.start; });
+            return '<td class="slot" data-act="pick" data-space="' + esc(sp[0]) + '" data-d="' + d + '" title="Book ' + esc(sp[0]) + '">' + here.map(function (b) { return '<span class="bk' + (b.status === "Held" ? " held" : "") + '">' + hourLabel(b.start) + " " + esc(b.who) + "</span>"; }).join("") + "</td>";
+          }).join("") + "</tr>";
+        }).join("");
+        return head("This week", sum) + '<table class="tbl cal"><thead>' + headRow + "</thead><tbody>" + rows + "</tbody></table>" + note("Tap an empty square to book it. Holds turn into bookings when the deposit comes in; the front desk marks that with one tap.");
+      }
+      if (view === "book") {
+        var pick = st.pick || { space: Reservations.spaces[0][0], day: 0 };
+        var dayOpts = days.map(function (d) { return shortDate(Reservations.dayDate(d)); });
+        return head("Book a space") + note("Residents see the same form online. The desk sees holds the moment they are made.") +
+          '<form class="frm" data-act="book">' + field("Space", select("space", Reservations.spaces.map(function (s) { return s[0]; }), pick.space)) + field("Day", select("day", dayOpts, dayOpts[pick.day])) +
+          '<div class="two">' + field("From", select("start", HOURS.slice(0, -1).map(hourLabel), hourLabel(pick.start || 9))) + field("To", select("end", HOURS.slice(1).map(hourLabel), hourLabel(pick.end || 11))) + "</div>" +
+          field("Who is it for", input("who", pick.who || "", ' placeholder="Group or family name" required')) +
+          '<div class="fa"><button type="submit" class="b">Hold it</button></div></form>';
+      }
+      return head("Rates") + '<table class="tbl"><thead><tr><th>Space</th><th class="num">Per hour</th><th class="xw">Deposit</th></tr></thead><tbody>' +
+        Reservations.spaces.map(function (s) { return "<tr><td>" + esc(s[0]) + '</td><td class="num">' + money(s[1]) + '</td><td class="xw">' + money(s[1] * 2) + "</td></tr>"; }).join("") + "</tbody></table>" +
+        '<div class="stats">' + stat("Collected this week", money(st.fees)) + stat("Bookings", st.bookings.length) + "</div>" + note("Change a rate here and every new hold uses it. Residents and groups with a tax exemption are flagged by the desk.");
+    },
+    card: function (b) {
+      return '<div class="card"><div class="ch"><b>' + esc(b.space) + "</b>" + (b.status === "Held" ? pill("Held", "warn") : pill("Confirmed", "ok")) + '</div><div class="addr">' + hourLabel(b.start) + " to " + hourLabel(b.end) + ", " + esc(b.who) + '</div><div class="cf"><span>' + money(Reservations.rate(b.space) * (b.end - b.start)) + "</span>" + (b.status === "Held" ? btn("confirm", "Deposit received", "small", ' data-id="' + b.id + '"') : "") + "</div></div>";
+    },
+    act: function (st, act, el, form) {
+      if (act === "day") { st.day = Number(el.getAttribute("data-d")); return true; }
+      if (act === "pick") { st.pick = { space: el.getAttribute("data-space"), day: Number(el.getAttribute("data-d")), start: 9, end: 11 }; st.view = "book"; st.msg = "Booking " + st.pick.space + " on " + shortDate(Reservations.dayDate(st.pick.day)) + ". Set the hours."; return true; }
+      if (act === "book") {
+        var who = form.who.value.trim(); if (!who) { form.who.focus(); return false; }
+        var space = form.space.value, day = form.day.selectedIndex, start = HOURS[form.start.selectedIndex], end = HOURS[form.end.selectedIndex + 1];
+        st.pick = { space: space, day: day, start: start, end: end, who: who };
+        if (end <= start) { st.msg = "The end has to come after the start."; st.err = true; return true; }
+        var clash = st.bookings.filter(function (b) { return b.space === space && b.day === day && b.start < end && b.end > start; })[0];
+        if (clash) { st.msg = space + " is taken " + hourLabel(clash.start) + " to " + hourLabel(clash.end) + " by " + clash.who + ". Pick another hour or the other room."; st.err = true; return true; }
+        st.bookings.push({ id: st.next, space: space, day: day, start: start, end: end, who: who, status: "Held" }); st.flash = st.next; st.next++;
+        st.msg = "Held for " + who + ", " + money(Reservations.rate(space) * (end - start)) + ". It becomes a booking when the deposit comes in."; st.pick = null; st.view = "week"; st.day = day; return true;
+      }
+      if (act === "confirm") { var b = st.bookings.filter(function (x) { return x.id === Number(el.getAttribute("data-id")); })[0]; b.status = "Confirmed"; st.fees += Reservations.rate(b.space) * (b.end - b.start); st.msg = b.who + " is confirmed. The receipt is on its way."; st.stamp = true; return true; }
+      return false;
+    }
+  };
+
+  /* =====================================================================
+     8. Fleet: pre-trip inspections the way the rules want them
+     ===================================================================== */
+  var DVIR = ["Brakes", "Steering", "Lights and reflectors", "Tires and wheels", "Horn", "Wipers and washers", "Mirrors", "Coupling devices", "Emergency equipment", "Fluid leaks"];
+  var CRITICAL = { "Brakes": 1, "Steering": 1, "Lights and reflectors": 1, "Tires and wheels": 1 };
+  var PreTrip = {
+    name: function () { return "Fleet pre-trip inspections"; },
+    who: function () { return "Shop"; },
+    section: "Fleet",
+    views: function () { return [{ id: "today", label: "Today" }, { id: "inspect", label: "Inspect a vehicle" }, { id: "shop", label: "Shop queue" }]; },
+    init: function () {
+      return { view: "today", vehicle: "Truck 12", next: 1, vehicles: [
+        { id: "Truck 12", type: "Plow truck", status: "ready", by: "R. Alvarez", at: "6:10 am", defects: [] },
+        { id: "Truck 7", type: "Dump truck", status: "defect", by: "T. Brennan", at: "6:14 am", defects: ["Horn: weak"] },
+        { id: "Loader 2", type: "Wheel loader", status: "ready", by: "J. Carter", at: "6:21 am", defects: [] },
+        { id: "Van 3", type: "Crew van", status: "oos", by: "D. Kowalski", at: "6:05 am", defects: ["Brakes: soft pedal"] },
+        { id: "Sweeper 1", type: "Street sweeper", status: "none", by: "", at: "", defects: [] }
+      ] };
+    },
+    statusPill: function (v) { return v.status === "ready" ? pill("Ready", "ok") : v.status === "defect" ? pill("Defect noted", "warn") : v.status === "oos" ? pill("Out of service", "bad") : pill("Not inspected", "quiet"); },
+    render: function (st, view, phone) {
+      var vs = st.vehicles, ready = vs.filter(function (v) { return v.status === "ready"; }).length, oos = vs.filter(function (v) { return v.status === "oos"; }).length;
+      if (view === "today") {
+        return head("Today", '<span class="sum">' + ready + " ready, " + oos + " out of service, " + vs.filter(function (v) { return v.status === "none"; }).length + " not yet inspected</span>" + btn("export", "Export CSV", "ghost small")) +
+          '<div class="stack g2">' + vs.map(function (v) {
+            return '<div class="card' + (st.flash === v.id ? " new" : "") + '"><div class="ch"><b>' + esc(v.id) + '</b>' + PreTrip.statusPill(v) + '</div><div class="addr">' + esc(v.type) + (v.by ? ", " + esc(v.by) + " at " + v.at : "") + (v.defects.length ? ". " + esc(v.defects.join("; ")) : "") + '</div><div class="cf"><span>' + (v.status === "oos" ? "Stays parked until the shop clears it" : v.status === "defect" ? "Can run; shop has it on the list" : v.status === "ready" ? "Good to go" : "Needs a walk-around before it moves") + "</span>" + btn("start", "Inspect", "ghost small", ' data-v="' + esc(v.id) + '"') + "</div></div>";
+          }).join("") + "</div>";
+      }
+      if (view === "inspect") {
+        var items = DVIR.map(function (d, i) {
+          return '<div class="dv"><span>' + esc(d) + (CRITICAL[d] ? ' <em class="dim">safety</em>' : "") + '</span><span class="dvo"><label><input type="radio" name="i' + i + '" value="ok" checked> OK</label><label><input type="radio" name="i' + i + '" value="defect"> Defect</label></span></div>';
+        }).join("");
+        return head("Pre-trip inspection") + '<form class="frm" data-act="submit">' + '<div class="two">' + field("Vehicle", select("vehicle", vs.map(function (v) { return v.id; }), st.vehicle)) + field("Driver", input("driver", "", ' placeholder="Your name" required')) + "</div>" +
+          '<div class="box dvl">' + items + "</div>" + field("Notes on any defect", input("notes", "", ' placeholder="For example: left brake light out"')) +
+          '<label class="ck"><input type="checkbox" name="cert" required> I inspected this vehicle and the report above is true</label><div class="fa"><button type="submit" class="b">Sign and submit</button></div></form>' +
+          note("A defect on brakes, steering, lights, or tires parks the vehicle until a mechanic certifies the repair. The report, the repair, and the driver's review are the three signatures the rules ask for.");
+      }
+      var queue = vs.filter(function (v) { return v.defects.length; });
+      return head("Shop queue", '<span class="sum">' + plural(queue.length, "vehicle", "vehicles") + " with open defects</span>") +
+        (queue.length ? '<div class="stack">' + queue.map(function (v) {
+          return '<div class="card"><div class="ch"><b>' + esc(v.id) + "</b>" + PreTrip.statusPill(v) + '</div><div class="addr">' + esc(v.defects.join("; ")) + '</div><div class="cf"><span>Reported by ' + esc(v.by) + " at " + v.at + "</span>" + btn("repaired", "Repaired and certified", "small", ' data-v="' + esc(v.id) + '"') + "</div></div>";
+        }).join("") + "</div>" : '<p class="empty">Nothing open. The whole fleet is clear.</p>') + note("Certifying a repair puts the vehicle back in service and files the record with the inspection it answers.");
+    },
+    act: function (st, act, el, form) {
+      var byId = function (id) { return st.vehicles.filter(function (v) { return v.id === id; })[0]; };
+      if (act === "start") { st.vehicle = el.getAttribute("data-v"); st.view = "inspect"; return true; }
+      if (act === "submit") {
+        var driver = form.driver.value.trim(); if (!driver) { form.driver.focus(); return false; }
+        if (!form.cert.checked) { form.cert.focus(); return false; }
+        var v = byId(form.vehicle.value), defects = [], critical = false, notes = form.notes.value.trim();
+        DVIR.forEach(function (d, i) { if (form["i" + i].value === "defect") { defects.push(d + (notes ? ": " + notes : "")); if (CRITICAL[d]) critical = true; } });
+        v.defects = defects; v.by = driver; v.at = new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }).toLowerCase(); v.status = critical ? "oos" : defects.length ? "defect" : "ready";
+        st.msg = critical ? v.id + " is out of service until the shop certifies the repair. The shop has it." : defects.length ? v.id + " can run; the defect is on the shop list." : v.id + " is ready. Report filed, " + driver + ".";
+        if (critical) st.err = true; else st.stamp = true;
+        st.flash = v.id; st.view = "today"; return true;
+      }
+      if (act === "repaired") { var r = byId(el.getAttribute("data-v")); r.defects = []; r.status = "ready"; st.msg = r.id + " is back in service. The repair is certified against the report."; st.stamp = true; return true; }
+      if (act === "export") {
+        var rows = [["Vehicle", "Type", "Status", "Inspected by", "Time", "Defects"]].concat(st.vehicles.map(function (v) { return [v.id, v.type, { ready: "Ready", defect: "Defect noted", oos: "Out of service", none: "Not inspected" }[v.status], v.by, v.at, v.defects.join("; ")]; }));
+        st.msg = download("pre-trip-" + isoDate(new Date()) + ".csv", csv(rows), "text/csv") ? "Today's inspections downloaded." : "Your browser blocked the download."; return true;
+      }
+      return false;
+    }
+  };
+
+  /* =====================================================================
+     9. Property management and HOAs: resident requests, dues, notices
+     ===================================================================== */
+  var Residents = {
+    name: function () { return "Stonebridge Commons"; },
+    who: function () { return "Manager"; },
+    section: "Community",
+    vendors: ["Unassigned", "Green Thumb Landscaping", "Reyes Plumbing", "Lakeside Electric", "North Snow and Ice"],
+    views: function () { return [{ id: "requests", label: "Requests" }, { id: "residents", label: "Residents and dues", tab: "Residents" }, { id: "notices", label: "Notices" }]; },
+    init: function () {
+      return { view: "requests", next: 318, residents: [
+        { unit: "101", name: "Alvarez", dues: "Paid" }, { unit: "102", name: "Brennan", dues: "Due" }, { unit: "103", name: "Carter", dues: "Paid" }, { unit: "104", name: "Kowalski", dues: "Late" },
+        { unit: "201", name: "Nguyen", dues: "Paid" }, { unit: "202", name: "Okafor", dues: "Due" }, { unit: "203", name: "Reyes", dues: "Paid" }, { unit: "204", name: "Singh", dues: "Paid" }
+      ], requests: [
+        { id: 317, unit: "104", what: "Sprinkler head broken by the mailboxes", kind: "Landscaping", status: "New", vendor: "Unassigned" },
+        { id: 316, unit: "202", what: "Hallway light out, second floor", kind: "Lighting", status: "Assigned", vendor: "Lakeside Electric" },
+        { id: 314, unit: "101", what: "Slow drain in the clubhouse kitchen", kind: "Plumbing", status: "Assigned", vendor: "Reyes Plumbing" },
+        { id: 311, unit: "203", what: "Ice on the north walk", kind: "Snow", status: "Done", vendor: "North Snow and Ice" }
+      ], notices: [{ date: shortDate(dateAt(-9)), subject: "Parking lot sealing, Oct 20 and 21", to: 86 }, { date: shortDate(dateAt(-30)), subject: "Annual meeting agenda", to: 86 }], amount: 85 };
+    },
+    render: function (st, view, phone) {
+      if (view === "requests") {
+        var open = st.requests.filter(function (r) { return r.status !== "Done"; }).length;
+        return head("Requests", '<span class="sum">' + plural(open, "open request", "open requests") + "</span>") +
+          '<div class="stack">' + st.requests.map(function (r, i) {
+            var vendor = r.status === "Done" ? '<span class="dim">' + esc(r.vendor) + "</span>" : select("vendor", Residents.vendors, r.vendor, ' data-change="assign" data-i="' + i + '"', "small");
+            return '<div class="card' + (st.flash === r.id ? " new" : "") + '"><div class="ch"><b>#' + r.id + " " + esc(r.what) + "</b>" + (r.status === "Done" ? pill("Done", "ok") : r.status === "Assigned" ? pill("Assigned", "warn") : pill("New")) + '</div><div class="addr">Unit ' + esc(r.unit) + ", " + esc(r.kind) + '</div><div class="cf"><span class="vend">' + vendor + "</span>" + (r.status !== "Done" ? btn("close", "Done", "small", ' data-i="' + i + '"') : "") + "</div></div>";
+          }).join("") + "</div>" +
+          '<form class="frm boxed" data-act="add"><h4>New request</h4><div class="two">' + field("Unit", select("unit", st.residents.map(function (r) { return r.unit; }), "102")) + field("Kind", select("kind", ["Landscaping", "Plumbing", "Lighting", "Snow", "Other"], "Landscaping")) + "</div>" + field("What is wrong", input("what", "", ' placeholder="Tell us what you saw" required')) + '<div class="fa"><button type="submit" class="b">Send it to the manager</button></div></form>';
+      }
+      if (view === "residents") {
+        var paid = st.residents.filter(function (r) { return r.dues === "Paid"; }).length;
+        return head("Residents and dues", '<span class="sum">' + paid + " of " + st.residents.length + " paid this quarter, " + money(st.amount) + " each</span>" + btn("export", "Export CSV", "ghost small")) +
+          '<table class="tbl"><thead><tr><th>Unit</th><th>Name</th><th>Dues</th><th></th></tr></thead><tbody>' + st.residents.map(function (r, i) {
+            return "<tr><td>" + esc(r.unit) + "</td><td>" + esc(r.name) + "</td><td>" + (r.dues === "Paid" ? pill("Paid", "ok") : r.dues === "Late" ? pill("Late", "bad") : pill("Due", "warn")) + '</td><td class="ta">' + (r.dues !== "Paid" ? btn("pay", "Record payment", "ghost small", ' data-i="' + i + '"') : "") + "</td></tr>";
+          }).join("") + "</tbody></table>" + note("Late dues get a reminder on the first of the month and a letter after sixty days. Nobody has to remember to send either.");
+      }
+      return head("Notices", '<span class="sum">' + st.residents.length + " units, 86 residents on the list</span>") +
+        '<form class="frm boxed" data-act="notice"><h4>Send a notice</h4>' + field("Subject", input("subject", "", ' placeholder="For example: Water shutoff Thursday 9 to noon" required')) + field("Message", input("body", "", ' placeholder="One or two sentences"')) + '<div class="fa"><button type="submit" class="b">Send to every resident</button></div></form>' +
+        '<table class="tbl"><thead><tr><th>Sent</th><th>Subject</th><th class="num">To</th></tr></thead><tbody>' + st.notices.map(function (n) { return "<tr><td>" + esc(n.date) + "</td><td>" + esc(n.subject) + '</td><td class="num">' + n.to + "</td></tr>"; }).join("") + "</tbody></table>";
+    },
+    act: function (st, act, el, form) {
+      if (act === "assign") { var r = st.requests[Number(el.getAttribute("data-i"))]; r.vendor = el.value; r.status = el.value === "Unassigned" ? "New" : "Assigned"; st.msg = el.value === "Unassigned" ? "#" + r.id + " is back in the queue." : el.value + " has #" + r.id + ". They get the address and a photo link."; return true; }
+      if (act === "close") { var c = st.requests[Number(el.getAttribute("data-i"))]; c.status = "Done"; st.msg = "#" + c.id + " closed. Unit " + c.unit + " gets a note."; st.stamp = true; return true; }
+      if (act === "add") { var what = form.what.value.trim(); if (!what) { form.what.focus(); return false; } st.requests.unshift({ id: st.next, unit: form.unit.value, what: what, kind: form.kind.value, status: "New", vendor: "Unassigned" }); st.flash = st.next; st.msg = "#" + st.next + " is with the manager. Unit " + form.unit.value + " can follow it from their phone."; st.next++; return true; }
+      if (act === "pay") { var p = st.residents[Number(el.getAttribute("data-i"))]; p.dues = "Paid"; st.msg = "Unit " + p.unit + " paid " + money(st.amount) + ". Receipt sent."; st.stamp = true; return true; }
+      if (act === "notice") { var subj = form.subject.value.trim(); if (!subj) { form.subject.focus(); return false; } st.notices.unshift({ date: shortDate(new Date()), subject: subj, to: 86 }); st.msg = "Sent to 86 residents by email and text. " + subj; st.chime = true; return true; }
+      if (act === "export") { var rows = [["Unit", "Name", "Dues"]].concat(st.residents.map(function (r) { return [r.unit, r.name, r.dues]; })); st.msg = download("dues.csv", csv(rows), "text/csv") ? "dues.csv downloaded." : "Your browser blocked the download."; return true; }
+      return false;
+    }
+  };
+
+  /* =====================================================================
+     10. Membership organizations: members, renewals, events
+     ===================================================================== */
+  var Members = {
+    name: function () { return "Northside Business Association"; },
+    who: function () { return "Secretary"; },
+    section: "Members",
+    views: function () { return [{ id: "members", label: "Members" }, { id: "events", label: "Events" }, { id: "dues", label: "Dues" }]; },
+    init: function () {
+      function m(name, org, status, renew) { return { name: name, org: org, status: status, renew: renew }; }
+      return { view: "members", q: "", dues: 150, collected: 2700, next: 1, members: [
+        m("Ana Reyes", "Reyes Plumbing", "Active", dateAt(210)), m("Devon Park", "Park Street Bakery", "Active", dateAt(12)), m("Lee Tran", "Tran Accounting", "Due", dateAt(-3)),
+        m("Maria Gomez", "Gomez Insurance", "Active", dateAt(300)), m("Sam Kowalski", "Hart Electric", "Lapsed", dateAt(-70)), m("Priya Nair", "Nair Dental", "Active", dateAt(45)),
+        m("Jo Brennan", "The Corner Diner", "Active", dateAt(140)), m("Chris Okafor", "Okafor Law", "Due", dateAt(-10))
+      ], events: [
+        { id: 1, name: "Monthly breakfast", when: shortDate(nextWeekday(2)), cap: 40, going: ["Ana Reyes", "Devon Park", "Maria Gomez", "Priya Nair", "Jo Brennan"] },
+        { id: 2, name: "Shop local night", when: shortDate(dateAt(16)), cap: 120, going: ["Ana Reyes", "Jo Brennan"] },
+        { id: 3, name: "Board meeting", when: shortDate(nextWeekday(4)), cap: 12, going: ["Devon Park", "Chris Okafor", "Maria Gomez"] }
+      ] };
+    },
+    rows: function (st) {
+      var q = st.q.toLowerCase();
+      return st.members.filter(function (m) { return !q || (m.name + " " + m.org).toLowerCase().indexOf(q) >= 0; }).map(function (m) {
+        var i = st.members.indexOf(m);
+        var status = m.status === "Active" ? pill("Active", "ok") : m.status === "Due" ? pill("Due", "warn") : pill("Lapsed", "bad");
+        return "<tr><td>" + esc(m.name) + '<span class="dim xw"> ' + esc(m.org) + "</span></td><td>" + status + '</td><td class="xw">' + shortDate(m.renew) + '</td><td class="ta">' + (m.status !== "Active" ? btn("renew", "Renew", "small", ' data-i="' + i + '"') : "") + "</td></tr>";
+      }).join("") || '<tr><td colspan="4" class="dim">No match.</td></tr>';
+    },
+    render: function (st, view, phone) {
+      if (view === "members") {
+        var active = st.members.filter(function (m) { return m.status === "Active"; }).length;
+        return head("Members", '<span class="sum">' + active + " active of " + st.members.length + "</span>" + btn("export", "Export CSV", "ghost small")) +
+          input("q", st.q, ' placeholder="Search by name or business" data-live="q"', "search") +
+          '<table class="tbl"><thead><tr><th>Member</th><th>Status</th><th class="xw">Renews</th><th></th></tr></thead><tbody data-rows>' + Members.rows(st) + "</tbody></table>" + note("Renew records the payment and moves the date out a year. Members due in 30 days get an email on their own.");
+      }
+      if (view === "events") {
+        return head("Events") + '<div class="stack">' + st.events.map(function (e) {
+          var full = e.going.length >= e.cap;
+          var form = st.rsvp === e.id ? '<form class="inline" data-act="rsvp" data-id="' + e.id + '">' + input("name", "", ' placeholder="Your name" required autofocus') + '<button type="submit" class="b small">Count me in</button>' + btn("cancel", "Cancel", "ghost small") + "</form>" : "";
+          return '<div class="card"><div class="ch"><b>' + esc(e.name) + "</b>" + (full ? pill("Full", "bad") : pill(e.going.length + " of " + e.cap, "ok")) + '</div><div class="addr">' + esc(e.when) + '</div><div class="cf"><span class="avs">' + e.going.slice(0, 6).map(function (p) { return '<span class="av" title="' + esc(p) + '">' + esc(initials(p)) + "</span>"; }).join("") + (e.going.length > 6 ? '<span class="dim">+' + (e.going.length - 6) + "</span>" : "") + "</span>" + (st.rsvp === e.id || full ? "" : btn("rsvpstart", "RSVP", "small", ' data-id="' + e.id + '"')) + "</div>" + form + "</div>";
+        }).join("") + "</div>" + note("RSVPs go on the list, the member gets a calendar invite, and the host gets a headcount the day before.");
+      }
+      var due = st.members.filter(function (m) { return m.status !== "Active"; }).length;
+      return head("Dues") + '<div class="stats">' + stat("Collected this year", money(st.collected)) + stat("Active", st.members.filter(function (m) { return m.status === "Active"; }).length) + stat("Due or lapsed", due) + stat("Annual dues", money(st.dues)) + "</div>" +
+        note("Dues are " + money(st.dues) + " a year. The treasurer's report is this page, exported on the first of the month.") + '<div class="fa left">' + btn("export", "Export the treasurer's report", "ghost") + "</div>";
+    },
+    live: function (st, el, main) {
+      if (el.getAttribute("data-live") === "q") { st.q = el.value; var tb = main.querySelector("[data-rows]"); if (tb) tb.innerHTML = Members.rows(st); }
+    },
+    act: function (st, act, el, form) {
+      if (act === "renew") { var m = st.members[Number(el.getAttribute("data-i"))]; m.status = "Active"; m.renew = dateAt(365); st.collected += st.dues; st.msg = m.name + " renewed through " + shortDate(m.renew) + ". " + money(st.dues) + " recorded."; st.stamp = true; return true; }
+      if (act === "rsvpstart") { st.rsvp = Number(el.getAttribute("data-id")); return true; }
+      if (act === "cancel") { st.rsvp = null; return true; }
+      if (act === "rsvp") { var name = form.name.value.trim(); if (!name) { form.name.focus(); return false; } var e = st.events.filter(function (x) { return x.id === Number(form.getAttribute("data-id")); })[0]; e.going.push(name); st.rsvp = null; st.msg = name + " is on the list for " + e.name + ". Calendar invite sent."; st.chime = true; return true; }
+      if (act === "export") { var rows = [["Member", "Business", "Status", "Renews"]].concat(st.members.map(function (m) { return [m.name, m.org, m.status, isoDate(m.renew)]; })); st.msg = download("members.csv", csv(rows), "text/csv") ? "members.csv downloaded." : "Your browser blocked the download."; return true; }
+      return false;
+    }
+  };
+
+  /* =====================================================================
+     11. Sports leagues: a season scheduled by the circle method, standings from scores
+     ===================================================================== */
+  function roundRobin(teams) {
+    var list = teams.slice(); if (list.length % 2) list.push(null);
+    var n = list.length, rounds = [];
+    for (var r = 0; r < n - 1; r++) {
+      var games = [];
+      for (var i = 0; i < n / 2; i++) { var a = list[i], b = list[n - 1 - i]; if (a && b) games.push(r % 2 ? [b, a] : [a, b]); }
+      rounds.push(games);
+      list.splice(1, 0, list.pop());
+    }
+    return rounds;
+  }
+  var League = {
+    name: function () { return "Prairie Youth Soccer, U10"; },
+    who: function () { return "Commissioner"; },
+    section: "League",
+    views: function () { return [{ id: "schedule", label: "Schedule" }, { id: "standings", label: "Standings" }, { id: "teams", label: "Teams" }]; },
+    init: function () {
+      var st = { view: "schedule", teams: ["Hawks", "Comets", "Rapids", "Wolves", "Tigers", "Falcons"], results: {}, week: 0 };
+      League.build(st);
+      st.results["0-0"] = [2, 1]; st.results["0-1"] = [0, 0]; st.results["0-2"] = [3, 1]; st.results["1-0"] = [1, 2]; st.results["1-1"] = [4, 0];
+      st.week = 1;
+      return st;
+    },
+    build: function (st) { st.rounds = roundRobin(st.teams); st.results = {}; },
+    table: function (st) {
+      var t = {}; st.teams.forEach(function (n) { t[n] = { team: n, p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 }; });
+      st.rounds.forEach(function (games, r) { games.forEach(function (g, i) { var res = st.results[r + "-" + i]; if (!res) return; var A = t[g[0]], B = t[g[1]]; A.p++; B.p++; A.gf += res[0]; A.ga += res[1]; B.gf += res[1]; B.ga += res[0]; if (res[0] > res[1]) { A.w++; B.l++; A.pts += 3; } else if (res[0] < res[1]) { B.w++; A.l++; B.pts += 3; } else { A.d++; B.d++; A.pts++; B.pts++; } }); });
+      return Object.keys(t).map(function (k) { return t[k]; }).sort(function (a, b) { return b.pts - a.pts || (b.gf - b.ga) - (a.gf - a.ga) || b.gf - a.gf || a.team.localeCompare(b.team); });
+    },
+    render: function (st, view, phone) {
+      if (view === "schedule") {
+        var played = Object.keys(st.results).length, total = st.rounds.reduce(function (a, g) { return a + g.length; }, 0);
+        var chips = st.rounds.map(function (g, r) { return '<button type="button" class="chip' + (st.week === r ? " on" : "") + '" data-act="week" data-w="' + r + '">Week ' + (r + 1) + "</button>"; }).join("");
+        var games = st.rounds[st.week].map(function (g, i) {
+          var key = st.week + "-" + i, res = st.results[key];
+          var when = shortDate(nextWeekday(6)) ; var d = nextWeekday(6); d.setDate(d.getDate() + 7 * st.week); when = shortDate(d);
+          return '<form class="card game' + (res ? " done" : "") + '" data-act="score" data-k="' + key + '"><div class="ch"><b>' + esc(g[0]) + ' <span class="dim">vs</span> ' + esc(g[1]) + "</b>" + (res ? pill("Final", "ok") : pill(when, "quiet")) + '</div><div class="cf"><span class="sc">' + input("a", res ? res[0] : "", ' type="number" min="0" max="30" aria-label="' + esc(g[0]) + ' goals"') + '<i>:</i>' + input("b", res ? res[1] : "", ' type="number" min="0" max="30" aria-label="' + esc(g[1]) + ' goals"') + '</span><button type="submit" class="b small">' + (res ? "Change" : "Save score") + "</button></div></form>";
+        }).join("");
+        return head("Schedule", '<span class="sum">' + played + " of " + total + " games played, " + st.teams.length + " teams, " + st.rounds.length + " weeks</span>") + '<div class="chips wrap">' + chips + "</div>" + '<div class="stack g2">' + games + "</div>" + note("Every team plays every other team once. Add a team and the whole season rebuilds itself. Scores feed the standings the moment they are saved.");
+      }
+      if (view === "standings") {
+        var rows = League.table(st).map(function (t, i) { return "<tr><td>" + (i + 1) + "</td><td>" + esc(t.team) + '</td><td class="num">' + t.p + '</td><td class="num">' + t.w + "-" + t.d + "-" + t.l + '</td><td class="num xw">' + (t.gf - t.ga > 0 ? "+" : "") + (t.gf - t.ga) + '</td><td class="num"><b>' + t.pts + "</b></td></tr>"; }).join("");
+        return head("Standings", btn("export", "Export CSV", "ghost small")) + '<table class="tbl"><thead><tr><th>#</th><th>Team</th><th class="num">P</th><th class="num">W-D-L</th><th class="num xw">GD</th><th class="num">Pts</th></tr></thead><tbody>' + rows + "</tbody></table>" + note("Three points for a win, one for a draw. Ties break on goal difference, then goals scored. Parents see this page; coaches get it by text on Sunday night.");
+      }
+      return head("Teams", '<span class="sum">' + st.teams.length + " teams</span>") + '<div class="stack">' + st.teams.map(function (t, i) { return '<div class="card"><div class="ch"><b>' + esc(t) + "</b>" + btn("drop", "Remove", "x", ' data-i="' + i + '" aria-label="Remove ' + esc(t) + '"') + "</div></div>"; }).join("") + "</div>" +
+        '<form class="frm boxed" data-act="addteam"><h4>Add a team</h4>' + field("Team name", input("name", "", ' placeholder="For example: Otters" required')) + '<div class="fa"><button type="submit" class="b">Add and rebuild the season</button></div></form>';
+    },
+    act: function (st, act, el, form) {
+      if (act === "week") { st.week = Number(el.getAttribute("data-w")); return true; }
+      if (act === "score") { var a = form.a.value, b = form.b.value; if (a === "" || b === "") { (a === "" ? form.a : form.b).focus(); return false; } st.results[form.getAttribute("data-k")] = [Number(a), Number(b)]; st.msg = "Saved. Standings updated."; st.chime = true; return true; }
+      if (act === "addteam") { var name = form.name.value.trim(); if (!name) { form.name.focus(); return false; } if (st.teams.indexOf(name) >= 0) { st.msg = name + " is already in the league."; st.err = true; return true; } st.teams.push(name); League.build(st); st.week = 0; st.msg = name + " is in. " + st.rounds.length + " weeks, " + st.rounds.reduce(function (x, g) { return x + g.length; }, 0) + " games, no scores yet."; return true; }
+      if (act === "drop") { if (st.teams.length <= 3) { st.msg = "Three teams is the smallest league that works."; st.err = true; return true; } var gone = st.teams.splice(Number(el.getAttribute("data-i")), 1)[0]; League.build(st); st.week = 0; st.msg = gone + " removed. The season rebuilt without them."; return true; }
+      if (act === "export") { var rows = [["Place", "Team", "Played", "W", "D", "L", "GF", "GA", "Points"]].concat(League.table(st).map(function (t, i) { return [i + 1, t.team, t.p, t.w, t.d, t.l, t.gf, t.ga, t.pts]; })); st.msg = download("standings.csv", csv(rows), "text/csv") ? "standings.csv downloaded." : "Your browser blocked the download."; return true; }
+      return false;
+    }
+  };
+
+  /* =====================================================================
      The shell: who it is for, the device, and the start-from-this form
      ===================================================================== */
   var AUD = [
@@ -493,6 +822,11 @@
     { id: "biz", label: "Small business", kind: "Estimates", app: Estimates, ask: "Want estimates like this for your business?", hint: "For example: customer signatures, and an export for the bookkeeper", title: "Estimates that go out before you leave the driveway", why: "Line items, tax, a copy the customer can read on a phone, and a list of what is still waiting on a yes.", topic: "build" },
     { id: "np", label: "Nonprofit", kind: "Volunteer shifts", app: Volunteers, ask: "Want volunteer sign-ups like this for your organization?", hint: "For example: background check status, and text reminders", title: "Volunteer shifts that fill themselves", why: "Open spots, sign-ups, reminders, and the hours report your board asks for, without a shared spreadsheet that nobody trusts.", topic: "build" },
     { id: "learn", label: "Learning platform", kind: "Course player", app: Course, ask: "Want a course player like this for your learners?", hint: "For example: our own videos, and a report for managers", title: "A course player with a quiz and a certificate", why: "Lessons, a pass mark, and a certificate the learner downloads. The sample course is three short lessons on spotting phishing; yours would be your content.", topic: "build" },
+    { id: "park", label: "Park district", kind: "Reservations", app: Reservations, ask: "Want reservations like this for your district?", hint: "For example: online deposits, and a public calendar", title: "Reservations that cannot double-book a room", why: "Rooms, fields, and the pavilion on one week. A hold becomes a booking when the deposit comes in, and two groups cannot land on the same hour.", topic: "build" },
+    { id: "fleet", label: "Fleet and trucking", kind: "Pre-trip inspections", app: PreTrip, ask: "Want inspections like this for your fleet?", hint: "For example: photos of the defect, and mileage from the odometer", title: "Pre-trip inspections the way the rules want them", why: "The driver's walk-around, the shop's repair, and the sign-off, in one record. A brake defect parks the truck until a mechanic clears it.", topic: "build" },
+    { id: "hoa", label: "Property and HOAs", kind: "Resident requests", app: Residents, ask: "Want a resident portal like this for your community?", hint: "For example: architectural requests, and a board vote", title: "Requests, dues, and notices for a community", why: "Residents report from their phone, the manager assigns the vendor, dues are one list instead of a spreadsheet, and a notice reaches everyone at once.", topic: "build" },
+    { id: "club", label: "Membership organization", kind: "Members and dues", app: Members, ask: "Want a membership system like this for your organization?", hint: "For example: a member directory, and online dues", title: "Members, renewals, and events without the binder", why: "Posts, chambers, clubs, and associations: who is current, who is due, who is coming Thursday, and the treasurer's report on the first of the month.", topic: "build" },
+    { id: "league", label: "Sports league", kind: "Season scheduler", app: League, ask: "Want a scheduler like this for your league?", hint: "For example: field assignments, and text alerts for rainouts", title: "A season that schedules itself", why: "Add the teams and every team plays every other team. Enter a score and the standings move. Parents see the page; coaches get the text.", topic: "build" },
     { id: "idea", label: "My own idea", kind: "Licensing console", app: Console, ask: "Have an idea that needs this behind it?", hint: "For example: what it does and who would pay for it", title: "The back office your idea needs once it is a product", why: "Name the app, set a price per seat, add a customer, and the license key is generated. This is what we set up so you can sell what you own.", topic: "idea" }
   ];
   var byId = {}; AUD.forEach(function (a) { byId[a.id] = a; });
@@ -560,14 +894,24 @@
   customSw.innerHTML = '<input type="color" value="#1b3a6b" data-custom aria-label="Your own color"><i></i><span class="tip">Your own color</span>';
   swatches.appendChild(customSw);
   var customIn = customSw.querySelector("[data-custom]");
-  swatches.addEventListener("change", function (e) { if (e.target.name === "palette") { theme().palette = e.target.value; applyTheme(); } });
-  customIn.addEventListener("input", function () { var t = theme(); t.custom = customIn.value; t.palette = "custom"; applyTheme(); });
+  swatches.addEventListener("change", function (e) { if (e.target.name === "palette") { theme().palette = e.target.value; applyTheme(); splash(e.target.parentNode); } });
+  var customTimer = null;
+  customIn.addEventListener("input", function () { var t = theme(); t.custom = customIn.value; t.palette = "custom"; applyTheme(); clearTimeout(customTimer); customTimer = setTimeout(function () { splash(customSw); }, 150); });
+  /* The new colors spread across the screen from the swatch that was picked. */
+  function splash(from) {
+    sfx("splash");
+    if (reduceMotion) return;
+    var p = palette(), el = document.createElement("div"); el.className = "splash"; el.style.background = p.accent;
+    var r1 = from.getBoundingClientRect(), r2 = device.getBoundingClientRect();
+    el.style.left = (r1.left + r1.width / 2 - r2.left) + "px"; el.style.top = (r1.top + r1.height / 2 - r2.top) + "px";
+    device.appendChild(el); setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 900);
+  }
 
   // The font menu: every typeface shown in itself, so the choice is visible before it is made.
   FONTS.forEach(function (f) {
     var b = document.createElement("button"); b.type = "button"; b.setAttribute("role", "option"); b.setAttribute("data-font", f.id);
     b.innerHTML = '<span class="aa" style="font-family:' + f.head.replace(/"/g, "&quot;") + '">Aa</span><span><span class="fn" style="font-family:' + f.body.replace(/"/g, "&quot;") + '">' + esc(f.label) + '</span><span class="fd">' + esc(f.kind) + "</span></span>";
-    b.addEventListener("click", function () { theme().font = f.id; applyTheme(); closeFonts(); fontBtn.focus(); });
+    b.addEventListener("click", function () { theme().font = f.id; applyTheme(); sfx("tick"); closeFonts(); fontBtn.focus(); });
     fontMenu.appendChild(b);
   });
   function openFonts() { fontMenu.hidden = false; fontBtn.setAttribute("aria-expanded", "true"); var sel = fontMenu.querySelector('[aria-selected="true"]'); if (sel) sel.focus(); }
@@ -606,13 +950,18 @@
     }).join("");
     var html = '<div class="app-top"><span class="app-name" data-appname>' + esc(app.name(s)) + '</span><span class="who">' + esc(app.who(s)) + '</span><span class="clock" data-clock>' + clock() + "</span></div>";
     html += '<div class="app-body">' + (phone ? "" : '<nav class="app-side" aria-label="' + esc(app.section) + '"><div class="side-head">' + esc(app.section) + "</div>" + nav + "</nav>");
-    html += '<div class="app-main" data-main>' + app.render(s, s.view, phone) + (s.msg ? '<div class="toast" role="status">' + esc(s.msg) + "</div>" : "") + "</div></div>";
+    html += '<div class="app-main" data-main>' + app.render(s, s.view, phone) + (s.msg ? '<div class="toast' + (s.err ? " err" : "") + '" role="status">' + esc(s.msg) + "</div>" : "") + "</div></div>";
     if (phone) html += '<nav class="app-tabs" aria-label="' + esc(app.section) + '">' + nav + "</nav>";
     // The built app, and on a switch, the same app as a blueprint on top of it, wiped away left to right.
     var plan = animate && !reduceMotion;
     screen.innerHTML = '<div class="layer real">' + html + "</div>" + (plan ? '<div class="layer plan" aria-hidden="true" inert>' + html.replace(/ (data-[a-z-]+|name|aria-label|title|placeholder)="[^"]*"/g, "").replace(/ (data-[a-z-]+|required|autofocus|checked|disabled|tabindex="0")(?=[ >])/g, "") + '</div><div class="scan" aria-hidden="true"></div>' : "");
+    if (plan) sfx("draw");
     if (plan) setTimeout(function () { Array.prototype.forEach.call(screen.querySelectorAll(".plan, .scan"), function (e) { if (e.parentNode) e.parentNode.removeChild(e); }); }, 1400);
     if (s.msg) { s.msg = null; var t = screen.querySelector(".toast"); setTimeout(function () { if (t && t.parentNode) t.parentNode.removeChild(t); }, 3200); }
+    var cue = s.err ? "error" : s.stamp ? "stamp" : s.chime ? "chime" : s.flash ? "pop" : null;
+    s.err = s.stamp = s.chime = false; s.flash = null;
+    if (cue) sfx(cue);
+    countUp(screen.querySelector(".real"));
     var auto = screen.querySelector(".real [autofocus]"); if (auto && fromUser) { try { auto.focus({ preventScroll: true }); } catch (e) { auto.focus(); } }
     fitScreen();
   }
@@ -644,8 +993,8 @@
     var act = el.getAttribute("data-act"), s = st(), app = current().app;
     if (act === "view") {
       var v = el.getAttribute("data-v");
-      if (app.locked && app.locked(s, v)) { s.msg = "Pass the quiz first."; draw(false, true); return; }
-      s.view = v; draw(false, true); return;
+      if (app.locked && app.locked(s, v)) { s.msg = "Pass the quiz first."; s.err = true; draw(false, true); return; }
+      s.view = v; sfx("tick"); draw(false, true); return;
     }
     if (app.act(s, act, el, null)) draw(false, true);
   });
@@ -672,9 +1021,9 @@
   new MutationObserver(function () { Array.prototype.forEach.call(screen.querySelectorAll(".rng"), fill); }).observe(screen, { childList: true, subtree: true });
 
   // Who it is for
-  audSeg.addEventListener("change", function (e) { if (e.target.name === "aud") setAud(e.target.value, true); });
-  devSeg.addEventListener("change", function (e) { if (e.target.name === "device") { state.device = e.target.value; draw(); } });
-  resetBtn.addEventListener("click", function () { states[state.aud] = current().app.init(); states[state.aud].msg = "Sample data restored."; draw(true); });
+  audSeg.addEventListener("change", function (e) { if (e.target.name === "aud") { sfx("flip"); setAud(e.target.value, true); } });
+  devSeg.addEventListener("change", function (e) { if (e.target.name === "device") { state.device = e.target.value; sfx("whoosh"); draw(); } });
+  resetBtn.addEventListener("click", function () { states[state.aud] = current().app.init(); states[state.aud].msg = "Sample data restored."; sfx("whoosh"); draw(true); });
   window.addEventListener("resize", fitScreen);
   setInterval(function () { var c = screen.querySelector(".real [data-clock]"); if (c) c.textContent = clock(); }, 30000);
 
@@ -710,7 +1059,7 @@
     window.addEventListener("scroll", function () { if (!ticking) { ticking = true; window.requestAnimationFrame(drift); } }, { passive: true });
     drift();
   }
-  var seenEls = document.querySelectorAll("[data-seen], .prod, .probono");
+  var seenEls = document.querySelectorAll("[data-seen], .prod, .probono, .gift, .latest");
   if ("IntersectionObserver" in window) {
     var io = new IntersectionObserver(function (entries) { entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("seen"); io.unobserve(en.target); } }); }, { rootMargin: "0px 0px -12% 0px", threshold: 0.15 });
     Array.prototype.forEach.call(seenEls, function (e) { io.observe(e); });

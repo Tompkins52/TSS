@@ -1,0 +1,177 @@
+<!--
+title: TSS Invoice Creator
+title_full: TSS Invoice Creator | A free invoice tool for small businesses
+description: A free invoice creator from Tompkins Software Systems. Line items, sales tax, freight, customer PO, progress billing (invoice 2 of 3), payment instructions, print or save as PDF. Nothing leaves your browser and your business details are remembered on your device.
+nav: tools
+priority: 0.9
+body_class: tool
+styles: assets/css/invoice.css
+scripts: assets/js/sfx.js, assets/js/invoice.js
+-->
+<section class="tool-head band-dark on-dark">
+  <div class="wrap">
+    <div class="sec-label"><span class="n">Free tool</span>For every small business</div>
+    <h1>TSS Invoice Creator</h1>
+    <p class="lede">A clean invoice in two minutes. Fill in the left, print or save the right. Your business details and your next invoice number are remembered on this device, and nothing is sent to us or to anyone.</p>
+    <div class="product-hero-meta">
+      <span class="badge badge-ok">Free</span>
+      <span class="badge badge-dark">No account</span>
+      <span class="badge badge-dark">Nothing leaves your browser</span>
+      <span class="badge badge-dark">Print or save as PDF</span>
+    </div>
+  </div>
+</section>
+
+<section class="tool" id="tool">
+  <div class="wrap tool-grid">
+    <form class="tool-form" data-inv novalidate>
+      <div class="toolbar top">
+        <button class="btn btn-primary" type="button" data-print>Print or save as PDF</button>
+        <button class="btn btn-outline" type="button" data-new>New invoice</button>
+        <button class="reset sound" type="button" data-sound aria-pressed="false" title="Sounds for clicks and saves. Off until you turn them on."><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M2 6h3l4-3v10l-4-3H2z" fill="currentColor"/><path class="wave" d="M11 5.5a3.5 3.5 0 0 1 0 5M12.8 3.5a6 6 0 0 1 0 9" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg><span class="visually-hidden" data-sound-label>Sound off</span></button>
+        <span class="saved" data-saved aria-live="polite"></span>
+      </div>
+
+      <fieldset class="grp">
+        <legend>Your business</legend>
+        <div class="row2">
+          <label class="f">Business name<input type="text" name="biz.name" autocomplete="organization"></label>
+          <label class="f">Phone<input type="text" name="biz.phone" autocomplete="tel"></label>
+        </div>
+        <label class="f">Address<textarea name="biz.addr" rows="2" placeholder="Street, city, state, ZIP"></textarea></label>
+        <div class="row2">
+          <label class="f">Email<input type="text" name="biz.email" autocomplete="email"></label>
+          <label class="f">Website<input type="text" name="biz.web"></label>
+        </div>
+        <div class="row2">
+          <label class="f">Tax ID <span class="opt">(optional, if customers ask)</span><input type="text" name="biz.taxid"></label>
+          <label class="f">Accent color<input type="color" name="biz.accent" value="#12352b"></label>
+        </div>
+        <div class="row2">
+          <label class="f">Logo <span class="opt">(optional, stays on this device)</span><input type="file" name="logo" accept="image/*" data-logo></label>
+          <div class="f logo-f"><span>&nbsp;</span><button class="btn btn-outline btn-small" type="button" data-logo-clear hidden>Remove logo</button></div>
+        </div>
+      </fieldset>
+
+      <fieldset class="grp">
+        <legend>Invoice</legend>
+        <div class="row3">
+          <label class="f">Invoice number<input type="text" name="num"></label>
+          <label class="f">Invoice date<input type="date" name="date"></label>
+          <label class="f">Terms<select name="terms" data-terms><option>Due on receipt</option><option>Net 15</option><option selected>Net 30</option><option>Net 45</option><option>Net 60</option></select></label>
+        </div>
+        <div class="row3">
+          <label class="f">Due date<input type="date" name="due"></label>
+          <label class="f">Customer PO number<input type="text" name="po"></label>
+          <label class="f">Your reference <span class="opt">(job, quote)</span><input type="text" name="ref"></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="grp">
+        <legend>Bill to</legend>
+        <div class="row2">
+          <label class="f">Customer<input type="text" name="cust.name"></label>
+          <label class="f">Attention<input type="text" name="cust.attn" placeholder="Accounts payable, a person"></label>
+        </div>
+        <div class="row2">
+          <label class="f">Billing address<textarea name="cust.addr" rows="2"></textarea></label>
+          <label class="f">Ship to or job site <span class="opt">(optional)</span><textarea name="ship" rows="2"></textarea></label>
+        </div>
+        <label class="f">Customer email<input type="text" name="cust.email"></label>
+      </fieldset>
+
+      <fieldset class="grp">
+        <legend>Services</legend>
+        <label class="f">Description of services<textarea name="desc" rows="2" placeholder="What you did, in a sentence or two"></textarea></label>
+        <div class="row2">
+          <label class="f">Service period from<input type="date" name="from"></label>
+          <label class="f">To<input type="date" name="to"></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="grp">
+        <legend>Line items</legend>
+        <div class="lines" data-lines></div>
+        <div class="fa"><button class="btn btn-outline btn-small" type="button" data-addline>Add a line</button><span class="hint">Untick "tax" on labor or anything your state does not tax.</span></div>
+      </fieldset>
+
+      <fieldset class="grp">
+        <legend>Totals</legend>
+        <div class="row4">
+          <label class="f">Discount ($)<input type="number" name="disc" min="0" step="0.01" placeholder="0"></label>
+          <label class="f">Sales tax rate (%)<input type="number" name="tax" min="0" max="30" step="0.001" placeholder="0"></label>
+          <label class="f">Freight or shipping ($)<input type="number" name="freight" min="0" step="0.01" placeholder="0"></label>
+          <label class="f">Deposit or paid ($)<input type="number" name="paid" min="0" step="0.01" placeholder="0"></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="grp">
+        <legend>Progress billing <span class="opt">(one of several invoices on a contract or PO)</span></legend>
+        <label class="ck"><input type="checkbox" name="prog.on"> This is one of several invoices against a contract or PO</label>
+        <div class="row4" data-prog>
+          <label class="f">Contract or PO amount ($)<input type="number" name="prog.contract" min="0" step="0.01"></label>
+          <label class="f">This is invoice<input type="number" name="prog.n" min="1" step="1" value="1"></label>
+          <label class="f">of<input type="number" name="prog.m" min="1" step="1" value="3"></label>
+          <label class="f">Previously billed ($)<input type="number" name="prog.prev" min="0" step="0.01" placeholder="0"></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="grp">
+        <legend>Payment and notes</legend>
+        <div class="row2">
+          <label class="f">Make checks payable to<input type="text" name="pay.to"></label>
+          <label class="f">Late fee or early-pay terms<input type="text" name="pay.late" placeholder="For example: 1.5% per month after the due date"></label>
+        </div>
+        <label class="f">How to pay<textarea name="pay.instr" rows="2" placeholder="Mailing address for checks, ACH details, a card link, or a QR code description"></textarea></label>
+        <label class="f">Note to the customer<textarea name="pay.notes" rows="2" placeholder="Thank you, warranty, or what happens next"></textarea></label>
+      </fieldset>
+
+      <div class="toolbar bottom">
+        <button class="btn btn-primary" type="button" data-print>Print or save as PDF</button>
+        <button class="btn btn-outline" type="button" data-csv>Download CSV</button>
+        <button class="btn btn-outline" type="button" data-save>Save invoice file</button>
+        <label class="btn btn-outline file-btn">Open invoice file<input type="file" accept=".json,application/json" data-open></label>
+        <button class="btn btn-outline" type="button" data-sample>Load the sample</button>
+        <button class="btn-text" type="button" data-clear>Forget everything on this device</button>
+      </div>
+    </form>
+
+    <div class="tool-preview">
+      <div class="inv" data-preview aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-tint tool-help" aria-labelledby="help-title">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 id="help-title">What belongs on an invoice</h2>
+      <p>The things an accounts payable clerk looks for, in the order they look for them. Leave one out and the invoice goes to the bottom of the pile.</p>
+    </div>
+    <ol class="checklist">
+      <li><strong>Who you are.</strong> Legal business name, address, phone, and email. Add your tax ID when a customer asks for it; it should match the W-9 you gave them.</li>
+      <li><strong>The word "Invoice" and a number nobody else has.</strong> Sequential, never reused. The tool remembers your next number.</li>
+      <li><strong>Three dates.</strong> The invoice date, the due date, and the terms that produced it (Net 30 means thirty days from the invoice date). "Due on receipt" is a term too.</li>
+      <li><strong>Who pays.</strong> The customer's name, billing address, an attention line, and their purchase order number. The PO number is how their system matches your invoice to money they already approved.</li>
+      <li><strong>What you did.</strong> A sentence describing the work, the dates it covered, and line items with a quantity, a unit, a rate, and an amount.</li>
+      <li><strong>The math, shown.</strong> Subtotal, discount, taxable subtotal, the sales tax rate and the tax, freight, total, deposits already paid, and the balance due. Whether tax applies to labor, materials, or freight depends on your state; the tool taxes the lines you mark and leaves freight untaxed.</li>
+      <li><strong>Progress billing.</strong> When this is one of several invoices on a contract: the contract or PO amount, which invoice this is (2 of 3), billed to date, and what remains. Public agencies and general contractors expect it.</li>
+      <li><strong>How to pay.</strong> Who to make the check out to, where to send it, ACH or card options, and any late fee or early-payment discount.</li>
+      <li><strong>A thank-you and a contact.</strong> One line, and the name of the person who can answer a question about the invoice.</li>
+    </ol>
+    <p class="muted small">This is general information from a software company, not tax or legal advice. Your accountant knows your state's rules.</p>
+  </div>
+</section>
+
+<section class="cta band-dark on-dark">
+  <div class="wrap">
+    <div>
+      <h2>Outgrown the invoice?</h2>
+      <p>When the estimate, the invoice, the schedule, and the customer list need to be one system, that is the kind of thing we build. Fixed price, written down first.</p>
+    </div>
+    <div class="actions">
+      <a class="btn btn-brass" href="{{root}}index.html#try-biz">Try the estimate sample</a>
+      <a class="btn btn-ghost" href="{{root}}contact.html">Talk to us</a>
+    </div>
+  </div>
+</section>

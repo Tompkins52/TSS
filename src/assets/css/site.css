@@ -82,8 +82,12 @@ html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
 }
+/* Pages crossfade into each other in browsers that support it */
+@view-transition { navigation: auto; }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.28s; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  @view-transition { navigation: none; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
 
