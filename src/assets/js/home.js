@@ -974,16 +974,21 @@
     var views = app.views(s);
     var nav = views.map(function (v) {
       var on = s.view === v.id ? " on" : "", lock = v.locked ? " locked" : "", done = v.done ? " done" : "";
-      var short = (phone || find(LAYOUTS, theme().layout).shell === "rail") && v.tab ? v.tab : v.label;
+      var lay = find(LAYOUTS, theme().layout), short = ((phone && lay.id !== "compact") || lay.shell === "rail") && v.tab ? v.tab : v.label;
       return '<button type="button" class="nv' + on + lock + done + '" data-act="view" data-v="' + v.id + '"' + (v.locked ? ' aria-disabled="true"' : "") + "><span>" + esc(short) + "</span></button>";
     }).join("");
-    var layout = find(LAYOUTS, theme().layout), shell = phone ? (layout.shell === "pills" ? "pills" : "phone") : layout.shell;
+    // Four shells on a desktop (sidebar, tabs across the top, an icon rail, pills) and four on a phone
+    // (tabs along the bottom, a tab strip under the header, a slide-out drawer, pills).
+    var layout = find(LAYOUTS, theme().layout);
+    var shell = phone ? { classic: "phone", modern: "topm", compact: "drawer", friendly: "pills" }[layout.id] : layout.shell;
     var icon = a.look && a.look.icon ? '<svg class="app-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="' + a.look.icon + '" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/></svg>' : "";
-    var html = '<div class="app-top">' + icon + '<span class="app-name" data-appname>' + esc(app.name(s)) + '</span>' + (shell === "top" ? '<nav class="app-tabsx" aria-label="' + esc(app.section) + '">' + nav + "</nav>" : "") + '<span class="who">' + esc(app.who(s)) + '</span><span class="clock" data-clock>' + clock() + "</span></div>";
+    var menuBtn = shell === "drawer" ? '<button type="button" class="menu-btn" data-act="drawer" aria-label="Menu" aria-expanded="' + (s.drawer ? "true" : "false") + '"><i></i><i></i><i></i></button>' : "";
+    var html = '<div class="app-top">' + menuBtn + icon + '<span class="app-name" data-appname>' + esc(app.name(s)) + '</span>' + (shell === "top" || shell === "topm" ? '<nav class="app-tabsx" aria-label="' + esc(app.section) + '">' + nav + "</nav>" : "") + '<span class="who">' + esc(app.who(s)) + '</span><span class="clock" data-clock>' + clock() + "</span></div>";
     if (shell === "pills") html += '<nav class="app-pills" aria-label="' + esc(app.section) + '">' + nav + "</nav>";
     html += '<div class="app-body">' + (shell === "side" ? '<nav class="app-side" aria-label="' + esc(app.section) + '"><div class="side-head">' + esc(app.section) + "</div>" + nav + "</nav>" : shell === "rail" ? '<nav class="app-side rail" aria-label="' + esc(app.section) + '">' + nav + "</nav>" : "");
     html += '<div class="app-main" data-main>' + app.render(s, s.view, phone) + (s.msg ? '<div class="toast' + (s.err ? " err" : "") + '" role="status">' + esc(s.msg) + "</div>" : "") + "</div></div>";
     if (shell === "phone") html += '<nav class="app-tabs" aria-label="' + esc(app.section) + '">' + nav + "</nav>";
+    if (shell === "drawer" && s.drawer) html += '<div class="app-scrim" data-act="drawer"></div><nav class="app-drawer" aria-label="' + esc(app.section) + '"><div class="side-head">' + esc(app.section) + "</div>" + nav + "</nav>";
     screen.setAttribute("data-shell", shell); screen.setAttribute("data-layout", layout.id);
     // The built app, and on a switch, the same app as a blueprint on top of it, wiped away left to right.
     var plan = animate && !reduceMotion;
@@ -1024,10 +1029,11 @@
   screen.addEventListener("click", function (e) {
     var el = e.target.closest("[data-act]"); if (!el || el.tagName === "FORM") return;
     var act = el.getAttribute("data-act"), s = st(), app = current().app;
+    if (act === "drawer") { s.drawer = !s.drawer; sfx("tick"); draw(false, true); return; }
     if (act === "view") {
       var v = el.getAttribute("data-v");
-      if (app.locked && app.locked(s, v)) { s.msg = "Pass the quiz first."; s.err = true; draw(false, true); return; }
-      s.view = v; sfx("tick"); draw(false, true); return;
+      if (app.locked && app.locked(s, v)) { s.msg = "Pass the quiz first."; s.err = true; s.drawer = false; draw(false, true); return; }
+      s.view = v; s.drawer = false; sfx("tick"); draw(false, true); return;
     }
     if (app.act(s, act, el, null)) draw(false, true);
   });

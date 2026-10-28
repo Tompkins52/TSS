@@ -12,153 +12,35 @@ scripts: assets/js/invoice.js
   <div class="wrap">
     <div class="sec-label"><span class="n">Free tool</span>For every small business</div>
     <h1>TSS Invoice Creator</h1>
-    <p class="lede">A clean invoice in two minutes. Fill in the left, print or save the right. Your business details, logo, and next invoice number are remembered on this device, and nothing is sent to us or to anyone.</p>
+    <p class="lede">The invoice is the form. Tap any part of it and type: your business, the customer, line items, tax, freight, the PO number. Print it or save it as a PDF. Your business details, logo, and next invoice number are remembered on this device, and nothing is sent to us or to anyone.</p>
     <div class="product-hero-meta">
       <span class="badge badge-ok">Free</span>
       <span class="badge badge-dark">No account</span>
       <span class="badge badge-dark">Nothing leaves your browser</span>
-      <span class="badge badge-dark">Print or save as PDF</span>
+      <span class="badge badge-dark">Edit it right on the page</span>
     </div>
   </div>
 </section>
 
 <section class="tool" id="tool">
-  <div class="wrap tool-grid">
-    <form class="tool-form" data-inv novalidate>
-      <div class="toolbar top">
-        <button class="btn btn-primary" type="button" data-print>Print or save as PDF</button>
-        <button class="btn btn-outline" type="button" data-new>New invoice</button>
-        <span class="saved" data-saved aria-live="polite"></span>
-      </div>
-
-      <fieldset class="grp">
-        <legend class="visually-hidden">Your business</legend>
-        <h3 class="gt">Your business</h3>
-        <div class="row2">
-          <label class="f">Business name<input type="text" name="biz.name" autocomplete="organization"></label>
-          <label class="f">Phone<input type="text" name="biz.phone" autocomplete="tel"></label>
+  <div class="wrap">
+    <div class="toolbar top" data-toolbar>
+      <button class="btn btn-primary" type="button" data-print>Print or save as PDF</button>
+      <button class="btn btn-outline" type="button" data-new>New invoice</button>
+      <button class="btn btn-outline" type="button" data-csv>Download CSV</button>
+      <details class="more-tools"><summary>More</summary>
+        <div class="toolbar">
+          <button class="btn btn-outline btn-small" type="button" data-save>Save invoice file</button>
+          <label class="btn btn-outline btn-small file-btn">Open invoice file<input type="file" accept=".json,application/json" data-open></label>
+          <button class="btn btn-outline btn-small" type="button" data-sample>Load the sample</button>
+          <button class="btn-text" type="button" data-clear>Forget everything on this device</button>
         </div>
-        <label class="f">Address<textarea name="biz.addr" rows="2" placeholder="Street, city, state, ZIP"></textarea></label>
-        <div class="row2">
-          <label class="f">Email<input type="text" name="biz.email" autocomplete="email"></label>
-          <label class="f">Color on the invoice<input type="color" name="biz.accent" value="#12352b"></label>
-        </div>
-        <div class="row2">
-          <label class="f">Logo <span class="opt">(stays on this device)</span><input type="file" name="logo" accept="image/*" data-logo></label>
-          <div class="f logo-f"><span>&nbsp;</span><button class="btn btn-outline btn-small" type="button" data-logo-clear hidden>Remove logo</button></div>
-        </div>
-        <details class="more-fields"><summary>Website and tax ID</summary>
-          <div class="row2">
-            <label class="f">Website<input type="text" name="biz.web"></label>
-            <label class="f">Tax ID <span class="opt">(only if customers ask)</span><input type="text" name="biz.taxid"></label>
-          </div>
-        </details>
-      </fieldset>
-
-      <fieldset class="grp">
-        <legend class="visually-hidden">Invoice</legend>
-        <h3 class="gt">Invoice</h3>
-        <div class="row2">
-          <label class="f">Invoice number<input type="text" name="num"></label>
-          <label class="f">Invoice date<input type="date" name="date"></label>
-        </div>
-        <div class="row2">
-          <label class="f">Terms<select name="terms" data-terms><option>Due on receipt</option><option>Net 15</option><option selected>Net 30</option><option>Net 45</option><option>Net 60</option></select></label>
-          <label class="f">Customer PO number<input type="text" name="po"></label>
-        </div>
-        <details class="more-fields"><summary>Due date and your reference</summary>
-          <div class="row2">
-            <label class="f">Due date <span class="opt">(set by the terms; change it if you like)</span><input type="date" name="due"></label>
-            <label class="f">Your reference <span class="opt">(job or quote)</span><input type="text" name="ref"></label>
-          </div>
-        </details>
-      </fieldset>
-
-      <fieldset class="grp">
-        <legend class="visually-hidden">Bill to</legend>
-        <h3 class="gt">Bill to</h3>
-        <div class="row2">
-          <label class="f">Customer<input type="text" name="cust.name"></label>
-          <label class="f">Billing address<textarea name="cust.addr" rows="2"></textarea></label>
-        </div>
-        <details class="more-fields"><summary>Attention line, email, ship-to</summary>
-          <div class="row2">
-            <label class="f">Attention<input type="text" name="cust.attn" placeholder="Accounts payable, a person"></label>
-            <label class="f">Customer email<input type="text" name="cust.email"></label>
-          </div>
-          <label class="f">Ship to or job site<textarea name="ship" rows="2"></textarea></label>
-        </details>
-      </fieldset>
-
-      <fieldset class="grp">
-        <legend class="visually-hidden">What you did</legend>
-        <h3 class="gt">What you did</h3>
-        <label class="f">Description of services<textarea name="desc" rows="2" placeholder="What you did, in a sentence or two"></textarea></label>
-        <div class="lines" data-lines></div>
-        <div class="fa"><button class="btn btn-outline btn-small" type="button" data-addline>Add a line</button><span class="hint">Untick "tax" on labor or anything your state does not tax.</span></div>
-        <details class="more-fields"><summary>Service period</summary>
-          <div class="row2">
-            <label class="f">From<input type="date" name="from"></label>
-            <label class="f">To<input type="date" name="to"></label>
-          </div>
-        </details>
-      </fieldset>
-
-      <fieldset class="grp">
-        <legend class="visually-hidden">Totals</legend>
-        <h3 class="gt">Totals</h3>
-        <div class="row3">
-          <label class="f">Sales tax rate (%)<input type="number" name="tax" min="0" max="30" step="0.001" placeholder="0"></label>
-          <label class="f">Freight or shipping ($)<input type="number" name="freight" min="0" step="0.01" placeholder="0"></label>
-          <label class="f">Deposit already paid ($)<input type="number" name="paid" min="0" step="0.01" placeholder="0"></label>
-        </div>
-        <details class="more-fields"><summary>Discount</summary>
-          <div class="row3"><label class="f">Discount ($)<input type="number" name="disc" min="0" step="0.01" placeholder="0"></label></div>
-        </details>
-      </fieldset>
-
-      <fieldset class="grp">
-        <legend class="visually-hidden">Progress billing</legend>
-        <h3 class="gt">Progress billing</h3>
-        <label class="ck"><input type="checkbox" name="prog.on"> This is one of several invoices on a contract or PO</label>
-        <div class="row4" data-prog>
-          <label class="f">Contract or PO amount ($)<input type="number" name="prog.contract" min="0" step="0.01"></label>
-          <label class="f">This is invoice<input type="number" name="prog.n" min="1" step="1" value="1"></label>
-          <label class="f">of<input type="number" name="prog.m" min="1" step="1" value="3"></label>
-          <label class="f">Previously billed ($)<input type="number" name="prog.prev" min="0" step="0.01" placeholder="0"></label>
-        </div>
-      </fieldset>
-
-      <fieldset class="grp">
-        <legend class="visually-hidden">Payment and notes</legend>
-        <h3 class="gt">Payment and notes</h3>
-        <div class="row2">
-          <label class="f">Make checks payable to<input type="text" name="pay.to"></label>
-          <label class="f">How to pay<textarea name="pay.instr" rows="2" placeholder="Mailing address for checks, ACH details, a card link"></textarea></label>
-        </div>
-        <label class="f">Note to the customer<textarea name="pay.notes" rows="2" placeholder="Thank you, warranty, or what happens next"></textarea></label>
-        <details class="more-fields"><summary>Late fee or early-pay terms</summary>
-          <label class="f">Terms<input type="text" name="pay.late" placeholder="For example: 1.5% per month after the due date"></label>
-        </details>
-      </fieldset>
-
-      <div class="toolbar bottom">
-        <button class="btn btn-primary" type="button" data-print>Print or save as PDF</button>
-        <button class="btn btn-outline" type="button" data-csv>Download CSV</button>
-        <details class="more-tools"><summary>More</summary>
-          <div class="toolbar">
-            <button class="btn btn-outline btn-small" type="button" data-save>Save invoice file</button>
-            <label class="btn btn-outline btn-small file-btn">Open invoice file<input type="file" accept=".json,application/json" data-open></label>
-            <button class="btn btn-outline btn-small" type="button" data-sample>Load the sample</button>
-            <button class="btn-text" type="button" data-clear>Forget everything on this device</button>
-          </div>
-        </details>
-      </div>
-    </form>
-
-    <div class="tool-preview">
-      <div class="inv" data-preview aria-live="polite"></div>
+      </details>
+      <span class="saved" data-saved aria-live="polite"></span>
     </div>
+    <p class="tool-hint">Tap anything on the invoice to change it. The small green links add the parts you need and disappear when you print.</p>
+    <input type="file" accept="image/*" data-logo hidden>
+    <div class="inv" data-inv aria-label="Your invoice, editable"></div>
   </div>
 </section>
 

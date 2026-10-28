@@ -184,6 +184,21 @@ body.home .site-nav li.nav-cta .btn-primary:hover { background: var(--brass-300)
 .device.phone { max-width: 320px; }
 .device.phone .screen { height: 640px; border-radius: 30px; border: 6px solid #0d1d18; }
 .device.phone .layer { grid-template-rows: 46px 1fr 50px; }
+.device.phone .screen[data-shell="topm"] .layer { grid-template-rows: 80px 1fr; }
+.device.phone .screen[data-shell="drawer"] .layer { grid-template-rows: 46px 1fr; }
+.device.phone .screen[data-shell="topm"] .app-top { justify-content: flex-start; }
+.device.phone .app-tabsx { overflow-x: auto; scrollbar-width: none; flex-wrap: nowrap; }
+.device.phone .app-tabsx::-webkit-scrollbar { display: none; }
+.device.phone .app-tabsx .nv { flex: none; }
+.menu-btn { width: 28px; height: 28px; border: 0; background: transparent; display: grid; gap: 4px; align-content: center; justify-items: center; padding: 0; cursor: pointer; color: inherit; flex: none; margin-right: 2px; }
+.menu-btn i { display: block; width: 16px; height: 2px; border-radius: 1px; background: currentColor; }
+.app-scrim { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.35); z-index: 6; animation: scrim-in 0.25s ease both; }
+@keyframes scrim-in { from { opacity: 0; } to { opacity: 1; } }
+.app-drawer { position: absolute; top: 0; bottom: 0; left: 0; width: 72%; max-width: 240px; background: var(--ui-side); color: var(--ui-side-ink); z-index: 7; padding: 16px 0; display: flex; flex-direction: column; gap: 2px; box-shadow: 8px 0 30px rgba(0, 0, 0, 0.35); animation: drawer-in 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+@keyframes drawer-in { from { translate: -100% 0; } to { translate: none; } }
+.app-drawer .side-head { padding: 0 16px 10px; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ui-side-muted); opacity: 0.8; }
+.app-drawer .nv { font-size: 13px; padding: 10px 16px 10px 14px; }
+.device.phone .screen[data-layout="friendly"] .app-top { padding-top: 12px; }
 .screen .layer { position: absolute; inset: 0; display: grid; min-height: 0; }
 /* The blueprint: the same app drawn as lines, wiped away to reveal the built one */
 .screen .plan { z-index: 2; pointer-events: none; background-color: #0e2f27; background-image: linear-gradient(0deg, rgba(230, 201, 121, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(230, 201, 121, 0.08) 1px, transparent 1px); background-size: 100% 24px, 24px 100%; animation: plan-wipe 1.1s cubic-bezier(0.65, 0, 0.35, 1) 0.1s both; }
@@ -539,7 +554,7 @@ body.home .site-nav li.nav-cta .btn-primary:hover { background: var(--brass-300)
 .latest time { color: var(--green-700); font-weight: 600; font-size: 0.85rem; padding-top: 0.15rem; }
 @media (max-width: 520px) { .latest li { grid-template-columns: 1fr; gap: 0.15rem; } }
 
-@media (prefers-reduced-motion: reduce) { .splash, .splash .blob, .splash .drop, .screen .toast, .screen .card.new { animation: none; } .device { transition: none; } .screen.boot, .try h1.words .w, .screen .plan, .screen .scan { animation: none; } .screen .plan, .screen .scan { display: none; } .bar i, .shot, .shot::after, .prod-copy, .probono-copy, .sec-label::after { transition: none; } .shot { transform: none; } .shot::after { opacity: 0; } .prod .prod-copy, .probono-copy, .gift-copy, .latest li { opacity: 1; translate: none; transition: none; } .sec-label::after { width: 3.5rem; } }
+@media (prefers-reduced-motion: reduce) { .splash, .splash .blob, .splash .drop, .screen .toast, .screen .card.new, .app-scrim, .app-drawer { animation: none; } .device { transition: none; } .screen.boot, .try h1.words .w, .screen .plan, .screen .scan { animation: none; } .screen .plan, .screen .scan { display: none; } .bar i, .shot, .shot::after, .prod-copy, .probono-copy, .sec-label::after { transition: none; } .shot { transform: none; } .shot::after { opacity: 0; } .prod .prod-copy, .probono-copy, .gift-copy, .latest li { opacity: 1; translate: none; transition: none; } .sec-label::after { width: 3.5rem; } }
 
 /* ---------- The free invoice tool ---------- */
 .gift { padding: 3rem 0; background: var(--surface); border-top: 1px solid var(--stone-200); }
