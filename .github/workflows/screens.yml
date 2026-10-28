@@ -30,6 +30,8 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -51,6 +53,11 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add src/assets/img/products
           git commit -m "Refresh product screens, $(date -u +%Y-%m-%d)" -m "$(git diff --cached --name-only | sed 's|src/assets/img/products/||')"
-          git push
+          # Someone may have pushed while the capture ran; put this commit on top and try again.
+          for attempt in 1 2 3; do
+            git pull --rebase origin main && git push && break
+            if [ "$attempt" = 3 ]; then echo "Could not push after three tries."; exit 1; fi
+            sleep 20
+          done
           gh workflow run pages.yml --ref main
           echo "New screens committed; the site is rebuilding." >> "$GITHUB_STEP_SUMMARY"
