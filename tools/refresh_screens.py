@@ -36,7 +36,7 @@ PRODUCTS = {
     "pm": {"name": "Painless Project Management", "base": os.environ.get("SCREENS_PM", "https://tompkins52.github.io/painless-pm/"), "title": "Painless"},
     "p107": {"name": "Part 107 Prep", "base": os.environ.get("SCREENS_P107", "https://tompkins52.github.io/part107-prep/"), "title": "Part 107"},
     "ps": {"name": "Phantom Soldier", "base": os.environ.get("SCREENS_PS", "https://phantomsoldier.org/"), "title": "Phantom Soldier"},
-    "wc": {"name": "Which Card", "base": os.environ.get("SCREENS_WC", "https://tompkins52.github.io/which-card/"), "title": "Which Card"},
+    "wc": {"name": "Witch Card", "base": os.environ.get("SCREENS_WC", "https://tompkins52.github.io/which-card/"), "title": "Witch Card"},
 }
 
 DESKTOP = {"viewport": {"width": 1280, "height": 800}, "device_scale_factor": 1}
@@ -102,9 +102,9 @@ def r_p107_exam(page, base):
     settle(page)
 
 
-# Which Card is a phone app that keeps everything on the phone, so every capture starts
+# Witch Card is a phone app that keeps everything on the phone, so every capture starts
 # from the same sample wallet written into the app's own storage. Cards are picked by
-# name; the app never holds a card number. Every Which Card screen is a phone screen.
+# name; the app never holds a card number. Every Witch Card screen is a phone screen.
 # Location is on in the sample wallet, and the phone stands at a gas station: its position
 # is fixed and the OpenStreetMap lookup is answered with the two businesses there, so the
 # app opens with "You're at Shell" every time, the way it does at a real pump.
@@ -133,7 +133,7 @@ WC_SEED = """(ids) => {
 
 
 def r_wc(path="index.html", then=None, first_run=False):
-    """Load Which Card with the sample wallet (or as a first-time visitor), then run an optional step."""
+    """Load Witch Card with the sample wallet (or as a first-time visitor), then run an optional step."""
     def go(page, base):
         # Write the storage from a file that does not run the app (its icon). Loading the app
         # itself here would start a store lookup that can finish later and save over the seed.

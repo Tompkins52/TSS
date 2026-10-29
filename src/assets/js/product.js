@@ -112,7 +112,7 @@
     showQ(); drawGoal();
   }
 
-  /* ---------- Which Card: the answer screen, from the app's own card rules ---------- */
+  /* ---------- Witch Card: the answer screen, from the app's own card rules ---------- */
   // Six common cards and ten stores, copied from the app's card data (October 2026).
   // Rates are percent back, or points per dollar for Freedom Unlimited, counted at one cent
   // a point the way the app counts them when cash back is the priority. "not" lists the store
@@ -230,6 +230,16 @@
         '<text x="292" y="178" text-anchor="end" fill="#fff" fill-opacity=".9" font-family="' + font + '" font-size="' + (mid ? 16 : 26) + '" font-weight="850" font-style="italic" font-stretch="112%" letter-spacing="1">' + net + "</text></svg>";
       return el("span", "wc-art", svg);
     };
+    // The witch hat that lands on the card to use, the same shape as in the app.
+    var wcHat = function () {
+      var id = "wch" + (++wcSeq);
+      return '<svg viewBox="38 -44 102 96" aria-hidden="true" focusable="false">' +
+        '<defs><linearGradient id="' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4A2F6E"/><stop offset="1" stop-color="#170D20"/></linearGradient></defs>' +
+        '<path d="M64 39 Q 78 4 92 -22 Q 104 -42 126 -30 Q 129 -28 124 -26 Q 110 -28 104 -14 Q 98 8 114 39 Z" fill="url(#' + id + ')" stroke="#7A5AA8" stroke-width="1.6" stroke-linejoin="round"/>' +
+        '<path d="M67 32 Q 89 35.5 110.5 32 L 107.4 24 Q 89 27.5 70.2 24 Z" fill="#F6A623"/>' +
+        '<rect x="84" y="24.6" width="10" height="8.6" rx="1.6" fill="none" stroke="#1E1328" stroke-width="2"/>' +
+        '<ellipse cx="89" cy="40" rx="46" ry="8" fill="url(#' + id + ')" stroke="#7A5AA8" stroke-width="1.6"/></svg>';
+    };
 
     var wcRender = function () {
       var amount = Math.min(parseFloat(String(wcAmount.value).replace(/[^0-9.]/g, "")) || 0, 1000000);
@@ -249,7 +259,7 @@
         var changed = wcLast !== best.card.id; wcLast = best.card.id;
         var win = el("div", "wc-winner" + (changed ? " reveal" : ""));
         win.appendChild(el("div", "wc-wlabel", wcIcon("check", 2.5) + "Use this card"));
-        var big = el("div", "wc-big"); big.appendChild(wcArt(best.card, 250)); win.appendChild(big);
+        var big = el("div", "wc-big"); big.appendChild(wcArt(best.card, 250)); big.appendChild(el("span", "wc-hat", wcHat())); win.appendChild(big);
         win.appendChild(el("div", "wc-name", esc(best.card.name)));
         var tail = best.why.replace(/^\s*[\d.]+\s*(%|x)\s*/i, "") + (best.card.points ? ", points worth " + (Math.round(best.pct * 10) / 10) + "%" : "");
         var row = el("div", "wc-row");

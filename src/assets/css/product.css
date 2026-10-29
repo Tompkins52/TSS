@@ -180,7 +180,7 @@
 .cta .actions { margin: 0; }
 @media (min-width: 880px) { .cta .wrap { grid-template-columns: 1fr auto; align-items: center; gap: 3rem; } }
 
-/* ---------- Which Card: an app for phones, shown only on phones ---------- */
+/* ---------- Witch Card (formerly Which Card): an app for phones, shown only on phones ---------- */
 .phero-phones { position: relative; align-self: end; width: 100%; max-width: 540px; height: clamp(330px, 88vw, 420px); margin: 0 auto; overflow: hidden; }
 .phero-phones img { position: absolute; display: block; height: auto; border-radius: 28px; border: 6px solid #0d1d18; background: #fff; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.14); }
 .phero-phones .ph-front { left: 4%; top: 22px; width: 50%; rotate: -3deg; z-index: 2; }
@@ -231,8 +231,7 @@
 .wc-screen { position: relative; border-radius: 36px; background: #F5F2F8; color: #1E1328; padding: 12px 14px 18px; font-family: "Archivo WC", var(--font-body); font-size: 15px; font-weight: 430; line-height: 1.4; overflow: hidden; }
 .wc-notch { display: block; width: 92px; height: 24px; margin: 0 auto 8px; border-radius: 999px; background: #1B1222; }
 .wc-bar { display: flex; align-items: center; gap: 10px; padding: 2px 2px 14px; font-weight: 820; font-stretch: 112%; font-size: 18px; letter-spacing: -0.015em; }
-.wc-bar i { position: relative; flex: none; width: 27px; height: 18px; border-radius: 5px; background: linear-gradient(135deg, #7E4BC0, #3B1A60); rotate: -9deg; box-shadow: 0 3px 6px rgba(42, 22, 64, 0.35); }
-.wc-bar i::after { content: ""; position: absolute; left: 4px; top: 5px; width: 8px; height: 6px; border-radius: 2px; background: #F6A623; }
+.wc-bar .wc-mark { flex: none; width: 34px; height: 31px; margin: -6px -3px -2px -2px; filter: drop-shadow(0 3px 4px rgba(42, 22, 64, 0.3)); }
 
 /* "You're at": the store the phone is standing in, with its category's icon */
 .wc-here { display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 12px; align-items: center; margin-bottom: 16px; }
@@ -265,7 +264,12 @@
 .wc-winner { display: flex; flex-direction: column; gap: 8px; }
 .wc-wlabel { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 650; color: #5B2E86; }
 .wc-wlabel svg { display: block; width: 15px; height: 15px; }
-.wc-big { align-self: flex-start; width: min(100%, 250px); margin: 0 0 4px 4px; }
+.wc-big { position: relative; align-self: flex-start; width: min(100%, 250px); margin: 0 0 4px 4px; }
+/* The witch hat lands on the card to use, as in the app */
+.wc-hat { position: absolute; right: -5%; top: 0; width: 25%; transform: translate(0, -56%) rotate(16deg); transform-origin: 50% 85%; pointer-events: none; }
+.wc-hat svg { display: block; width: 100%; height: auto; filter: drop-shadow(0 6px 6px rgba(42, 22, 64, 0.28)); }
+.wc-winner.reveal .wc-hat { animation: wc-hatdrop 0.5s 0.32s cubic-bezier(0.2, 0.9, 0.3, 1.25) both; }
+@keyframes wc-hatdrop { from { opacity: 0; transform: translate(-10%, -150%) rotate(-12deg); } to { opacity: 1; transform: translate(0, -56%) rotate(16deg); } }
 .wc-big .wc-art svg { display: block; width: 100%; height: auto; rotate: -2deg; filter: drop-shadow(0 16px 14px rgba(42, 22, 64, 0.3)) drop-shadow(0 3px 4px rgba(42, 22, 64, 0.2)); }
 .wc-winner.reveal .wc-big { animation: wc-pull 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.12) both; }
 @keyframes wc-pull { from { opacity: 0; transform: translateY(40px) rotate(4deg) scale(0.95); } to { opacity: 1; transform: none; } }
@@ -309,5 +313,5 @@
 .screens-grid.phones figcaption { text-align: center; max-width: 24ch; margin: 0 auto; }
 
 @media (prefers-reduced-motion: reduce) {
-  .wc-winner.reveal .wc-big, .wc-here.found b { animation: none; }
+  .wc-winner.reveal .wc-big, .wc-winner.reveal .wc-hat, .wc-here.found b { animation: none; }
 }
