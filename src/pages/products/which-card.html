@@ -29,7 +29,7 @@ scripts: assets/js/product.js
     </div>
     <div class="phero-phones">
       <img class="ph-back" src="{{root}}assets/img/products/wc-phone-wallet.webp" alt="The wallet screen: each card drawn in its own color, with what it earns most on and the perks still to activate" width="390" height="844">
-      <img class="ph-front" src="{{root}}assets/img/products/wc-phone.webp" alt="The app opened at a gas station: it says You're at Shell, then shows the card to use, what it earns on the purchase, and every other card ranked below it" width="390" height="844">
+      <img class="ph-front" src="{{root}}assets/img/products/wc-phone.webp" alt="The app opened at a gas station: it says You're at Shell, then shows the card to use, drawn big, with what it earns on the purchase and how much more than the next best card" width="390" height="844">
     </div>
   </div>
 </section>
@@ -48,14 +48,17 @@ scripts: assets/js/product.js
           <span class="wc-notch" aria-hidden="true"></span>
           <div class="wc-bar"><i aria-hidden="true"></i>Which Card</div>
           <div class="wc-here" data-wc-here>
-            <span class="wc-here-ic"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="M12 21.5s6.8-6.3 6.8-11.6a6.8 6.8 0 1 0-13.6 0c0 5.3 6.8 11.6 6.8 11.6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="9.8" r="2.5" fill="currentColor"/></svg></span>
-            <span class="wc-here-t"><small>You're at</small><b data-wc-store>Shell</b><span data-wc-cat>Gas</span></span>
+            <span class="wc-here-ic" data-wc-ic><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M4 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M3 21h12M6 7h6v5H6zM14 10h2a2 2 0 0 1 2 2v5a1.5 1.5 0 0 0 3 0V9l-2.5-2.5"/></svg></span>
+            <span class="wc-here-t"><small><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M12 22s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12zM12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/></svg>You're at</small><b data-wc-store>Shell</b><span data-wc-cat>Gas</span></span>
           </div>
           <span class="wc-label" id="wc-try">Try another store</span>
           <div class="wc-stores" role="group" aria-labelledby="wc-try" data-wc-stores></div>
-          <label class="wc-amount"><span aria-hidden="true">$</span><input type="text" inputmode="decimal" autocomplete="off" value="45" aria-label="Amount in dollars" data-wc-amount></label>
+          <label class="wc-amount"><span class="cur" aria-hidden="true">$</span><input type="text" inputmode="decimal" autocomplete="off" value="45" aria-label="Amount in dollars" data-wc-amount><span class="opt" aria-hidden="true">Amount (optional)</span></label>
           <div data-wc-answer></div>
-          <ul class="wc-others" aria-label="The other cards in this wallet" data-wc-others></ul>
+          <div class="wc-pocket" data-wc-pocket>
+            <p class="wc-pocket-label" aria-hidden="true">The rest of your wallet</p>
+            <ul class="wc-others" aria-label="The other cards in this wallet, best first" data-wc-others></ul>
+          </div>
           <p class="visually-hidden" aria-live="polite" data-wc-say></p>
           <p class="wc-asof">Rates as of October 2026, from each issuer's own pages. Points are counted at a cent each, with cash back as the priority.</p>
         </div>
@@ -105,7 +108,7 @@ scripts: assets/js/product.js
   <div class="wrap">
     <h2>Screens</h2>
     <div class="screens-grid phones">
-      <figure class="tall"><img src="{{root}}assets/img/products/wc-phone-anywhere.webp" alt="The best card you do not have at a gas station, with how much more it would earn in a year after its fee" width="390" height="844" loading="lazy"><figcaption>The best card you do not have at this store, after its annual fee. Nobody pays for that spot.</figcaption></figure>
+      <figure class="tall"><img src="{{root}}assets/img/products/wc-phone-anywhere.webp" alt="The rest of the wallet ranked in its pocket, and under it the best card you do not have at this gas station, with how much more it would earn in a year after its fee" width="390" height="844" loading="lazy"><figcaption>The best card you do not have at this store, after its annual fee. Nobody pays for that spot.</figcaption></figure>
       <figure class="tall"><img src="{{root}}assets/img/products/wc-phone-perks.webp" alt="The perks list for one card, each perk with an Activated switch and an Activate button" width="390" height="844" loading="lazy"><figcaption>Every perk with an Activated switch. Activate opens the bank's own page.</figcaption></figure>
       <figure class="tall"><img src="{{root}}assets/img/products/wc-phone-wallet.webp" alt="The wallet: each card with what it earns most on and what still needs activating" width="390" height="844" loading="lazy"><figcaption>Your cards, picked by name, with what each one is best at.</figcaption></figure>
       <figure class="tall"><img src="{{root}}assets/img/products/wc-phone-hello.webp" alt="The first screen: a cartoon card and a note that the app was built for people who pay in full" width="390" height="844" loading="lazy"><figcaption>The first screen, and the whole idea: pay in full, then let the rewards decide.</figcaption></figure>
@@ -125,6 +128,7 @@ scripts: assets/js/product.js
     <details class="history">
       <summary>Release history</summary>
       <ol class="timeline">
+        <li><time datetime="2026-10-29">October 29, 2026</time><h3>A new look, and a faster store finder</h3><p>The card to use is drawn big, as if just pulled from your wallet, with the rest of your cards ranked in a pocket under it, in new colors for light and dark mode. The store you are standing in shows up faster, and right away at places you have been in the last 30 days.</p></li>
         <li><time datetime="2026-10-28">October 28, 2026</time><h3>Released as a phone web app</h3><p>Opens with the store you are standing in and the best card there. 228 cards from 25 issuers, a perks checklist with links to each bank's activation page, drawn card pictures, the best card you do not have at each store, Prime and non-Prime rates, and your own card when it is not listed. The App Store and Google Play versions are in testing.</p></li>
       </ol>
     </details>

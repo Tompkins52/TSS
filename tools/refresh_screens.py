@@ -303,7 +303,8 @@ def main():
             path = os.path.join(OUT, name + ".webp")
             try:
                 recipe(page, product["base"])
-                png = page.screenshot()
+                # Finish any running animation first, so a card is never caught half way out of the wallet.
+                png = page.screenshot(animations="disabled")
             except Exception as e:
                 rows.append((name, "capture failed", str(e).splitlines()[0][:80]))
                 print("FAIL %s: %s" % (name, str(e).splitlines()[0][:120]))

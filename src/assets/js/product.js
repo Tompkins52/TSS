@@ -185,8 +185,25 @@
     var wcWallet = wc.querySelector("[data-wc-wallet]"), wcStores = wc.querySelector("[data-wc-stores]"), wcAmount = wc.querySelector("[data-wc-amount]");
     var wcPrime = wc.querySelector("[data-wc-prime]"), wcAnswer = wc.querySelector("[data-wc-answer]"), wcOthers = wc.querySelector("[data-wc-others]"), wcSay = wc.querySelector("[data-wc-say]");
     var wcHere = wc.querySelector("[data-wc-here]"), wcStoreName = wc.querySelector("[data-wc-store]"), wcStoreCat = wc.querySelector("[data-wc-cat]");
+    var wcIc = wc.querySelector("[data-wc-ic]"), wcPocket = wc.querySelector("[data-wc-pocket]");
     // The names the app shows under the store, by the store's main category.
     var WC_CAT_NAMES = { gas: "Gas", warehouse: "Warehouse club", groceries: "Groceries", superstore: "Walmart or Target", dining: "Dining", online: "Online shopping", drugstore: "Drugstore", streaming: "Streaming" };
+    // The app's icon and color for each category.
+    var WC_TINTS = { gas: "#E0801B", warehouse: "#1C8DC9", groceries: "#1F9D55", superstore: "#D63E8C", dining: "#D9443A", online: "#7C5CD6", drugstore: "#139E8C", streaming: "#E0366A" };
+    var WC_ICONS = {
+      gas: "M4 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M3 21h12M6 7h6v5H6zM14 10h2a2 2 0 0 1 2 2v5a1.5 1.5 0 0 0 3 0V9l-2.5-2.5",
+      warehouse: "M4 20h16M4 17h16M6 14V8h5v6M13 14V5h5v9M6 20v-3M18 20v-3",
+      groceries: "M3 4h2l2.4 11h11l2-7H7M9 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm9 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z",
+      superstore: "M4 9l1-5h14l1 5M4 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0M5 11v9h14v-9M10 20v-5h4v5",
+      dining: "M6 3v7a3 3 0 0 0 6 0V3M9 3v18M9 10v11M18 3c-2 2-3 5-3 8h3v10",
+      online: "M3 8l9-4 9 4v9l-9 4-9-4zM3 8l9 4 9-4M12 12v9",
+      drugstore: "M8.5 3.5l12 12a4.24 4.24 0 0 1-6 6l-12-12a4.24 4.24 0 0 1 6-6zM8.5 15.5l6-6",
+      streaming: "M4 5h16v12H4zM9 20h6M10 8l5 3-5 3z",
+      check: "M5 12l5 5 9-10"
+    };
+    var wcIcon = function (name, width) {
+      return '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="' + (width || 1.8) + '" stroke-linecap="round" stroke-linejoin="round" d="' + WC_ICONS[name] + '"/></svg>';
+    };
 
     var cents = function (c) { return "$" + (Math.round(c) / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
     var rateText = function (r) { return (Math.round(r.pct * 100) / 100) + (r.card.points ? "x" : "%"); };
@@ -197,27 +214,29 @@
       return "#" + out.map(function (v) { return (v < 16 ? "0" : "") + v.toString(16); }).join("");
     };
     // The same drawn card the app shows: the card's color, a chip, the issuer, and the network. No issuer artwork.
+    var wcFace = function (card) { return { c1: shade(card.color, 0.22), c2: card.color, c3: shade(card.color, -0.3) }; };
     var wcArt = function (card, width) {
-      var id = "wca" + (++wcSeq), mid = width >= 60;
+      var id = "wca" + (++wcSeq), mid = width >= 60, f = wcFace(card), font = "Archivo WC, Archivo, Helvetica, Arial, sans-serif";
       var net = { "American Express": "AMEX", "Mastercard": "MASTERCARD", "Visa": "VISA" }[card.network] || card.network.toUpperCase();
       var svg = '<svg viewBox="0 0 320 200" width="' + width + '" height="' + Math.round(width * 200 / 320) + '" aria-hidden="true" focusable="false">' +
-        '<defs><linearGradient id="' + id + 'g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + shade(card.color, 0.22) + '"/><stop offset=".55" stop-color="' + card.color + '"/><stop offset="1" stop-color="' + shade(card.color, -0.3) + '"/></linearGradient>' +
+        '<defs><linearGradient id="' + id + 'g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + f.c1 + '"/><stop offset=".55" stop-color="' + f.c2 + '"/><stop offset="1" stop-color="' + f.c3 + '"/></linearGradient>' +
         '<linearGradient id="' + id + 's" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".22"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>' +
-        '<linearGradient id="' + id + 'c" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E7C56A"/><stop offset="1" stop-color="#B8902F"/></linearGradient>' +
+        '<linearGradient id="' + id + 'c" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F2D07A"/><stop offset="1" stop-color="#B8902F"/></linearGradient>' +
         '<clipPath id="' + id + 'k"><rect width="320" height="200" rx="18"/></clipPath></defs>' +
         '<g clip-path="url(#' + id + 'k)"><rect width="320" height="200" fill="url(#' + id + 'g)"/><path d="M-40 0 L140 0 L60 200 L-120 200 Z" fill="url(#' + id + 's)"/></g>' +
         '<rect x="28" y="62" width="52" height="38" rx="7" fill="url(#' + id + 'c)"/><path d="M28 81 h52 M54 62 v38" stroke="#B8902F" stroke-opacity=".7" stroke-width="2" fill="none"/>' +
         '<g fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="3" stroke-linecap="round" transform="translate(92,81)"><path d="M0-9a13 13 0 0 1 0 18"/><path d="M8-15a21 21 0 0 1 0 30"/><path d="M16-21a29 29 0 0 1 0 42"/></g>' +
-        (mid ? '<text x="28" y="40" fill="#fff" fill-opacity=".8" font-family="Helvetica, Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="2">' + esc(card.issuer.toUpperCase()) + "</text>" : "") +
-        '<text x="292" y="178" text-anchor="end" fill="#fff" fill-opacity=".9" font-family="Helvetica, Arial, sans-serif" font-size="' + (mid ? 16 : 26) + '" font-weight="800" font-style="italic" letter-spacing="1">' + net + "</text></svg>";
+        (mid ? '<text x="28" y="40" fill="#fff" fill-opacity=".82" font-family="' + font + '" font-size="15" font-weight="700" font-stretch="112%" letter-spacing="2">' + esc(card.issuer.toUpperCase()) + "</text>" : "") +
+        '<text x="292" y="178" text-anchor="end" fill="#fff" fill-opacity=".9" font-family="' + font + '" font-size="' + (mid ? 16 : 26) + '" font-weight="850" font-style="italic" font-stretch="112%" letter-spacing="1">' + net + "</text></svg>";
       return el("span", "wc-art", svg);
     };
 
     var wcRender = function () {
       var amount = Math.min(parseFloat(String(wcAmount.value).replace(/[^0-9.]/g, "")) || 0, 1000000);
       var cards = WC_CARDS.filter(function (c) { return wcOn[c.id]; });
-      wcAnswer.innerHTML = ""; wcOthers.innerHTML = "";
+      wcAnswer.innerHTML = ""; wcOthers.innerHTML = ""; wcPocket.hidden = true;
       wcStoreName.textContent = wcStore.name; wcStoreCat.textContent = WC_CAT_NAMES[wcStore.cats[0]] || "";
+      wcIc.innerHTML = wcIcon(wcStore.cats[0]); wcIc.style.setProperty("--tint", WC_TINTS[wcStore.cats[0]] || "#5F6B7A");
       var here = "You're at " + wcStore.name + ". ";
       if (!cards.length) { wcAnswer.appendChild(el("div", "wc-none", "<b>No cards in this wallet.</b>Turn one on to get an answer.")); wcSay.textContent = here + "No cards are turned on."; wcLast = null; return; }
       var list = wcRank(cards, wcStore, amount, wcPrime.checked), best = list[0];
@@ -226,35 +245,36 @@
         wcSay.textContent = here + best.warn + ". None of the cards turned on will work here.";
         wcLast = null;
       } else {
+        // As in the app: the card drawn big, its name, then "4%" with "on gas" under it and the dollars beside it.
         var changed = wcLast !== best.card.id; wcLast = best.card.id;
-        var tile = el("div", "wc-winner" + (changed ? " reveal" : ""));
-        tile.style.setProperty("--card", best.card.color);
-        tile.appendChild(wcArt(best.card, 92));
-        tile.appendChild(el("div", "wc-eyebrow", "Use this card"));
-        tile.appendChild(el("div", "wc-name", esc(best.card.name)));
+        var win = el("div", "wc-winner" + (changed ? " reveal" : ""));
+        win.appendChild(el("div", "wc-wlabel", wcIcon("check", 2.5) + "Use this card"));
+        var big = el("div", "wc-big"); big.appendChild(wcArt(best.card, 250)); win.appendChild(big);
+        win.appendChild(el("div", "wc-name", esc(best.card.name)));
+        var tail = best.why.replace(/^\s*[\d.]+\s*(%|x)\s*/i, "") + (best.card.points ? ", points worth " + (Math.round(best.pct * 10) / 10) + "%" : "");
         var row = el("div", "wc-row");
-        row.appendChild(el("div", "wc-rate", rateText(best) + (best.card.points ? "<small>points · " + (Math.round(best.pct * 10) / 10) + "% value</small>" : "")));
-        if (amount > 0) row.appendChild(el("div", "wc-value", cents(best.cents) + (best.card.points ? " value" : " back")));
-        tile.appendChild(row);
-        tile.appendChild(el("div", "wc-why", esc(best.why)));
-        if (best.warn) tile.appendChild(el("div", "wc-flag", esc(best.warn)));
+        row.appendChild(el("div", "wc-rate", rateText(best) + "<small>" + esc(tail) + "</small>"));
+        if (amount > 0) row.appendChild(el("div", "wc-value", cents(best.cents) + "<small>" + (best.card.points ? "in value" : "back") + "</small>"));
+        win.appendChild(row);
+        if (best.warn) win.appendChild(el("div", "wc-flag", esc(best.warn)));
         var next = list[1], edgeText = "";
         if (amount > 0 && next && next.accepted) {
           var edge = best.cents - next.cents;
           if (edge >= 1) edgeText = cents(edge) + " more than your next best card";
           else if (edge > -1) edgeText = "Ties with " + next.card.name;
-          if (edgeText) tile.appendChild(el("div", "wc-edge", esc(edgeText)));
+          if (edgeText) win.appendChild(el("div", "wc-edge", esc(edgeText)));
         }
-        wcAnswer.appendChild(tile);
+        wcAnswer.appendChild(win);
         wcSay.textContent = here + "Use " + best.card.name + ": " + best.why + (amount > 0 ? ", " + cents(best.cents) + (best.card.points ? " in points" : " back") : "") + "." + (edgeText ? " " + edgeText + "." : "");
       }
       (best.accepted ? list.slice(1) : list).forEach(function (r) {
-        var li = el("li", r.accepted ? "" : "off");
-        li.style.setProperty("--card", r.card.color);
-        li.innerHTML = '<span class="bar"></span><span class="n">' + esc(r.card.name) + "<small>" + esc(r.why) + "</small>" +
+        var li = el("li", r.accepted ? "" : "off"), f = wcFace(r.card);
+        li.style.setProperty("--c1", f.c1); li.style.setProperty("--c2", f.c2); li.style.setProperty("--c3", f.c3);
+        li.innerHTML = '<span class="n">' + esc(r.card.name) + "<small>" + esc(r.why) + "</small>" +
           (r.warn ? '<small class="' + (r.accepted ? "warn" : "bad") + '">' + esc(r.warn) + "</small>" : "") + "</span>" +
           '<span class="r">' + (r.accepted ? rateText(r) + "<small>" + (amount > 0 ? cents(r.cents) : r.card.points ? (Math.round(r.pct * 10) / 10) + "% value" : "") + "</small>" : "×") + "</span>";
         wcOthers.appendChild(li);
+        wcPocket.hidden = false;
       });
     };
 

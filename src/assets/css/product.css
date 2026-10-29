@@ -216,73 +216,91 @@
 .wc-prime input { width: 1.15rem; height: 1.15rem; margin: 0; accent-color: var(--green-700); }
 .wc-side .actions { margin-top: 1.2rem; }
 
-.wc-device { justify-self: center; width: 100%; max-width: 380px; padding: 10px; border-radius: 46px; background: #0d1d18; box-shadow: 0 30px 60px rgba(26, 34, 30, 0.25), inset 0 0 0 2px #2c3b35; }
-.wc-screen { position: relative; border-radius: 36px; background: #f4f5f1; color: #101418; padding: 12px 12px 16px; min-height: 620px; font-family: var(--font-body); font-size: 15px; line-height: 1.35; overflow: hidden; }
-.wc-notch { display: block; width: 92px; height: 24px; margin: 0 auto 6px; border-radius: 999px; background: #0d1d18; }
-.wc-bar { display: flex; align-items: center; gap: 8px; padding: 2px 4px 12px; font-weight: 800; font-size: 17px; letter-spacing: -0.01em; }
-.wc-bar i { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: #12352b; }
-.wc-bar i::before { content: ""; width: 14px; height: 9px; border-radius: 2px; border: 2px solid #d4a84b; }
-.wc-here { display: flex; align-items: center; gap: 11px; margin-bottom: 14px; padding: 11px 13px; background: #fff; border: 1px solid #b7cfc3; border-radius: 16px; }
-.wc-here-ic { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: #e3efe8; color: #1f5c47; }
-.wc-here-ic svg { display: block; }
-.wc-here-t { display: grid; min-width: 0; }
-.wc-here-t small { font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #1f5c47; }
-.wc-here-t b { font-size: 18px; font-weight: 800; line-height: 1.2; }
-.wc-here-t span { font-size: 13px; color: #66706a; }
-.wc-here.found { animation: wc-found 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); }
-@keyframes wc-found { 0% { box-shadow: 0 0 0 0 rgba(31, 92, 71, 0.4); transform: scale(0.98); } 60% { box-shadow: 0 0 0 10px rgba(31, 92, 71, 0); transform: none; } 100% { box-shadow: none; } }
-.wc-label { display: block; margin: 0 4px 7px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #66706a; }
+/* The phone in the demo wears the app's own look: Mist, Ink, Plum, the plum pocket and
+   Marigold, set in Archivo (wide for names, condensed for numbers). The font is only
+   downloaded on the page that shows the demo. */
+@font-face {
+  font-family: "Archivo WC";
+  src: url("../fonts/Archivo-wdth.woff2") format("woff2-variations"), url("../fonts/Archivo-wdth.woff2") format("woff2");
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-style: normal;
+  font-display: swap;
+}
+.wc-device { justify-self: center; width: 100%; max-width: 380px; padding: 10px; border-radius: 46px; background: #1B1222; box-shadow: 0 30px 60px rgba(42, 22, 64, 0.28), inset 0 0 0 2px #3A2D47; }
+.wc-screen { position: relative; border-radius: 36px; background: #F5F2F8; color: #1E1328; padding: 12px 14px 18px; font-family: "Archivo WC", var(--font-body); font-size: 15px; font-weight: 430; line-height: 1.4; overflow: hidden; }
+.wc-notch { display: block; width: 92px; height: 24px; margin: 0 auto 8px; border-radius: 999px; background: #1B1222; }
+.wc-bar { display: flex; align-items: center; gap: 10px; padding: 2px 2px 14px; font-weight: 820; font-stretch: 112%; font-size: 18px; letter-spacing: -0.015em; }
+.wc-bar i { position: relative; flex: none; width: 27px; height: 18px; border-radius: 5px; background: linear-gradient(135deg, #7E4BC0, #3B1A60); rotate: -9deg; box-shadow: 0 3px 6px rgba(42, 22, 64, 0.35); }
+.wc-bar i::after { content: ""; position: absolute; left: 4px; top: 5px; width: 8px; height: 6px; border-radius: 2px; background: #F6A623; }
+
+/* "You're at": the store the phone is standing in, with its category's icon */
+.wc-here { display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 12px; align-items: center; margin-bottom: 16px; }
+.wc-here-ic { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 14px; color: var(--tint, #E0801B); background: color-mix(in srgb, var(--tint, #E0801B) 15%, #fff); }
+.wc-here-ic svg { display: block; width: 24px; height: 24px; }
+.wc-here-t { display: flex; flex-direction: column; min-width: 0; }
+.wc-here-t small { display: flex; align-items: center; gap: 4px; font-size: 12.5px; font-weight: 640; color: #5B2E86; }
+.wc-here-t small svg { display: block; width: 13px; height: 13px; }
+.wc-here-t b { font-size: 24px; font-weight: 790; font-stretch: 104%; line-height: 1.12; letter-spacing: -0.015em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wc-here-t span { font-size: 13.5px; color: #6B5F7D; }
+.wc-here.found b { animation: wc-found 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+@keyframes wc-found { from { opacity: 0; transform: translateY(6px); } }
+
+.wc-label { display: block; margin: 0 2px 7px; font-size: 12.5px; font-weight: 620; color: #6B5F7D; }
 .wc-stores { display: flex; flex-wrap: wrap; gap: 6px; }
-.wc-chip { font: inherit; font-size: 13px; font-weight: 600; line-height: 1; padding: 9px 11px; border-radius: 999px; border: 1px solid #dfe3dc; background: #fff; color: #1a221e; cursor: pointer; transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease; }
-.wc-chip:hover { border-color: #1f5c47; }
-.wc-chip[aria-pressed="true"] { background: #1f5c47; border-color: #1f5c47; color: #fff; }
-.wc-chip:focus-visible { outline: 3px solid rgba(31, 92, 71, 0.4); outline-offset: 2px; }
-.wc-amount { display: flex; align-items: baseline; gap: 4px; margin: 12px 0; padding: 8px 14px; background: #fff; border: 1px solid #dfe3dc; border-radius: 16px; cursor: text; }
-.wc-amount:focus-within { border-color: #1f5c47; box-shadow: 0 0 0 3px rgba(31, 92, 71, 0.18); }
-.wc-amount span { font-size: 22px; font-weight: 700; color: #66706a; }
-.wc-screen .wc-amount input { width: 100%; min-width: 0; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; font: inherit; font-size: 34px; font-weight: 800; letter-spacing: -0.02em; color: #101418; font-variant-numeric: tabular-nums; }
+.wc-chip { font: inherit; font-size: 13px; font-weight: 620; line-height: 1; padding: 9px 12px; border-radius: 999px; border: 1px solid #E3DBEC; background: #fff; color: #1E1328; cursor: pointer; transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease; }
+.wc-chip:hover { border-color: #5B2E86; }
+.wc-chip[aria-pressed="true"] { background: #1E1328; border-color: #1E1328; color: #F5F2F8; }
+.wc-chip:focus-visible { outline: 3px solid #5B2E86; outline-offset: 2px; }
+
+/* The amount: a big condensed number on a line */
+.wc-amount { display: flex; align-items: baseline; gap: 4px; margin: 18px 0 16px; padding: 0 2px 4px; border-bottom: 2px solid #E3DBEC; cursor: text; transition: border-color 0.15s ease; }
+.wc-amount:focus-within { border-bottom-color: #5B2E86; }
+.wc-amount .cur { font-size: 28px; font-weight: 720; font-stretch: 75%; color: #6B5F7D; }
+.wc-screen .wc-amount input { flex: 1; width: 100%; min-width: 0; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; font: inherit; font-size: 44px; font-weight: 820; font-stretch: 72%; line-height: 1.1; letter-spacing: -0.01em; color: #1E1328; font-variant-numeric: tabular-nums; }
 .wc-screen .wc-amount input:focus { box-shadow: none; outline: none; }
+.wc-amount .opt { font-size: 12.5px; color: #6B5F7D; white-space: nowrap; }
 
-.wc-winner { position: relative; overflow: hidden; border-radius: 20px; padding: 16px 16px 14px; color: #fff; background: var(--card, #1f5c47); box-shadow: 0 8px 22px rgba(16, 20, 24, 0.18); }
-.wc-winner::after { content: ""; position: absolute; right: -40px; top: -40px; width: 160px; height: 160px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); pointer-events: none; }
-.wc-winner > * { position: relative; }
-.wc-winner .wc-art { position: absolute; right: 14px; top: 14px; rotate: -6deg; z-index: 1; }
-.wc-winner .wc-art svg { display: block; border-radius: 6px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35); }
-.wc-eyebrow { padding-right: 104px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #f0d38a; }
-.wc-name { padding-right: 104px; margin-top: 4px; font-size: 22px; font-weight: 800; line-height: 1.15; letter-spacing: -0.01em; }
-.wc-row { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; margin-top: 12px; }
-.wc-rate { font-size: 40px; font-weight: 800; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
-.wc-rate small { margin-left: 6px; font-size: 13px; font-weight: 600; letter-spacing: 0; opacity: 0.9; }
-.wc-value { font-size: 21px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.wc-why { margin-top: 8px; font-size: 14px; opacity: 0.92; }
-.wc-flag { display: inline-block; margin-top: 8px; padding: 4px 9px; border-radius: 999px; background: #fbefd0; color: #7f5f1b; font-size: 12px; font-weight: 600; }
-.wc-edge { margin-top: 8px; font-size: 13px; font-weight: 600; color: #f0d38a; }
-.wc-winner.reveal { animation: wc-pop 0.38s cubic-bezier(0.2, 0.8, 0.2, 1); }
-.wc-winner.reveal::before { content: ""; position: absolute; inset: 0; z-index: 2; background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.28) 50%, transparent 70%); transform: translateX(-120%); animation: wc-sheen 0.9s 0.12s ease-out forwards; pointer-events: none; }
-@keyframes wc-pop { from { transform: scale(0.97); opacity: 0.6; } to { transform: none; opacity: 1; } }
-@keyframes wc-sheen { to { transform: translateX(120%); } }
-.wc-none { padding: 16px; border-radius: 20px; background: #fff; border: 1px dashed #c9ccc4; font-size: 14px; color: #3a443f; }
-.wc-none b { display: block; margin-bottom: 4px; color: #101418; }
+/* The answer: the card to use, drawn big as if just pulled out of the wallet */
+.wc-winner { display: flex; flex-direction: column; gap: 8px; }
+.wc-wlabel { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 650; color: #5B2E86; }
+.wc-wlabel svg { display: block; width: 15px; height: 15px; }
+.wc-big { align-self: flex-start; width: min(100%, 250px); margin: 0 0 4px 4px; }
+.wc-big .wc-art svg { display: block; width: 100%; height: auto; rotate: -2deg; filter: drop-shadow(0 16px 14px rgba(42, 22, 64, 0.3)) drop-shadow(0 3px 4px rgba(42, 22, 64, 0.2)); }
+.wc-winner.reveal .wc-big { animation: wc-pull 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.12) both; }
+@keyframes wc-pull { from { opacity: 0; transform: translateY(40px) rotate(4deg) scale(0.95); } to { opacity: 1; transform: none; } }
+.wc-name { font-size: 20px; font-weight: 790; font-stretch: 106%; line-height: 1.12; letter-spacing: -0.015em; }
+.wc-row { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 6px 16px; }
+.wc-rate { font-size: 56px; font-weight: 830; font-stretch: 70%; line-height: 0.86; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+.wc-value { text-align: right; font-size: 36px; font-weight: 800; font-stretch: 72%; line-height: 0.9; font-variant-numeric: tabular-nums; }
+.wc-rate small, .wc-value small { display: block; margin-top: 6px; font-size: 12.5px; font-weight: 600; font-stretch: 100%; letter-spacing: 0; line-height: 1.3; color: #6B5F7D; }
+.wc-flag { align-self: flex-start; padding: 5px 10px; border-radius: 999px; background: #FFEFCC; color: #7A4B00; font-size: 12px; font-weight: 620; }
+.wc-edge { align-self: flex-start; padding: 0 2px; font-size: 13.5px; font-weight: 680; background: linear-gradient(transparent 58%, rgba(246, 166, 35, 0.32) 58%); }
+.wc-none { padding: 16px; border-radius: 18px; background: #fff; border: 1.5px dashed #D9CFE6; font-size: 14px; color: #6B5F7D; }
+.wc-none b { display: block; margin-bottom: 4px; color: #1E1328; }
 
-.wc-others { list-style: none; margin: 10px 0 0; padding: 0; background: #fff; border: 1px solid #dfe3dc; border-radius: 16px; overflow: hidden; }
-.wc-others:empty { display: none; }
-.wc-others li { display: grid; grid-template-columns: 5px minmax(0, 1fr) auto; gap: 11px; align-items: center; margin: 0; padding: 10px 12px 10px 10px; border-bottom: 1px solid #e9ebe6; }
-.wc-others li:last-child { border-bottom: 0; }
-.wc-others .bar { align-self: stretch; border-radius: 3px; background: var(--card, #888); }
-.wc-others .n { min-width: 0; font-size: 14px; font-weight: 700; }
-.wc-others .n small { display: block; font-size: 12.5px; font-weight: 500; color: #66706a; }
-.wc-others .n .warn { color: #8c6a1f; font-weight: 600; }
-.wc-others .n .bad { color: #a3372b; font-weight: 600; }
-.wc-others .r { text-align: right; font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; }
-.wc-others .r small { display: block; font-size: 12px; font-weight: 600; color: #66706a; }
-.wc-others li.off { background: #fafaf8; }
-.wc-others li.off .n, .wc-others li.off .r { opacity: 0.7; }
-.wc-asof { margin: 12px 4px 0; font-size: 11.5px; color: #66706a; }
+/* The rest of the wallet, best first, in a stitched plum pocket */
+.wc-pocket { position: relative; margin-top: 18px; padding: 12px 9px 10px; border-radius: 24px; background: #2A1640; color: #F6EFFC; box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.06), inset 0 -10px 24px rgba(0, 0, 0, 0.25); }
+.wc-pocket::before { content: ""; position: absolute; inset: 5px; border-radius: 20px; border: 1.5px dashed rgba(246, 166, 35, 0.42); pointer-events: none; }
+.wc-pocket[hidden] { display: none; }
+.wc-pocket-label { position: relative; margin: 2px 10px 10px; font-size: 12.5px; font-weight: 600; color: rgba(246, 239, 252, 0.78); }
+.wc-others { position: relative; list-style: none; margin: 0; padding: 0; }
+.wc-others li { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: start; margin: 0; padding: 10px 13px 22px; border-radius: 13px; color: #fff; background: linear-gradient(135deg, var(--c1, #6B5F7D), var(--c2, #4A3F5C) 55%, var(--c3, #2D2538)); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 -6px 14px rgba(0, 0, 0, 0.28); }
+.wc-others li + li { margin-top: -12px; }
+.wc-others li:last-child { padding-bottom: 12px; }
+.wc-others .n { min-width: 0; font-size: 14px; font-weight: 700; line-height: 1.25; }
+.wc-others .n small { display: block; margin-top: 1px; font-size: 12px; font-weight: 500; opacity: 0.85; }
+.wc-others .n .warn, .wc-others .n .bad { display: inline-block; margin-top: 5px; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; opacity: 1; background: rgba(255, 255, 255, 0.92); color: #7A4B00; }
+.wc-others .n .bad { color: #B42318; }
+.wc-others .r { text-align: right; font-size: 22px; font-weight: 820; font-stretch: 74%; line-height: 1; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.wc-others .r small { display: block; margin-top: 3px; font-size: 11.5px; font-weight: 620; font-stretch: 100%; opacity: 0.9; }
+.wc-others li.off { filter: saturate(0.2); opacity: 0.78; }
+.wc-asof { margin: 14px 2px 0; font-size: 11.5px; color: #6B5F7D; }
 @media (max-width: 380px) {
   .wc-device { padding: 7px; border-radius: 38px; }
-  .wc-screen { border-radius: 31px; padding: 10px 9px 14px; }
-  .wc-rate { font-size: 34px; }
-  .wc-name { font-size: 20px; }
+  .wc-screen { border-radius: 31px; padding: 10px 10px 14px; }
+  .wc-rate { font-size: 48px; }
+  .wc-name { font-size: 18px; }
 }
 
 /* Four phone screens in a row */
@@ -291,6 +309,5 @@
 .screens-grid.phones figcaption { text-align: center; max-width: 24ch; margin: 0 auto; }
 
 @media (prefers-reduced-motion: reduce) {
-  .wc-winner.reveal, .wc-winner.reveal::before, .wc-here.found { animation: none; }
-  .wc-winner.reveal::before { display: none; }
+  .wc-winner.reveal .wc-big, .wc-here.found b { animation: none; }
 }
