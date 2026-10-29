@@ -1102,11 +1102,7 @@
     window.addEventListener("scroll", function () { if (!ticking) { ticking = true; window.requestAnimationFrame(drift); } }, { passive: true });
     drift();
   }
-  var seenEls = document.querySelectorAll("[data-seen], .prod, .probono, .gift, .latest");
-  if ("IntersectionObserver" in window) {
-    var io = new IntersectionObserver(function (entries) { entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("seen"); io.unobserve(en.target); } }); }, { rootMargin: "0px 0px -12% 0px", threshold: 0.15 });
-    Array.prototype.forEach.call(seenEls, function (e) { io.observe(e); });
-  } else { Array.prototype.forEach.call(seenEls, function (e) { e.classList.add("seen"); }); }
+  // Product cards and section labels draw in through site.js, which this page also loads.
 
   // Boot
   devSeg.querySelector('input[value="' + state.device + '"]').checked = true;

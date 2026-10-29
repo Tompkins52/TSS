@@ -101,7 +101,7 @@
   /* ---- Motion: things fade in as they arrive and out as they leave; the map drifts; a reading line ---- */
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!reduceMotion) {
-    var REVEAL = ".card, .feat-grid > li, .timeline > li, .values > li, .sectors > li, .screens-grid figure, .checklist > li, .sidebar-note, .facts dl > div, .section-head, .demo-copy, .demo .panel, .phero-shots, .grp, .how-list > li, .prose > h2, .callout, .spec";
+    var REVEAL = ".card, .feat-grid > li, .timeline > li, .values > li, .sectors > li, .screens-grid figure, .checklist > li, .sidebar-note, .facts dl > div, .section-head, .demo-copy, .demo .panel, .phero-shots, .phero-phones, .grp, .how-list > li, .prose > h2, .callout, .spec";
     var items = document.querySelectorAll(REVEAL), counts = [];
     Array.prototype.forEach.call(items, function (el) {
       if (el.closest("#try")) return;
@@ -129,6 +129,16 @@
     };
     window.addEventListener("scroll", function () { if (!ticking) { ticking = true; window.requestAnimationFrame(onScroll); } }, { passive: true });
     onScroll();
+  }
+
+  /* ---- Product cards and section labels draw in once, the first time they are seen ---- */
+  // Used by the home page and the products page. With reduced motion the CSS shows them at once.
+  var seenEls = document.querySelectorAll("[data-seen], .prod, .probono, .gift, .latest");
+  if (seenEls.length) {
+    if ("IntersectionObserver" in window) {
+      var seenIo = new IntersectionObserver(function (entries) { entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("seen"); seenIo.unobserve(en.target); } }); }, { rootMargin: "0px 0px -12% 0px", threshold: 0.15 });
+      Array.prototype.forEach.call(seenEls, function (e) { seenIo.observe(e); });
+    } else { Array.prototype.forEach.call(seenEls, function (e) { e.classList.add("seen"); }); }
   }
 
   /* ---- Footer year ----------------------------------------------------------- */

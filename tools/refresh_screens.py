@@ -20,9 +20,11 @@ new color, or a missing section does. A product that cannot be reached, or that 
 other than its own page, is skipped and reported rather than replaced.
 """
 import argparse
+import json
 import os
 import sys
 import time
+from urllib.parse import urlsplit
 
 from PIL import Image, ImageChops, ImageFilter, ImageStat
 
@@ -35,6 +37,7 @@ PRODUCTS = {
     "pm": {"name": "Painless Project Management", "base": os.environ.get("SCREENS_PM", "https://tompkins52.github.io/painless-pm/"), "title": "Painless"},
     "p107": {"name": "Part 107 Prep", "base": os.environ.get("SCREENS_P107", "https://tompkins52.github.io/part107-prep/"), "title": "Part 107"},
     "ps": {"name": "Phantom Soldier", "base": os.environ.get("SCREENS_PS", "https://phantomsoldier.org/"), "title": "Phantom Soldier"},
+    "wc": {"name": "Which Card", "base": os.environ.get("SCREENS_WC", "https://which-card.tompkinssoftwaresystems.com/"), "title": "Which Card"},
 }
 
 DESKTOP = {"viewport": {"width": 1280, "height": 800}, "device_scale_factor": 1}
@@ -100,6 +103,92 @@ def r_p107_exam(page, base):
     settle(page)
 
 
+# Which Card is a phone app that keeps everything on the phone, so every capture starts
+# from the same sample wallet written into the app's own storage. Cards are picked by
+# name; the app never holds a card number. Every Which Card screen is a phone screen.
+# Location is on in the sample wallet, and the phone stands at a gas station: its position
+# is fixed and the OpenStreetMap lookup is answered with the two businesses there, so the
+# app opens with "You're at Shell" every time, the way it does at a real pump.
+WC_HERE = {"latitude": 41.98002, "longitude": -88.30002}
+WC_PLACES = {"elements": [
+    {"type": "node", "lat": 41.98, "lon": -88.30, "tags": {"name": "Shell", "brand": "Shell", "amenity": "fuel"}},
+    {"type": "way", "center": {"lat": 41.9806, "lon": -88.3004}, "tags": {"name": "Jewel-Osco", "shop": "supermarket"}},
+]}
+WC_WALLET = ["chase-sapphire-reserve", "citi-costco-anywhere-visa", "amex-blue-cash-preferred",
+             "chase-prime-visa", "wells-fargo-active-cash", "chase-freedom-unlimited"]
+WC_SEED = """(ids) => {
+  const now = new Date(), at = now.toISOString();
+  const quarter = now.getFullYear() + '-Q' + (Math.floor(now.getMonth() / 3) + 1);
+  const wallet = ids.map((id) => {
+    const e = { cardId: id, added: at, activated: {}, purchases: [] };
+    if (id === 'chase-prime-visa') e.memberships = { 'amazon-prime': true };
+    if (id === 'chase-sapphire-reserve') e.perkState = { 'apple-tv-music': { at }, 'dashpass': { at }, 'lyft-credit': { at }, 'travel-credit': { at } };
+    return e;
+  });
+  const dismissed = {}; dismissed['perks:' + quarter] = true;
+  localStorage.clear();
+  localStorage.setItem('whichcard.state.v1', JSON.stringify({ wallet, customCards: [], trips: {}, dismissed,
+    prefs: { priority: 'cash', payMethod: 'card', redeem: {}, theme: 'light', location: true, showAnywhere: true },
+    disclaimed: true, onboarded: true, locationAsked: true }));
+}"""
+
+
+def r_wc(path="index.html", then=None, first_run=False):
+    """Load Which Card with the sample wallet (or as a first-time visitor), then run an optional step."""
+    def go(page, base):
+        page.goto(base + "index.html", wait_until="domcontentloaded")
+        if first_run:
+            page.evaluate("localStorage.clear()")
+        else:
+            page.evaluate(WC_SEED, WC_WALLET)
+        page.goto(base + path, wait_until="networkidle")
+        settle(page)
+        if then:
+            then(page)
+            settle(page)
+    return go
+
+
+def wc_amount(value, then=None):
+    """Wait for the app to name the store it found, then type the amount."""
+    def step(page):
+        page.wait_for_selector(".where-chip.here", timeout=10000)
+        page.fill("#amount", value)
+        page.evaluate("document.activeElement && document.activeElement.blur()")
+        settle(page)
+        if then:
+            then(page)
+    return step
+
+
+def wc_scroll_to(selector):
+    def step(page):
+        page.locator(selector).first.scroll_into_view_if_needed(timeout=5000)
+        page.evaluate("(s) => document.querySelector(s).scrollIntoView({block: 'center'})", selector)
+    return step
+
+
+def wc_tab(view):
+    def step(page):
+        page.locator(".tabs button[data-view='%s']" % view).click(timeout=5000)
+    return step
+
+
+def wc_card(name, perk=None):
+    """Open a card from the wallet; with a perk name, scroll the perks list to it."""
+    def step(page):
+        wc_tab("wallet")(page)
+        settle(page)
+        page.locator(".tile", has_text=name).first.click(timeout=5000)
+        settle(page)
+        if perk:
+            page.evaluate("""(t) => {
+              const item = [...document.querySelectorAll('.perk-list > *')].find((e) => e.textContent.includes(t));
+              if (item) item.scrollIntoView({block: 'center'});
+            }""", perk)
+    return step
+
+
 SCREENS = [
     ("safe-training", "safe", "desktop", r_goto("index.html")),
     ("safe-module", "safe", "desktop", r_safe_module),
@@ -120,6 +209,11 @@ SCREENS = [
     ("ps-home", "ps", "desktop", r_goto("index.html")),
     ("ps-music", "ps", "desktop", r_goto("music/")),
     ("ps-phone", "ps", "phone", r_goto("index.html")),
+    ("wc-phone", "wc", "phone", r_wc(then=wc_amount("45"))),
+    ("wc-phone-anywhere", "wc", "phone", r_wc(then=wc_amount("45", then=wc_scroll_to(".anywhere")))),
+    ("wc-phone-perks", "wc", "phone", r_wc(then=wc_card("Sapphire Reserve", perk="Apple TV"))),
+    ("wc-phone-wallet", "wc", "phone", r_wc(then=wc_tab("wallet"))),
+    ("wc-phone-hello", "wc", "phone", r_wc(first_run=True)),
 ]
 
 
@@ -168,7 +262,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--force", action="store_true", help="replace every screen, changed or not")
     ap.add_argument("--dry-run", action="store_true", help="capture and compare, change nothing")
-    ap.add_argument("--only", help="comma-separated product keys to capture (safe, pm, p107, ps)")
+    ap.add_argument("--only", help="comma-separated product keys to capture (safe, pm, p107, ps, wc)")
     ap.add_argument("--report", help="append a Markdown summary to this file (the workflow passes $GITHUB_STEP_SUMMARY)")
     ap.add_argument("--threshold", type=float, default=THRESHOLD)
     args = ap.parse_args()
@@ -184,6 +278,12 @@ def main():
         pages = {"desktop": browser.new_context(**DESKTOP).new_page(), "phone": browser.new_context(**PHONE).new_page()}
         for page in pages.values():
             page.add_init_script(SEEDED_RANDOM)
+        if "wc" in only:
+            wc = urlsplit(PRODUCTS["wc"]["base"])
+            phone = pages["phone"].context
+            phone.grant_permissions(["geolocation"], origin="%s://%s" % (wc.scheme, wc.netloc))
+            phone.set_geolocation(WC_HERE)
+            pages["phone"].route("https://overpass-api.de/**", lambda route: route.fulfill(status=200, content_type="application/json", body=json.dumps(WC_PLACES)))
 
         # Is each product up and answering with its own page?
         for key, product in PRODUCTS.items():
