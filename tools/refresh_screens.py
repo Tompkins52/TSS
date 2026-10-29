@@ -24,7 +24,6 @@ import json
 import os
 import sys
 import time
-from urllib.parse import urlsplit
 
 from PIL import Image, ImageChops, ImageFilter, ImageStat
 
@@ -37,7 +36,7 @@ PRODUCTS = {
     "pm": {"name": "Painless Project Management", "base": os.environ.get("SCREENS_PM", "https://tompkins52.github.io/painless-pm/"), "title": "Painless"},
     "p107": {"name": "Part 107 Prep", "base": os.environ.get("SCREENS_P107", "https://tompkins52.github.io/part107-prep/"), "title": "Part 107"},
     "ps": {"name": "Phantom Soldier", "base": os.environ.get("SCREENS_PS", "https://phantomsoldier.org/"), "title": "Phantom Soldier"},
-    "wc": {"name": "Which Card", "base": os.environ.get("SCREENS_WC", "https://which-card.tompkinssoftwaresystems.com/"), "title": "Which Card"},
+    "wc": {"name": "Which Card", "base": os.environ.get("SCREENS_WC", "https://tompkins52.github.io/which-card/"), "title": "Which Card"},
 }
 
 DESKTOP = {"viewport": {"width": 1280, "height": 800}, "device_scale_factor": 1}
@@ -279,9 +278,9 @@ def main():
         for page in pages.values():
             page.add_init_script(SEEDED_RANDOM)
         if "wc" in only:
-            wc = urlsplit(PRODUCTS["wc"]["base"])
+            # Any origin: the app's address may forward to its own domain.
             phone = pages["phone"].context
-            phone.grant_permissions(["geolocation"], origin="%s://%s" % (wc.scheme, wc.netloc))
+            phone.grant_permissions(["geolocation"])
             phone.set_geolocation(WC_HERE)
             pages["phone"].route("https://overpass-api.de/**", lambda route: route.fulfill(status=200, content_type="application/json", body=json.dumps(WC_PLACES)))
 

@@ -107,6 +107,13 @@ def main():
                 canonical = base + meta["redirect"]
                 extra_head += '\n<meta http-equiv="refresh" content="0; url=%s%s">' % (root, meta["redirect"])
                 meta["noindex"] = "true"
+            # A short address on this site for a product hosted elsewhere: "go: https://..."
+            # forwards visitors at once and stays out of the sitemap. The page body can link
+            # to the same address with {{go}}. Change the product's address here and every
+            # link and QR code that uses the short address follows.
+            if meta.get("go"):
+                extra_head += '\n<meta http-equiv="refresh" content="0; url=%s">' % html.escape(meta["go"], quote=True)
+                meta["noindex"] = "true"
             if meta.get("noindex") == "true":
                 extra_head += '\n<meta name="robots" content="noindex">'
             # Optional per-page stylesheet(s) and script(s), comma separated, relative to the site root.
@@ -125,6 +132,7 @@ def main():
                 "extra_scripts": extra_scripts,
                 "body_class": meta.get("body_class", ""),
                 "revision": revision,
+                "go": html.escape(meta.get("go", ""), quote=True),
             }
             page = mark_active_nav(render(head_t, values), meta.get("nav")) + render(body, values) + render(foot_t, values)
             dest = os.path.join(out, rel)
