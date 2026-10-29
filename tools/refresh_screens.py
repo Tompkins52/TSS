@@ -108,10 +108,10 @@ def r_p107_exam(page, base):
 # Location is on in the sample wallet, and the phone stands at a gas station: its position
 # is fixed and the OpenStreetMap lookup is answered with the two businesses there, so the
 # app opens with "You're at Shell" every time, the way it does at a real pump.
-WC_HERE = {"latitude": 41.98002, "longitude": -88.30002}
+WC_HERE = {"latitude": 41.87860, "longitude": -87.63590, "accuracy": 15}
 WC_PLACES = {"elements": [
-    {"type": "node", "lat": 41.98, "lon": -88.30, "tags": {"name": "Shell", "brand": "Shell", "amenity": "fuel"}},
-    {"type": "way", "center": {"lat": 41.9806, "lon": -88.3004}, "tags": {"name": "Jewel-Osco", "shop": "supermarket"}},
+    {"type": "node", "lat": 41.87861, "lon": -87.63589, "tags": {"name": "Shell", "brand": "Shell", "amenity": "fuel"}},
+    {"type": "way", "center": {"lat": 41.87920, "lon": -87.63630}, "tags": {"name": "Jewel-Osco", "shop": "supermarket"}},
 ]}
 WC_WALLET = ["chase-sapphire-reserve", "citi-costco-anywhere-visa", "amex-blue-cash-preferred",
              "chase-prime-visa", "wells-fargo-active-cash", "chase-freedom-unlimited"]
@@ -135,7 +135,9 @@ WC_SEED = """(ids) => {
 def r_wc(path="index.html", then=None, first_run=False):
     """Load Which Card with the sample wallet (or as a first-time visitor), then run an optional step."""
     def go(page, base):
-        page.goto(base + "index.html", wait_until="domcontentloaded")
+        # Write the storage from a file that does not run the app (its icon). Loading the app
+        # itself here would start a store lookup that can finish later and save over the seed.
+        page.goto(base + "icons/icon-192.png", wait_until="domcontentloaded")
         if first_run:
             page.evaluate("localStorage.clear()")
         else:
@@ -282,7 +284,8 @@ def main():
             phone = pages["phone"].context
             phone.grant_permissions(["geolocation"])
             phone.set_geolocation(WC_HERE)
-            pages["phone"].route("https://overpass-api.de/**", lambda route: route.fulfill(status=200, content_type="application/json", body=json.dumps(WC_PLACES)))
+            # The app asks one of two public map servers; both answer with the same two businesses.
+            pages["phone"].route("**/api/interpreter", lambda route: route.fulfill(status=200, content_type="application/json", body=json.dumps(WC_PLACES)))
 
         # Is each product up and answering with its own page?
         for key, product in PRODUCTS.items():
