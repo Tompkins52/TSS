@@ -122,6 +122,7 @@ WC_SEED = """(ids) => {
     const e = { cardId: id, added: at, activated: {}, purchases: [] };
     if (id === 'chase-prime-visa') e.memberships = { 'amazon-prime': true };
     if (id === 'chase-sapphire-reserve') e.perkState = { 'apple-tv-music': { at }, 'dashpass': { at }, 'lyft-credit': { at }, 'travel-credit': { at } };
+    e.activated[quarter] = true;
     return e;
   });
   const dismissed = {}; dismissed['perks:' + quarter] = true;
@@ -150,23 +151,20 @@ def r_wc(path="index.html", then=None, first_run=False):
     return go
 
 
-def wc_amount(value, then=None):
-    """Wait for the app to name the store it found, then type the amount."""
+def wc_found(then=None):
+    """Wait for the app to name the store it found (there is nothing to type), then run a step."""
     def step(page):
         page.wait_for_selector(".where-chip.here", timeout=10000)
-        page.fill("#amount", value)
-        page.evaluate("document.activeElement && document.activeElement.blur()")
         settle(page)
         if then:
             then(page)
     return step
 
 
-def wc_scroll_to(selector):
-    def step(page):
-        page.locator(selector).first.scroll_into_view_if_needed(timeout=5000)
-        page.evaluate("(s) => document.querySelector(s).scrollIntoView({block: 'center'})", selector)
-    return step
+def wc_best_cards(page):
+    """Open the best cards at this store from the wallet pocket: yours marked, the rest ranked."""
+    page.locator("#answer button.more").first.click(timeout=5000)
+    page.wait_for_selector(".sheet .best-row", timeout=5000)
 
 
 def wc_tab(view):
@@ -210,8 +208,9 @@ SCREENS = [
     ("ps-home", "ps", "desktop", r_goto("index.html")),
     ("ps-music", "ps", "desktop", r_goto("music/")),
     ("ps-phone", "ps", "phone", r_goto("index.html")),
-    ("wc-phone", "wc", "phone", r_wc(then=wc_amount("45"))),
-    ("wc-phone-anywhere", "wc", "phone", r_wc(then=wc_amount("45", then=wc_scroll_to(".anywhere")))),
+    ("wc-phone", "wc", "phone", r_wc(then=wc_found())),
+    ("wc-phone-anywhere", "wc", "phone", r_wc(then=wc_found(then=wc_best_cards))),
+    ("wc-phone-compare", "wc", "phone", r_wc(then=wc_found(then=wc_tab("offers")))),
     ("wc-phone-perks", "wc", "phone", r_wc(then=wc_card("Sapphire Reserve", perk="Apple TV"))),
     ("wc-phone-wallet", "wc", "phone", r_wc(then=wc_tab("wallet"))),
     ("wc-phone-hello", "wc", "phone", r_wc(first_run=True)),

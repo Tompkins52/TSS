@@ -182,7 +182,7 @@
   var wc = document.getElementById("demo-wc");
   if (wc) {
     var wcOn = {}, wcStore = WC_STORES[0], wcLast = null, wcSeq = 0;
-    var wcWallet = wc.querySelector("[data-wc-wallet]"), wcStores = wc.querySelector("[data-wc-stores]"), wcAmount = wc.querySelector("[data-wc-amount]");
+    var wcWallet = wc.querySelector("[data-wc-wallet]"), wcStores = wc.querySelector("[data-wc-stores]");
     var wcPrime = wc.querySelector("[data-wc-prime]"), wcAnswer = wc.querySelector("[data-wc-answer]"), wcOthers = wc.querySelector("[data-wc-others]"), wcSay = wc.querySelector("[data-wc-say]");
     var wcHere = wc.querySelector("[data-wc-here]"), wcStoreName = wc.querySelector("[data-wc-store]"), wcStoreCat = wc.querySelector("[data-wc-cat]");
     var wcIc = wc.querySelector("[data-wc-ic]"), wcPocket = wc.querySelector("[data-wc-pocket]");
@@ -242,7 +242,7 @@
     };
 
     var wcRender = function () {
-      var amount = Math.min(parseFloat(String(wcAmount.value).replace(/[^0-9.]/g, "")) || 0, 1000000);
+      var amount = 0;  // the app ranks by rate; there is nothing to type at the counter
       var cards = WC_CARDS.filter(function (c) { return wcOn[c.id]; });
       wcAnswer.innerHTML = ""; wcOthers.innerHTML = ""; wcPocket.hidden = true;
       wcStoreName.textContent = wcStore.name; wcStoreCat.textContent = WC_CAT_NAMES[wcStore.cats[0]] || "";
@@ -308,8 +308,6 @@
       });
       wcStores.appendChild(b);
     });
-    wcAmount.addEventListener("input", wcRender);
-    wcAmount.addEventListener("focus", function () { wcAmount.select(); });
     wcPrime.addEventListener("change", wcRender);
     wcRender();
   }

@@ -231,7 +231,7 @@
 .wc-screen { position: relative; border-radius: 36px; background: #F5F2F8; color: #1E1328; padding: 12px 14px 18px; font-family: "Archivo WC", var(--font-body); font-size: 15px; font-weight: 430; line-height: 1.4; overflow: hidden; }
 .wc-notch { display: block; width: 92px; height: 24px; margin: 0 auto 8px; border-radius: 999px; background: #1B1222; }
 .wc-bar { display: flex; align-items: center; gap: 10px; padding: 2px 2px 14px; font-weight: 820; font-stretch: 112%; font-size: 18px; letter-spacing: -0.015em; }
-.wc-bar .wc-mark { flex: none; width: 34px; height: 31px; margin: -6px -3px -2px -2px; filter: drop-shadow(0 3px 4px rgba(42, 22, 64, 0.3)); }
+.wc-bar .wc-mark { flex: none; width: 30px; height: 30px; margin: -3px 0 -3px -1px; border-radius: 7px; filter: drop-shadow(0 2px 3px rgba(42, 22, 64, 0.3)); }
 
 /* "You're at": the store the phone is standing in, with its category's icon */
 .wc-here { display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 12px; align-items: center; margin-bottom: 16px; }
