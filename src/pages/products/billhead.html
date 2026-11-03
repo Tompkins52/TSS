@@ -1,0 +1,140 @@
+<!--
+title: Billhead
+title_full: Billhead | Invoices from your phone, by Tompkins Software Systems
+description: Billhead makes invoices from your phone. Set up your company once, then make a simple or an advanced invoice by answering a few questions or by typing on the invoice itself. Jobs billed in stages, payments tracked, a locked PDF, and nothing leaves your device. No subscription; free while in testing.
+nav: tools
+priority: 0.9
+styles: assets/css/product.css
+scripts: assets/js/product.js
+-->
+<section class="phero band-dark on-dark">
+  <div class="wrap phero-grid">
+    <div class="phero-copy">
+      <span class="eyebrow">Product</span>
+      <p class="bh-from" data-bh-from hidden>TSS Invoice Creator is now Billhead: everything it did, and a good deal more.</p>
+      <h1>Billhead</h1>
+      <p class="lede">Invoices from your phone. Set up your company once, then make each invoice by answering a few questions or by typing straight onto it. Jobs billed in stages keep their own running totals, and the PDF goes out locked. Nothing leaves your device.</p>
+      <div class="product-hero-meta">
+        <span class="badge badge-ok">Web app: available</span>
+        <span class="badge badge-brass">Free while in testing</span>
+        <span class="badge badge-dark">No account</span>
+        <span class="badge badge-dark">No subscription, no ads</span>
+      </div>
+      <div class="actions">
+        <a class="btn btn-brass" href="{{root}}billhead/">Open Billhead</a>
+        <a class="btn btn-ghost" href="#try">What it will cost you</a>
+      </div>
+    </div>
+    <div class="phero-shots">
+      <div class="frame"><img src="{{root}}assets/img/products/bh-edit.webp" alt="An advanced invoice open on the page: Hart Electric's logo and details, Lakeside Dental as the customer, invoice 2 of 3 on PO 4471, and dashed links that add the parts an invoice may need" width="1100" height="687"></div>
+      <img class="frame-phone" src="{{root}}assets/img/products/bh-phone.webp" alt="Billhead's home screen on a phone: a new simple or advanced invoice, what is outstanding and overdue, and the invoices that need attention" width="390" height="844">
+    </div>
+  </div>
+</section>
+<div class="phero-rule" aria-hidden="true"></div>
+
+<section class="try-section" id="try">
+  <div class="wrap">
+    <div class="demo" id="demo-bh">
+      <div class="demo-copy">
+        <span class="eyebrow">What it will cost you</span>
+        <h2>Pay for invoices, not for a subscription.</h2>
+        <p>Every invoice is free while Billhead is in testing. After that, your first invoice is free, then you pay once for each invoice when you download it: 99 cents for a simple invoice, $1.99 for an advanced one. Packs never expire, and a year of unlimited invoices is $99, paid once, with no auto-renew. Move the sliders to see the cheapest way to pay at your pace.</p>
+        <p class="bh-never">Billhead never takes a percentage of what your customer pays you.</p>
+        <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}billhead/">Make an invoice now, free</a></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><span>A year of invoicing</span><span class="muted">Prices after testing</span></div>
+        <div class="panel-body bh-grid">
+          <div class="pm-controls">
+            <div><label for="bh-n">Invoices a month <span class="val" data-bh-n-v></span></label><input class="range" id="bh-n" type="range" min="1" max="60" step="1" value="6" data-bh-n></div>
+            <div><label for="bh-adv">Advanced invoices <span class="val" data-bh-adv-v></span></label><input class="range" id="bh-adv" type="range" min="0" max="100" step="5" value="30" data-bh-adv></div>
+            <p class="bh-what">An invoice is advanced when it has a PO or a job site, progress billing on a project, retainage, freight, late fee terms, or your signature.</p>
+          </div>
+          <div class="bh-out">
+            <ul class="bh-opts" data-bh-opts></ul>
+            <p class="bh-best" data-bh-best aria-live="polite"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="bh-ref">For comparison, invoicing subscriptions commonly run $7 to $45 a month, and the cheaper plans cap how many invoices you can send. Apps that are free to send often take 2.9 percent plus 60 cents when your customer pays by card through them, which is $29.60 on a $1,000 invoice.</p>
+  </div>
+</section>
+
+<section class="section section-tint">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>What it does</h2>
+      <p>Most small businesses invoice the same way every time: the same company details, the same terms, often the same customers and the same kinds of work. Billhead remembers all of it, so an invoice is the customer, the work, and the price. Jobs that are billed in stages get the arithmetic most apps leave to you.</p>
+    </div>
+    <ul class="feat-grid">
+      <li><strong>Your company, set up once</strong><span>Your name or your logo, address, terms, tax rate, invoice numbering, and how to pay you, with a payment link if you have one. Every new invoice starts filled in, customers are saved the first time you bill them, and the lines you have billed before are a tap away.</span></li>
+      <li><strong>Simple or advanced</strong><span>A simple invoice is who, what, how much, sales tax, a discount or a deposit, when it is due, and how to pay. An advanced invoice adds a PO and a reference, the job site, the service period, units and tax by line, freight, retainage, late fee terms, and your signature.</span></li>
+      <li><strong>Ask me, or type on the page</strong><span>Ask me walks through one question at a time and ends on the finished invoice. On the page, the invoice is the form: tap any part of it and type, and dashed links add the parts you need. Switch between the two whenever you like.</span></li>
+      <li><strong>Jobs billed in stages</strong><span>A project holds the contract amount, approved change orders, the PO, and retainage. Each new invoice on it says which one it is (2 of 3), what was billed before, and what remains, and the project shows billed, paid, outstanding, and retainage held. Several projects can run at once.</span></li>
+      <li><strong>Sent, overdue, paid</strong><span>Downloading an invoice marks it sent. It turns overdue on its due date, partly paid or paid as you record payments by check, ACH, card, or anything else, and a paid invoice gets a PAID stamp. Home shows what is outstanding and what needs attention.</span></li>
+      <li><strong>A PDF that stays as you sent it</strong><span>Drawn on your phone in clean type with your logo, signed in the app if you choose, and locked so viewers will not let it be edited. Every page carries an Invoice ID made from what the invoice says, so a copy that comes back can be checked against the one you sent.</span></li>
+    </ul>
+    <details class="more">
+      <summary>What is in each invoice, the lock, pricing, and where your invoices live</summary>
+      <div class="prose">
+        <h3>Simple and advanced</h3>
+        <p><strong>Simple:</strong> your name or logo and details, the customer, an invoice number, the date, terms, and the due date, line items with a quantity and a rate, one sales tax, a discount, a deposit received, payment instructions with a pay link, and a note. One page.</p>
+        <p><strong>Advanced, everything in simple and:</strong> the customer's PO and your reference, an attention line, the job site or ship-to address, the service period, a units column, tax by line, freight, retainage, late fee or early-payment terms, progress billing on a project (contract amount, previously billed, this invoice, billed to date, remaining), your drawn signature, a line for the customer to sign, your tax ID or a VAT or GST number, another currency, and terms and conditions. A simple invoice can switch to advanced at any time; adding an advanced part asks first.</p>
+        <h3>The lock and the signature</h3>
+        <p>The PDF opens in any viewer without a password, prints, and lets its text be copied, and it carries a permission that tells viewers not to allow edits. Acrobat, Preview, and the major browsers honor it. Software made to strip PDF permissions can still remove it, which is why every page also carries the Invoice ID: if a copy comes back with different numbers, the ID tells you which version you actually sent. A drawn signature prints above a line with your name, your title, and the date it was signed in the app.</p>
+        <h3>Pricing, plainly</h3>
+        <p>Free while in testing. After that, your first invoice is free; then 99 cents for a simple invoice and $1.99 for an advanced one, paid once when you download it. Packs of 10 simple ($7.99), 10 advanced ($14.99), or 50 advanced ($49) never expire, and a year of unlimited invoices is $99, paid once, with no auto-renew. Editing or downloading again an invoice you have paid for is free. There is no account to keep and nothing renews on its own.</p>
+        <h3>Where your invoices live</h3>
+        <p>On your phone or computer, in the browser's own storage. There is no account and no server. A backup file under More holds your company, customers, projects, and invoices; keep one somewhere safe and use it to move to a new phone. More also saves every invoice as a CSV file for your accountant.</p>
+        <h3>Coming from TSS Invoice Creator</h3>
+        <p>Billhead replaces the free invoice tool that used to be on this site. If you have an invoice saved in it, open <a href="{{root}}invoice-creator.html">the old tool's address</a> on the same device and tap Move it to Billhead: your business details and the invoice come across in one step.</p>
+        <h3>Put it on your home screen</h3>
+        <p>On an iPhone, open it in Safari, tap Share, then Add to Home Screen. On Android, open it in Chrome, tap the menu, then Add to Home screen or Install app. It opens full screen like any other app and works without a signal once it has loaded. On an iPhone it also keeps your invoices safer: Safari clears a website's saved data after seven days without a visit, while an app on the home screen keeps its own count, which starts over every time you open it.</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <h2>Screens</h2>
+    <div class="screens-grid">
+      <figure><img src="{{root}}assets/img/products/bh-invoice.webp" alt="A paid invoice for the Prairie City Public Library: invoice 1 of 4 on its PO, the ACH payment recorded, and a green PAID stamp" width="1100" height="687" loading="lazy"><figcaption>Paid in full, stamped, with the payment on record.</figcaption></figure>
+      <figure class="tall"><img src="{{root}}assets/img/products/bh-phone-ask.webp" alt="Ask me, question 3 of 7: what are you billing for, with two lines, each with a quantity, a rate, and the amount" width="390" height="844" loading="lazy"><figcaption>Ask me: one question at a time, ending on the finished invoice.</figcaption></figure>
+      <figure class="tall"><img src="{{root}}assets/img/products/bh-phone-project.webp" alt="A project billed in stages: billed, paid, outstanding, remaining, and retainage held, with its invoices listed" width="390" height="844" loading="lazy"><figcaption>A job billed in stages, with what is billed, paid, and left.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="facts">
+  <div class="wrap">
+    <dl>
+      <div><dt>Status</dt><dd>Web app available on any phone or computer; App Store and Google Play versions later</dd></div>
+      <div><dt>Price</dt><dd>Free while in testing. Then 99 cents an invoice, $1.99 advanced, packs, or $99 a year. No subscription and no ads, ever.</dd></div>
+      <div><dt>Data lives</dt><dd>On your device. No account, no server.</dd></div>
+      <div><dt>Works</dt><dd>In any modern browser, from the home screen, and offline once loaded</dd></div>
+      <div><dt>Support and privacy</dt><dd><a href="{{root}}support.html#billhead">Support</a>, <a href="{{root}}privacy.html#billhead">privacy policy</a></dd></div>
+    </dl>
+    <details class="history">
+      <summary>Release history</summary>
+      <ol class="timeline">
+        <li><time datetime="2026-11-03">November 3, 2026</time><h3>Released as a web app</h3><p>A company profile set up once; simple and advanced invoices, made by answering questions or by typing on the invoice; projects billed in stages with change orders and retainage; payments that turn an invoice partly paid and paid; a locked PDF with an Invoice ID on every page and an optional drawn signature; a backup file and a CSV for your accountant. It takes over from TSS Invoice Creator, and an invoice saved in the old tool moves across in one tap.</p></li>
+      </ol>
+    </details>
+  </div>
+</section>
+
+<section class="cta band-dark on-dark">
+  <div class="wrap">
+    <div>
+      <h2>Send the next invoice from your phone.</h2>
+      <p>Open Billhead on any phone or computer and set up your company in about two minutes. It is free while in testing; subscribe to the newsletter and we will say before that changes.</p>
+    </div>
+    <div class="actions">
+      <a class="btn btn-brass" href="{{root}}billhead/">Open Billhead</a>
+      <a class="btn btn-ghost" href="{{root}}newsletter.html">Get the newsletter</a>
+    </div>
+  </div>
+</section>

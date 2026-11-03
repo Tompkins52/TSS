@@ -311,4 +311,49 @@
     wcPrime.addEventListener("change", wcRender);
     wcRender();
   }
+
+  /* ---------- Billhead: what a year of invoicing costs, the cheapest way ---------- */
+  /* Prices after testing, as the app will charge them: singles, packs that never expire, or a year pass. */
+  var BH = { simple: 0.99, advanced: 1.99, simplePacks: [{ n: 10, price: 7.99 }], advancedPacks: [{ n: 50, price: 49 }, { n: 10, price: 14.99 }], pass: 99 };
+  var bh = document.getElementById("demo-bh");
+  if (bh) {
+    var bhN = bh.querySelector("[data-bh-n]"), bhAdv = bh.querySelector("[data-bh-adv]");
+    wireRange(bhN, bhUpdate); wireRange(bhAdv, bhUpdate);
+    bhUpdate();
+  }
+  var from = document.querySelector("[data-bh-from]");
+  if (from && /[?&]from=invoice-creator\b/.test(location.search)) from.hidden = false;
+
+  function dollars(n) { return "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  /* The cheapest mix of packs and single invoices for a year's count: packs are tried biggest first. */
+  function bhCheapest(count, single, packs) {
+    var best = count * single;
+    (function go(i, left, cost) {
+      if (cost >= best) return;
+      if (i === packs.length) { best = Math.min(best, cost + left * single); return; }
+      var p = packs[i];
+      for (var k = Math.ceil(left / p.n); k >= 0; k--) go(i + 1, Math.max(0, left - k * p.n), cost + k * p.price);
+    })(0, count, 0);
+    return Math.round(best * 100) / 100;
+  }
+  function bhUpdate() {
+    var n = Number(bhN.value), share = Number(bhAdv.value) / 100, year = n * 12;
+    var adv = Math.round(year * share), simple = year - adv;
+    bh.querySelector("[data-bh-n-v]").textContent = n + (n === 1 ? " invoice" : " invoices");
+    bh.querySelector("[data-bh-adv-v]").textContent = Math.round(share * 100) + " percent";
+    var singles = Math.round((simple * BH.simple + adv * BH.advanced) * 100) / 100;
+    var packs = Math.round((bhCheapest(simple, BH.simple, BH.simplePacks) + bhCheapest(adv, BH.advanced, BH.advancedPacks)) * 100) / 100;
+    var opts = [
+      { key: "singles", name: "One at a time", say: "paying one at a time is", total: singles, how: simple + " simple at 99 cents, " + adv + " advanced at $1.99" },
+      { key: "packs", name: "Packs", say: "packs are", total: packs, how: packs < singles ? "Packs that never expire, topped up with single invoices" : "No pack saves anything at this pace" },
+      { key: "pass", name: "Year pass", say: "the year pass is", total: BH.pass, how: "Unlimited invoices for a year, paid once, no auto-renew" }
+    ];
+    var best = opts.reduce(function (a, b) { return b.total < a.total - 0.004 ? b : a; });
+    var list = bh.querySelector("[data-bh-opts]");
+    list.innerHTML = opts.map(function (o) {
+      return '<li class="' + (o === best ? "best" : "") + '"><span>' + esc(o.name) + "</span><b>" + dollars(o.total) + " a year</b><small>" + esc(o.how) + "</small></li>";
+    }).join("");
+    bh.querySelector("[data-bh-best]").textContent = "At " + n + (n === 1 ? " invoice" : " invoices") + " a month, " + best.say + " the cheapest: " +
+      dollars(best.total) + " a year, about " + dollars(best.total / 12) + " a month, or " + dollars(best.total / year) + " an invoice. Your first invoice is free on top of that.";
+  }
 })();

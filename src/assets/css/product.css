@@ -312,6 +312,23 @@
 @media (min-width: 960px) { .screens-grid.phones { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .screens-grid.phones figcaption { text-align: center; max-width: 24ch; margin: 0 auto; }
 
+/* Billhead: what a year of invoicing costs */
+.bh-from { display: inline-block; margin: 0 0 0.6rem; padding: 0.35em 0.75em; border-radius: 999px; background: rgba(212, 168, 75, 0.18); color: var(--brass-300); font-size: 0.88rem; font-weight: 600; }
+.bh-never { font-weight: 600; color: var(--ink); }
+.bh-grid { display: grid; gap: 1.25rem; }
+@media (min-width: 680px) { .bh-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 1.5rem; } }
+.bh-grid .pm-controls { align-content: start; }
+.bh-what { margin: 0; font-size: 0.85rem; color: var(--muted); }
+.bh-opts { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.bh-opts li { margin: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.15rem 1rem; align-items: baseline; padding: 0.65rem 0.85rem; border: 1px solid var(--stone-200); border-radius: var(--radius); background: var(--surface); transition: border-color 0.2s ease, background-color 0.2s ease; }
+.bh-opts li span { font-weight: 600; }
+.bh-opts li b { font-variant-numeric: tabular-nums; font-weight: 600; }
+.bh-opts li small { grid-column: 1 / -1; color: var(--muted); font-size: 0.82rem; }
+.bh-opts li.best { border-color: var(--green-700); background: #dff0e6; }
+.bh-opts li.best span::after { content: "Cheapest"; margin-left: 0.5rem; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--green-800); vertical-align: 0.1em; }
+.bh-best { margin: 0.8rem 0 0; font-size: 0.93rem; color: var(--ink); }
+.bh-ref { margin: 1.5rem 0 0; max-width: 72ch; font-size: 0.88rem; color: var(--muted); }
+
 @media (prefers-reduced-motion: reduce) {
   .wc-winner.reveal .wc-big, .wc-winner.reveal .wc-hat, .wc-here.found b { animation: none; }
 }

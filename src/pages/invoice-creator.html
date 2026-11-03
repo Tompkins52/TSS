@@ -1,79 +1,61 @@
 <!--
-title: TSS Invoice Creator
-title_full: TSS Invoice Creator | A free invoice tool for small businesses
-description: A free invoice creator from Tompkins Software Systems. Line items, sales tax, freight, customer PO, progress billing (invoice 2 of 3), payment instructions, print or save as PDF. Nothing leaves your browser and your business details are remembered on your device.
+title: TSS Invoice Creator is now Billhead
+description: The free TSS Invoice Creator has been replaced by Billhead, an invoice app with a company profile, jobs billed in stages, payments tracked, and a locked PDF. An invoice saved in the old tool moves across in one tap.
 nav: tools
-priority: 0.9
-body_class: tool
-styles: assets/css/invoice.css
-scripts: assets/js/invoice.js
+noindex: true
 -->
-<section class="tool-head band-dark on-dark">
+<section class="page-head band-dark on-dark">
   <div class="wrap">
-    <div class="sec-label"><span class="n">Free tool</span>For every small business</div>
-    <h1>TSS Invoice Creator</h1>
-    <p class="lede">The invoice is the form. Tap any part of it and type: your business, the customer, line items, tax, freight, the PO number. Print it or save it as a PDF. Your business details, logo, and next invoice number are remembered on this device, and nothing is sent to us or to anyone.</p>
-    <div class="product-hero-meta">
-      <span class="badge badge-ok">Free</span>
-      <span class="badge badge-dark">No account</span>
-      <span class="badge badge-dark">Nothing leaves your browser</span>
-      <span class="badge badge-dark">Edit it right on the page</span>
-    </div>
-  </div>
-</section>
-
-<section class="tool" id="tool">
-  <div class="wrap">
-    <div class="toolbar top" data-toolbar>
-      <button class="btn btn-primary" type="button" data-print>Print or save as PDF</button>
-      <button class="btn btn-outline" type="button" data-new>New invoice</button>
-      <button class="btn btn-outline" type="button" data-csv>Download CSV</button>
-      <details class="more-tools"><summary>More</summary>
-        <div class="toolbar">
-          <button class="btn btn-outline btn-small" type="button" data-save>Save invoice file</button>
-          <label class="btn btn-outline btn-small file-btn">Open invoice file<input type="file" accept=".json,application/json" data-open></label>
-          <button class="btn btn-outline btn-small" type="button" data-sample>Load the sample</button>
-          <button class="btn-text" type="button" data-clear>Forget everything on this device</button>
-        </div>
-      </details>
-      <span class="saved" data-saved aria-live="polite"></span>
-    </div>
-    <p class="tool-hint">Tap anything on the invoice to change it. The small green links add the parts you need and disappear when you print.</p>
-    <input type="file" accept="image/*" data-logo hidden>
-    <div class="inv" data-inv aria-label="Your invoice, editable"></div>
-  </div>
-</section>
-
-<section class="section section-tint tool-help" aria-labelledby="help-title">
-  <div class="wrap">
-    <div class="section-head">
-      <h2 id="help-title">What belongs on an invoice</h2>
-      <p>The things an accounts payable clerk looks for, in the order they look for them. Leave one out and the invoice goes to the bottom of the pile.</p>
-    </div>
-    <ol class="checklist">
-      <li><strong>Who you are.</strong> Legal business name, address, phone, and email. Add your tax ID when a customer asks for it; it should match the W-9 you gave them.</li>
-      <li><strong>The word "Invoice" and a number nobody else has.</strong> Sequential, never reused. The tool remembers your next number.</li>
-      <li><strong>Three dates.</strong> The invoice date, the due date, and the terms that produced it (Net 30 means thirty days from the invoice date). "Due on receipt" is a term too.</li>
-      <li><strong>Who pays.</strong> The customer's name, billing address, an attention line, and their purchase order number. The PO number is how their system matches your invoice to money they already approved.</li>
-      <li><strong>What you did.</strong> A sentence describing the work, the dates it covered, and line items with a quantity, a unit, a rate, and an amount.</li>
-      <li><strong>The math, shown.</strong> Subtotal, discount, taxable subtotal, the sales tax rate and the tax, freight, total, deposits already paid, and the balance due. Whether tax applies to labor, materials, or freight depends on your state; the tool taxes the lines you mark and leaves freight untaxed.</li>
-      <li><strong>Progress billing.</strong> When this is one of several invoices on a contract: the contract or PO amount, which invoice this is (2 of 3), billed to date, and what remains. Public agencies and general contractors expect it.</li>
-      <li><strong>How to pay.</strong> Who to make the check out to, where to send it, ACH or card options, and any late fee or early-payment discount.</li>
-      <li><strong>A thank-you and a contact.</strong> One line, and the name of the person who can answer a question about the invoice.</li>
-    </ol>
-    <p class="muted small">This is general information from a software company, not tax or legal advice. Your accountant knows your state's rules.</p>
-  </div>
-</section>
-
-<section class="cta band-dark on-dark">
-  <div class="wrap">
-    <div>
-      <h2>Outgrown the invoice?</h2>
-      <p>When the estimate, the invoice, the schedule, and the customer list need to be one system, that is the kind of thing we build. Fixed price, written down first.</p>
-    </div>
+    <span class="eyebrow">TSS Invoice Creator</span>
+    <h1>The Invoice Creator is now Billhead.</h1>
+    <p class="lede">Everything the free tool did, plus your company saved once, customers and projects, payments tracked, and a PDF that goes out locked. It keeps everything on your device the same way, and it is free while in testing.</p>
     <div class="actions">
-      <a class="btn btn-brass" href="{{root}}index.html#try-biz">Try the estimate sample</a>
-      <a class="btn btn-ghost" href="{{root}}contact.html">Talk to us</a>
+      <a class="btn btn-brass" href="{{root}}billhead/">Open Billhead</a>
+      <a class="btn btn-ghost" href="{{root}}products/billhead.html">What is new</a>
     </div>
   </div>
 </section>
+
+<section class="section" data-old hidden>
+  <div class="wrap prose">
+    <h2>Your saved invoice</h2>
+    <p>This device still has invoice <strong data-old-num></strong><span data-old-for> for <strong data-old-cust></strong></span> from the old tool. Move it to Billhead and your business details come with it, so Billhead starts already set up.</p>
+    <p class="muted small">Nothing is sent to us. The invoice travels inside the link to Billhead, after the # sign, a part of a link that browsers never send to a server, and Billhead clears it from the address as soon as it has read it.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="{{root}}billhead/" data-move>Move it to Billhead</a>
+      <button class="btn btn-outline" type="button" data-forget>Forget it on this device</button>
+    </div>
+    <p class="small" data-old-note hidden>Your logo is too large to carry in a link; add it again in Billhead under More, Company profile.</p>
+  </div>
+</section>
+
+<noscript><section class="section"><div class="wrap prose"><p>To move an invoice saved in the old tool, turn on JavaScript and reload this page.</p></div></section></noscript>
+
+<script>
+(function () {
+  "use strict";
+  var KEY = "tss-invoice-creator", APP = "https://invoice.tompkinssoftwaresystems.com/", ROOM = 60000;
+  var saved = null;
+  try { saved = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { saved = null; }
+  var inv = saved && saved.last;
+  // Nothing saved here from the old tool: go straight to Billhead's page, which says what happened.
+  if (!inv || !inv.lines) { location.replace("{{root}}products/billhead.html?from=invoice-creator"); return; }
+  function encode(o) { return btoa(unescape(encodeURIComponent(JSON.stringify({ v: 1, src: KEY, inv: o })))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); }
+  var link = APP + "#import=" + encode(inv), dropped = false;
+  if (link.length > ROOM && inv.biz && inv.biz.logo) {
+    var lean = JSON.parse(JSON.stringify(inv)); lean.biz.logo = "";
+    link = APP + "#import=" + encode(lean); dropped = true;
+  }
+  var box = document.querySelector("[data-old]");
+  box.querySelector("[data-old-num]").textContent = inv.num || "(no number)";
+  var cust = inv.cust && inv.cust.name ? inv.cust.name : "";
+  if (cust) box.querySelector("[data-old-cust]").textContent = cust; else box.querySelector("[data-old-for]").hidden = true;
+  box.querySelector("[data-move]").href = link;
+  if (dropped) box.querySelector("[data-old-note]").hidden = false;
+  box.querySelector("[data-forget]").addEventListener("click", function () {
+    try { localStorage.removeItem(KEY); } catch (e) { }
+    location.replace("{{root}}products/billhead.html?from=invoice-creator");
+  });
+  box.hidden = false;
+})();
+</script>
