@@ -1,0 +1,162 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Scene</title>
+<style>
+  html, body { margin: 0; background: #000; }
+  svg { display: block; width: 1920px; height: 1080px; }
+  .ink { stroke: #1a1410; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+  text { font-family: "Liberation Sans", "DejaVu Sans", Arial, sans-serif; font-weight: 700; }
+</style>
+<svg id="s" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg"></svg>
+<script src="toon.js"></script>
+<script>
+const SCENES = {
+  // K1: the whole checkout. Dave fans five cards, the line waits, the cashier has seen this before.
+  k1() {
+    wallAndFloor(); checkoutBack();
+    cashier({});
+    counter();
+    theLine();
+    dave({ x: 880, y: 520, scale: 1.2,
+      arms: (p) => { el('line', { x1: -56, y1: 60, x2: -118, y2: 150, class: 'ink' }, p); el('line', { x1: 56, y1: 60, x2: 160, y2: 40, class: 'ink' }, p); cardFan(p, 160, 40); } });
+    sweat([[985, 350, 25, 1.3], [1005, 420, 40, 1], [770, 380, -30, 1.1], [760, 450, -45, .8]]);
+    basket(1010, 760);
+  },
+
+  // K2: the forty-seven page booklet, doing the one job it was ever good for.
+  k2() {
+    const defs = el('defs', {});
+    const grad = el('radialGradient', { id: 'kw', cx: '50%', cy: '30%', r: '80%' }, defs);
+    el('stop', { offset: '0', 'stop-color': '#f7e9c8' }, grad);
+    el('stop', { offset: '1', 'stop-color': '#d9c49a' }, grad);
+    el('rect', { x: 0, y: 0, width: 1920, height: 1080, fill: 'url(#kw)' });
+    el('rect', { x: 0, y: 700, width: 1920, height: 380, fill: '#b07a46' });
+    for (let x = 0; x < 2200; x += 240) el('line', { x1: x, y1: 700, x2: x - 80, y2: 1080, stroke: '#945f32', 'stroke-width': 6 });
+    el('rect', { x: 1380, y: 110, width: 400, height: 300, rx: 8, fill: '#bfe3f2', class: 'ink' });
+    el('line', { x1: 1580, y1: 110, x2: 1580, y2: 410, class: 'ink' });
+    el('line', { x1: 1380, y1: 260, x2: 1780, y2: 260, class: 'ink' });
+    // a chair, and Dave in it, eating cereal, at peace
+    el('rect', { x: 300, y: 430, width: 40, height: 400, rx: 6, fill: '#8a5a2b', class: 'ink' });
+    el('rect', { x: 300, y: 700, width: 300, height: 34, rx: 6, fill: '#8a5a2b', class: 'ink' });
+    dave({ x: 480, y: 480, scale: 1.25, noLegs: true, mouth: 'M -14 -20 Q 0 -8 14 -20', eyeShift: 6,
+      brows: (p) => { el('line', { x1: -44, y1: -98, x2: -16, y2: -100, class: 'ink' }, p); el('line', { x1: 16, y1: -100, x2: 44, y2: -98, class: 'ink' }, p); },
+      arms: (p) => { el('line', { x1: 56, y1: 60, x2: 170, y2: 110, class: 'ink' }, p); el('line', { x1: 170, y1: 110, x2: 190, y2: 40, class: 'ink' }, p); el('line', { x1: -56, y1: 60, x2: -20, y2: 150, class: 'ink' }, p); } });
+    el('line', { x1: 460, y1: 760, x2: 440, y2: 1000, class: 'ink' });
+    el('line', { x1: 540, y1: 760, x2: 560, y2: 1000, class: 'ink' });
+    el('ellipse', { cx: 430, cy: 1006, rx: 42, ry: 14, fill: INK });
+    el('ellipse', { cx: 570, cy: 1006, rx: 42, ry: 14, fill: INK });
+    // a spoon on its way up
+    el('line', { x1: 716, y1: 530, x2: 690, y2: 470, class: 'ink', 'stroke-width': 8 });
+    el('ellipse', { cx: 684, cy: 458, rx: 20, ry: 12, fill: '#c9c4cf', class: 'ink', 'stroke-width': 4, transform: 'rotate(-25 684 458)' });
+    // the table, leaning a hair toward the leg that needed help
+    const t = g({ transform: 'translate(1100 600) rotate(-1.5)' });
+    el('rect', { x: -480, y: -30, width: 960, height: 54, rx: 10, fill: '#d9a521', class: 'ink' }, t);
+    el('rect', { x: -440, y: 24, width: 40, height: 330, fill: '#c98f3a', class: 'ink' }, t);
+    el('rect', { x: 400, y: 24, width: 40, height: 262, fill: '#c98f3a', class: 'ink' }, t);
+    // the booklet, thick, blue, forty-seven pages of nothing
+    const b = g({ transform: 'translate(1520 925)' });
+    el('rect', { x: -110, y: -36, width: 220, height: 70, rx: 5, fill: '#f5f2f8', class: 'ink' }, b);
+    for (let i = 0; i < 12; i++) el('line', { x1: -104, y1: -24 + i * 4.6, x2: 104, y2: -24 + i * 4.6, stroke: '#c9c4cf', 'stroke-width': 2 }, b);
+    el('rect', { x: -110, y: -46, width: 220, height: 16, rx: 4, fill: '#2d5bd1', class: 'ink' }, b);
+    el('circle', { cx: -80, cy: -38, r: 5, fill: '#f3d27a' }, b);
+    // cereal bowl and a coffee, both staying put now
+    el('ellipse', { cx: 760, cy: 580, rx: 100, ry: 28, fill: '#f5f2f8', class: 'ink' });
+    el('path', { d: 'M 660 580 Q 760 670 860 580', fill: '#f5f2f8', class: 'ink' });
+    el('path', { d: 'M 1180 580 L 1180 470 L 1290 470 L 1290 580 Z', fill: '#e2473b', class: 'ink' });
+    el('path', { d: 'M 1290 490 Q 1350 525 1290 560', fill: 'none', class: 'ink' });
+    el('path', { d: 'M 1215 450 Q 1200 420 1220 400 Q 1240 380 1225 350', fill: 'none', class: 'ink', 'stroke-width': 5, opacity: .6 });
+    el('path', { d: 'M 1255 450 Q 1240 420 1260 400 Q 1280 380 1265 350', fill: 'none', class: 'ink', 'stroke-width': 5, opacity: .6 });
+  },
+
+  // K3: the card reader. The blue card goes in. The register says one percent. The green card says nothing.
+  k3() {
+    wallAndFloor(700);
+    // Dave at the counter, from the waist up, the counter in front of him
+    dave({ x: 560, y: 420, scale: 1.35, noLegs: true, eyeShift: 10,
+      arms: (p) => {
+        // right arm reaches across to the reader with the blue card
+        el('line', { x1: 56, y1: 60, x2: 300, y2: 150, class: 'ink' }, p);
+        const h = g({ transform: 'translate(300 150) rotate(-20)' }, p);
+        el('rect', { x: -34, y: -112, width: 68, height: 112, rx: 8, fill: '#2d5bd1', class: 'ink' }, h);
+        el('rect', { x: -22, y: -98, width: 24, height: 18, rx: 3, fill: '#f3d27a', class: 'ink', 'stroke-width': 3 }, h);
+        el('circle', { cx: 0, cy: 0, r: 22, fill: SKIN, class: 'ink' }, h);
+        // left hand holds the green card down and forgotten
+        el('line', { x1: -56, y1: 60, x2: -150, y2: 170, class: 'ink' }, p);
+        const gh = g({ transform: 'translate(-150 170) rotate(25)' }, p);
+        el('rect', { x: -34, y: -112, width: 68, height: 112, rx: 8, fill: '#2f9e5a', class: 'ink' }, gh);
+        el('rect', { x: -22, y: -98, width: 24, height: 18, rx: 3, fill: '#f3d27a', class: 'ink', 'stroke-width': 3 }, gh);
+        el('circle', { cx: 0, cy: 0, r: 22, fill: SKIN, class: 'ink' }, gh);
+      } });
+    sweat([[690, 250, 25, 1.4], [705, 330, 40, 1.1], [430, 270, -30, 1.2]]);
+    // the five percent the green card would have earned, floating away like a ghost
+    const ghost = g({ transform: 'translate(300 300)', opacity: .55 });
+    el('text', { x: 0, y: 0, 'text-anchor': 'middle', 'font-size': 150, fill: '#2f9e5a' }, ghost).textContent = '5%';
+    [[-60, -150], [40, -170], [110, -140]].forEach(([x, y]) => el('circle', { cx: x, cy: y, r: 10, fill: '#2f9e5a' }, ghost));
+    // the counter and the reader, big
+    el('rect', { x: 0, y: 700, width: 1920, height: 380, fill: '#c98f3a', class: 'ink' });
+    el('rect', { x: 0, y: 700, width: 1920, height: 34, fill: '#e0ad5c' });
+    const r = g({ transform: 'translate(1180 300)' });
+    el('rect', { x: 0, y: 0, width: 360, height: 400, rx: 24, fill: '#2b2b30', class: 'ink' }, r);
+    el('rect', { x: 36, y: 40, width: 288, height: 160, rx: 12, fill: '#9fe3a1' }, r);
+    el('text', { x: 180, y: 150, 'text-anchor': 'middle', 'font-size': 120, fill: INK }, r).textContent = '1%';
+    for (let i = 0; i < 9; i++) el('rect', { x: 50 + (i % 3) * 92, y: 230 + Math.floor(i / 3) * 52, width: 72, height: 40, rx: 8, fill: '#55555e', class: 'ink', 'stroke-width': 4 }, r);
+    el('rect', { x: 60, y: 388, width: 240, height: 22, rx: 6, fill: '#111', class: 'ink', 'stroke-width': 4 }, r);
+    // the cashier's hand, drumming
+    el('line', { x1: 1760, y1: 700, x2: 1900, y2: 560, class: 'ink' });
+    el('circle', { cx: 1760, cy: 700, r: 26, fill: SKIN, class: 'ink' });
+  },
+
+  // K4: the money app helps.
+  k4() {
+    wallAndFloor(); checkoutBack();
+    cashier({});
+    counter();
+    theLine();
+    dave({ x: 760, y: 520, scale: 1.2, eyeShift: 10, mouth: 'M -14 -18 L 14 -18',
+      brows: (p) => { el('line', { x1: -44, y1: -96, x2: -16, y2: -100, class: 'ink' }, p); el('line', { x1: 16, y1: -100, x2: 44, y2: -96, class: 'ink' }, p); },
+      arms: (p) => { el('line', { x1: -56, y1: 60, x2: -118, y2: 150, class: 'ink' }, p); el('line', { x1: 56, y1: 60, x2: 150, y2: 110, class: 'ink' }, p); } });
+    // the phone, held up, big enough to read
+    const ph = phone(960, 300, 300, 600, '#f5f2f8');
+    // a push notification, too big, too happy
+    const n = g({ transform: 'translate(28 70)' }, ph);
+    el('rect', { x: 0, y: 0, width: 244, height: 190, rx: 18, fill: '#fff', class: 'ink', 'stroke-width': 4 }, n);
+    el('circle', { cx: 34, cy: 36, r: 18, fill: '#e2473b' }, n);
+    el('rect', { x: 62, y: 26, width: 120, height: 18, rx: 9, fill: '#c9c4cf' }, n);
+    el('text', { x: 122, y: 92, 'text-anchor': 'middle', 'font-size': 34, fill: INK }, n).textContent = "YOU'RE";
+    el('text', { x: 122, y: 134, 'text-anchor': 'middle', 'font-size': 34, fill: '#e2473b' }, n).textContent = 'PRE-';
+    el('text', { x: 122, y: 176, 'text-anchor': 'middle', 'font-size': 34, fill: '#e2473b' }, n).textContent = 'APPROVED!';
+    // a sixth card sliding up out of the screen
+    el('rect', { x: 70, y: 330, width: 160, height: 100, rx: 10, fill: '#c96bd1', class: 'ink', transform: 'rotate(-8 150 380)' }, ph);
+    el('rect', { x: 90, y: 350, width: 36, height: 24, rx: 4, fill: '#f3d27a', class: 'ink', 'stroke-width': 3, transform: 'rotate(-8 150 380)' }, ph);
+    // the five he already has, in the other hand, drooping
+    const fan = g({ transform: 'translate(640 700) rotate(170)' });
+    cardFan(fan, 0, 0, .9);
+    // buzz lines off the phone
+    [[940, 340], [940, 400], [1280, 340], [1280, 400]].forEach(([x, y], i) => el('path', { d: i < 2 ? `M ${x} ${y} l -30 -14 M ${x} ${y + 30} l -34 0` : `M ${x} ${y} l 30 -14 M ${x} ${y + 30} l 34 0`, fill: 'none', class: 'ink', 'stroke-width': 7 }));
+    basket(1300, 760);
+  },
+
+  // K5: almost nobody.
+  k5() {
+    wallAndFloor(); checkoutBack();
+    document.querySelector('svg').querySelectorAll('rect').forEach((r) => { if (r.getAttribute('x') === '120' && r.getAttribute('y') === '120') r.remove(); });
+    cashier({ lids: false, mouth: 'M -14 -20 Q 0 -8 14 -20' });
+    counter();
+    theLine();
+    dave({ x: 760, y: 520, scale: 1.2, eyeShift: 8, eyeY: -62, mouth: 'M -16 -20 Q 0 -4 16 -20',
+      brows: (p) => { el('line', { x1: -44, y1: -102, x2: -16, y2: -106, class: 'ink' }, p); el('line', { x1: 16, y1: -106, x2: 44, y2: -102, class: 'ink' }, p); },
+      arms: (p) => { el('line', { x1: -56, y1: 60, x2: -118, y2: 150, class: 'ink' }, p); el('line', { x1: 56, y1: 60, x2: 150, y2: 110, class: 'ink' }, p); } });
+    const ph = phone(960, 300, 300, 600, '#F5F2F8');
+    el('image', { x: 40, y: 110, width: 220, height: 220, href: 'icon-512.png' }, ph);
+    el('rect', { x: 60, y: 370, width: 180, height: 22, rx: 11, fill: '#5B2E86' }, ph);
+    el('rect', { x: 80, y: 410, width: 140, height: 16, rx: 8, fill: '#c9c4cf' }, ph);
+    // sparkles off the screen
+    [[930, 320], [1300, 310], [1290, 520], [920, 540]].forEach(([x, y]) => el('path', { d: `M ${x} ${y - 22} L ${x + 6} ${y - 6} L ${x + 22} ${y} L ${x + 6} ${y + 6} L ${x} ${y + 22} L ${x - 6} ${y + 6} L ${x - 22} ${y} L ${x - 6} ${y - 6} Z`, fill: '#C4A3FF', class: 'ink', 'stroke-width': 3 }));
+    // the witch, flying in over Dave's shoulder, wand toward the phone
+    el('image', { x: 640, y: 0, width: 400, height: 440, href: 'witch-fly.webp' });
+    basket(1300, 760);
+  },
+};
+const key = (location.hash || '#k1').slice(1);
+SCENES[key]();
+</script>

@@ -1,3 +1,8 @@
 dist/
 __pycache__/
 .DS_Store
+
+# Video masters stay out; the web copy lives in src/assets/video
+marketing/witch-card/witch-card.mp4
+marketing/witch-card/witch-card-poster.jpg
+marketing/**/build/

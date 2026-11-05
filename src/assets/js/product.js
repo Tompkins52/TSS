@@ -356,4 +356,18 @@
     bh.querySelector("[data-bh-best]").textContent = "At " + n + (n === 1 ? " invoice" : " invoices") + " a month, " + best.say + " the cheapest: " +
       dollars(best.total) + " a year, about " + dollars(best.total / 12) + " a month, or " + dollars(best.total / year) + " an invoice. Your first invoice is free on top of that.";
   }
+
+  /* ---------- The video: captions only while the sound is off ---------- */
+  var watch = document.querySelector(".watch-frame video");
+  if (watch && watch.textTracks && watch.textTracks.length) {
+    var track = watch.textTracks[0], auto = false;
+    function captions() {
+      var quiet = watch.muted || watch.volume === 0;
+      if (quiet && track.mode !== "showing") { track.mode = "showing"; auto = true; }
+      else if (!quiet && auto) { track.mode = "hidden"; auto = false; }
+    }
+    track.mode = "hidden";
+    ["play", "volumechange"].forEach(function (ev) { watch.addEventListener(ev, captions); });
+    captions();
+  }
 })();
