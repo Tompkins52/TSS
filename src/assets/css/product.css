@@ -30,6 +30,12 @@
 .phero.band-dark::after { display: none; }
 .phero-rule { height: 3px; background: linear-gradient(90deg, var(--brass-500), var(--brass-300) 40%, var(--brass-500)); }
 
+/* ---------- The video ---------- */
+.watch { padding-bottom: 0; }
+.watch .section-head { max-width: 58ch; }
+.watch-frame { border-radius: 12px; overflow: hidden; background: #1d0f34; box-shadow: 0 24px 60px rgba(13, 29, 24, 0.28), 0 0 0 1px rgba(13, 29, 24, 0.08); }
+.watch-frame video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; }
+
 /* ---------- Try a piece of it ---------- */
 .try-section { padding: 3rem 0; }
 @media (min-width: 880px) { .try-section { padding: 4rem 0; } }

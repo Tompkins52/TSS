@@ -1,0 +1,109 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Witch Card demo stage</title>
+<style>
+  @font-face {
+    font-family: "Archivo WC";
+    src: url("app/fonts/archivo-wdth.woff2") format("woff2-variations"), url("app/fonts/archivo-wdth.woff2") format("woff2");
+    font-weight: 100 900; font-stretch: 62% 125%;
+  }
+  html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #000; font-family: "Archivo WC", system-ui, sans-serif; color: #F3F1F6; }
+  #stage { position: absolute; inset: 0; background: linear-gradient(#1D0F34, #2C1647 55%, #241238); opacity: 0; transition: opacity .4s; }
+  #stage.on { opacity: 1; }
+  .stars i { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: #FFE9B8; opacity: .55; animation: twinkle 2.4s ease-in-out infinite alternate; }
+  @keyframes twinkle { from { opacity: .15; transform: scale(.7); } to { opacity: .8; transform: scale(1); } }
+
+  /* title card */
+  .title { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 36px; opacity: 0; transition: opacity .4s; }
+  .title.on { opacity: 1; }
+  .title img { width: 170px; height: 170px; border-radius: 38px; box-shadow: 0 20px 60px rgba(0, 0, 0, .45); }
+  .title h1 { margin: 0; font-size: 150px; font-weight: 820; font-stretch: 108%; letter-spacing: -.025em; line-height: 1; }
+
+  /* phone */
+  .phone { position: absolute; left: 1150px; top: 70px; width: 436px; height: 940px; border-radius: 62px; background: #121114;
+    box-shadow: 0 40px 90px rgba(0, 0, 0, .55), inset 0 0 0 3px #3a3740; transform: translateY(70px); opacity: 0;
+    transition: transform .8s cubic-bezier(.2, .8, .2, 1), opacity .5s; }
+  .phone.on { transform: none; opacity: 1; }
+  .phone .screen { position: absolute; left: 23px; top: 23px; width: 390px; height: 894px; border-radius: 42px; overflow: hidden; background: #F5F2F8; }
+  .phone .bar { height: 50px; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; font-size: 17px; font-weight: 700; color: #1E1328; }
+  .phone .bar i { display: inline-block; width: 26px; height: 12px; border: 2px solid #1E1328; border-radius: 4px; position: relative; }
+  .phone .bar i::after { content: ""; position: absolute; left: 2px; top: 2px; right: 6px; bottom: 2px; background: #1E1328; border-radius: 1px; }
+  .phone iframe { display: block; width: 390px; height: 844px; border: 0; }
+
+  /* captions beside the phone: one block at a time, blocks stacked in the same cell so they crossfade */
+  .cap { position: absolute; left: 150px; top: 0; width: 900px; height: 1080px; display: grid; align-content: center; }
+  .cap .block { grid-area: 1 / 1; display: flex; flex-direction: column; gap: 22px; opacity: 0; transform: translateY(18px);
+    transition: opacity .28s ease-out, transform .32s ease-out; }
+  .cap .block.on { opacity: 1; transform: none; }
+  .cap .block.out { opacity: 0; transform: translateY(-14px); transition: opacity .18s ease-in, transform .22s ease-in; }
+  .cap .line { font-size: 78px; line-height: 1.04; font-weight: 800; font-stretch: 104%; letter-spacing: -.02em; }
+  .cap .line em { font-style: normal; color: #FFD67E; }
+
+  /* end card */
+  .end { position: absolute; inset: 0; opacity: 0; transition: opacity .5s; background: linear-gradient(#1D0F34, #2C1647 55%, #241238); }
+  .end.on { opacity: 1; }
+  .end .moon { position: absolute; width: 300px; height: 300px; border-radius: 50%; left: 62%; top: 16%;
+    background: radial-gradient(circle at 36% 30%, #FFD67E, #FDBD4C 58%, #EDA32C); box-shadow: 0 0 90px rgba(253, 189, 76, .38); }
+  .end .moon::before, .end .moon::after { content: ""; position: absolute; border-radius: 50%; background: rgba(206, 138, 28, .45); }
+  .end .moon::before { width: 52px; height: 52px; left: 24%; top: 58%; }
+  .end .moon::after { width: 32px; height: 32px; left: 62%; top: 28%; }
+  .end .cloud { position: absolute; left: -2%; width: 104%; height: 180px; fill: #7A55A8; opacity: .5; bottom: -20px; }
+  .end .cloud.front { fill: #A168B7; opacity: .85; bottom: -60px; }
+  .end .flyer { position: absolute; width: 260px; left: -20%; top: 12%; animation: flyby 7s linear forwards; }
+  .end .flyer img { display: block; width: 100%; animation: flybob 1.7s ease-in-out infinite alternate; }
+  @keyframes flyby { 0% { left: -18%; } 100% { left: 108%; } }
+  @keyframes flybob { from { transform: translateY(-10px) rotate(-3deg); } to { transform: translateY(10px) rotate(2deg); } }
+  .end .text { position: absolute; left: 0; right: 0; top: 50%; text-align: center; transform: translateY(-30%); }
+  .end .url { font-size: 76px; font-weight: 800; font-stretch: 104%; letter-spacing: -.02em; }
+  .end .url b { color: #FFD67E; font-weight: 800; }
+  .end .tag { margin-top: 24px; font-size: 44px; font-weight: 600; color: #C4A3FF; }
+  .end .brand { position: absolute; left: 0; right: 0; bottom: 70px; text-align: center; font-size: 30px; font-weight: 600; color: #A8A4B0; letter-spacing: .01em; }
+</style>
+<div id="stage">
+  <div class="stars" id="stars"></div>
+  <div class="title" id="title"><img src="app/icons/icon-512.png" alt=""><h1>Witch Card</h1></div>
+  <div class="cap" id="cap"></div>
+  <div class="phone" id="phone"><div class="screen"><div class="bar"><span>9:41</span><i></i></div><iframe id="app" allow="geolocation" title="Witch Card"></iframe></div></div>
+  <div class="end" id="end">
+    <div class="stars" id="stars2"></div>
+    <span class="moon"></span>
+    <svg class="cloud" viewBox="0 0 200 60" preserveAspectRatio="none"><path d="M0 60 L0 34 Q16 20 32 30 Q42 12 60 20 Q74 6 90 18 Q108 10 118 24 Q136 14 148 28 Q166 20 178 32 Q190 26 200 36 L200 60 Z"/></svg>
+    <div class="flyer" id="flyer"><img src="app/img/witch-fly.webp" alt=""></div>
+    <svg class="cloud front" viewBox="0 0 200 60" preserveAspectRatio="none"><path d="M0 60 L0 38 Q14 24 30 32 Q40 16 58 24 Q72 10 88 22 Q104 14 116 26 Q134 18 146 30 Q164 24 176 34 Q188 30 200 40 L200 60 Z"/></svg>
+    <div class="text"><div class="url">tompkinssoftwaresystems.com<b>/witch-card</b></div><div class="tag">Add it to your home screen. No account. No app store.</div></div>
+    <div class="brand">Tompkins Software Systems</div>
+  </div>
+</div>
+<script>
+  const $ = (id) => document.getElementById(id);
+  function stars(host, n) {
+    for (let i = 0; i < n; i++) {
+      const s = document.createElement('i');
+      s.style.left = (Math.random() * 100) + '%'; s.style.top = (Math.random() * 100) + '%';
+      s.style.animationDelay = (Math.random() * 2.4) + 's'; s.style.transform = 'scale(' + (.5 + Math.random()) + ')';
+      host.appendChild(s);
+    }
+  }
+  stars($('stars'), 40); stars($('stars2'), 60);
+  const stage = {
+    begin() { $('stage').classList.add('on'); },
+    title() { $('title').classList.add('on'); },
+    phone(src) { $('title').classList.remove('on'); const f = $('app'); if (src && f.src !== src) f.src = src; $('phone').classList.add('on'); },
+    // Show the line being said: the block before it fades out as this one fades in.
+    say(lines) {
+      const cap = $('cap');
+      cap.querySelectorAll('.block').forEach((b) => { b.classList.remove('on'); b.classList.add('out'); setTimeout(() => b.remove(), 260); });
+      const block = document.createElement('div'); block.className = 'block';
+      lines.forEach((t) => { const d = document.createElement('div'); d.className = 'line'; d.innerHTML = t; block.appendChild(d); });
+      cap.appendChild(block);
+      requestAnimationFrame(() => requestAnimationFrame(() => block.classList.add('on')));
+    },
+    clear() { $('cap').innerHTML = ''; },
+    end() {
+      $('end').classList.add('on'); $('phone').classList.remove('on'); $('cap').innerHTML = '';
+      // A fresh flyer, so the flight starts now rather than when the page loaded.
+      const old = $('flyer'), fresh = old.cloneNode(true); old.replaceWith(fresh);
+    },
+  };
+  window.stage = stage;
+</script>
