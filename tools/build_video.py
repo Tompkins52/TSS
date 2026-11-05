@@ -223,7 +223,40 @@ def main():
         "stop": end - skit_end + 0.8,
     }
     demo_len = (cuts[7] - skit_end) if has_outro else (end - skit_end)
-    print("demo beats:", json.dumps({k: round(v, 2) for k, v in beats.items()}))
+    # The words beside the phone appear as they are spoken and stay on their page. A sentence
+    # that starts with "!" begins a new page (the old one fades away); "|" marks a line break.
+    # Display words line up one to one with spoken words.
+    DISPLAY = {
+        "Open it at the register.": "!Open it|at the register.",
+        "It knows where you are, and pulls out the card that earns the most.": "It knows where you are,|and pulls out the card|that <em>earns</em> <em>the</em> <em>most</em>.",
+        "The rest of your wallet sits under it, ranked.": "The rest of your wallet|sits under it, ranked.",
+        "No ads.": "!No ads.",
+        "No sponsors.": "No sponsors.",
+        "Ninety-nine cents, once.": "<em>99</em> <em>cents</em>, once.",
+    }
+    words_path = os.path.join(A, "words.json")
+    demo_words = []
+    if os.path.exists(words_path):
+        with open(words_path) as f:
+            spoken = json.load(f)
+        for a, b, text in sent:
+            if text not in DISPLAY:
+                continue
+            shown = DISPLAY[text]
+            page = shown.startswith("!")
+            lines = shown.lstrip("!").split("|")
+            disp = [w for line in lines for w in line.split()]
+            firsts, k = set(), 0
+            for line in lines:
+                firsts.add(k)
+                k += len(line.split())
+            ws = [w for w in spoken if a - 0.01 <= w["start"] <= b + 0.01]
+            if len(disp) != len(ws):
+                raise SystemExit("display words for %r (%d) do not match the spoken words (%d)" % (text, len(disp), len(ws)))
+            for j, (w, d) in enumerate(zip(ws, disp)):
+                demo_words.append({"t": round(w["start"] + LEAD - skit_end, 3), "text": d, "block": j == 0 and page, "line": j in firsts})
+    beats["words"] = demo_words
+    print("demo beats:", json.dumps({k: round(v, 2) for k, v in beats.items() if not isinstance(v, list)}), "and %d words" % len(beats["words"]))
     print("length %.1fs: skit %.1fs, demo %.1fs, outro %.1fs" % (end, skit_end, demo_len, end - skit_end - demo_len))
 
     demo = args.demo
