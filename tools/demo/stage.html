@@ -30,14 +30,14 @@
   .phone .bar i::after { content: ""; position: absolute; left: 2px; top: 2px; right: 6px; bottom: 2px; background: #1E1328; border-radius: 1px; }
   .phone iframe { display: block; width: 390px; height: 844px; border: 0; }
 
-  /* captions beside the phone: one block at a time, blocks stacked in the same cell so they crossfade */
-  .cap { position: absolute; left: 150px; top: 0; width: 900px; height: 1080px; display: grid; align-content: center; }
-  .cap .block { grid-area: 1 / 1; display: flex; flex-direction: column; gap: 22px; opacity: 0; transform: translateY(18px);
-    transition: opacity .28s ease-out, transform .32s ease-out; }
-  .cap .block.on { opacity: 1; transform: none; }
-  .cap .block.out { opacity: 0; transform: translateY(-14px); transition: opacity .18s ease-in, transform .22s ease-in; }
-  .cap .line { font-size: 78px; line-height: 1.04; font-weight: 800; font-stretch: 104%; letter-spacing: -.02em; }
+  /* the words beside the phone: each fades in as it is spoken and stays on its page; a finished page drifts up and away slowly as the next begins */
+  .cap { position: absolute; left: 150px; top: 0; width: 960px; height: 1080px; display: grid; align-content: start; padding-top: 230px; box-sizing: border-box; }
+  .cap .block { grid-area: 1 / 1; display: flex; flex-direction: column; gap: 18px; opacity: 1; transition: opacity .85s ease, transform .85s ease; }
+  .cap .block.out { opacity: 0; transform: translateY(-70px); }
+  .cap .line { font-size: 72px; line-height: 1.04; font-weight: 800; font-stretch: 104%; letter-spacing: -.02em; white-space: nowrap; }
   .cap .line em { font-style: normal; color: #FFD67E; }
+  .cap .w { display: inline-block; opacity: 0; transform: translateY(10px); transition: opacity .35s ease-out, transform .4s ease-out; margin-right: .26em; }
+  .cap .w.on { opacity: 1; transform: none; }
 
   /* end card */
   .end { position: absolute; inset: 0; opacity: 0; transition: opacity .5s; background: linear-gradient(#1D0F34, #2C1647 55%, #241238); }
@@ -89,15 +89,21 @@
     begin() { $('stage').classList.add('on'); },
     title() { $('title').classList.add('on'); },
     phone(src) { $('title').classList.remove('on'); const f = $('app'); if (src && f.src !== src) f.src = src; $('phone').classList.add('on'); },
-    // Show the line being said: the block before it fades out as this one fades in.
-    say(lines) {
+    // One spoken word: starts a new page (the one before drifts away) or a new line when asked.
+    word(text, block, line) {
       const cap = $('cap');
-      cap.querySelectorAll('.block').forEach((b) => { b.classList.remove('on'); b.classList.add('out'); setTimeout(() => b.remove(), 260); });
-      const block = document.createElement('div'); block.className = 'block';
-      lines.forEach((t) => { const d = document.createElement('div'); d.className = 'line'; d.innerHTML = t; block.appendChild(d); });
-      cap.appendChild(block);
-      requestAnimationFrame(() => requestAnimationFrame(() => block.classList.add('on')));
+      let b = cap.querySelector('.block:not(.out)');
+      if (block || !b) {
+        cap.querySelectorAll('.block').forEach((o) => { o.classList.add('out'); setTimeout(() => o.remove(), 900); });
+        b = document.createElement('div'); b.className = 'block'; cap.appendChild(b);
+      }
+      let l = b.lastElementChild;
+      if (line || !l) { l = document.createElement('div'); l.className = 'line'; b.appendChild(l); }
+      const w = document.createElement('span'); w.className = 'w'; w.innerHTML = text; l.appendChild(w);
+      requestAnimationFrame(() => requestAnimationFrame(() => w.classList.add('on')));
     },
+    // A whole caption at once, for runs timed by hand.
+    say(lines) { lines.forEach((t, i) => t.split(' ').forEach((x, j) => stage.word(x, i === 0 && j === 0, j === 0))); },
     clear() { $('cap').innerHTML = ''; },
     end() {
       $('end').classList.add('on'); $('phone').classList.remove('on'); $('cap').innerHTML = '';

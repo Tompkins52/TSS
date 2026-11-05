@@ -8,7 +8,8 @@ the site screens use, standing in a grocery store so it opens with the right car
     python3 tools/record_demo.py                 # writes marketing/demo/demo.mp4
     python3 tools/record_demo.py --beats beats.json --out demo.mp4
 
-Beats are the second each caption lands; pass a JSON file to re-time them to the narration.
+Beats are the second each thing happens; tools/build_video.py writes them from the narration,
+including every word shown beside the phone and when it is spoken.
 """
 import argparse
 import functools
@@ -35,12 +36,13 @@ PLACES = {"elements": [{"type": "way", "center": {"lat": 42.0373, "lon": -88.281
 BEATS = {
     "title": 0.0,
     "open": 1.6,
-    "knows": 4.2,
-    "pulls": 6.6,
-    "ranked": 9.8,
-    "pledge": 13.0,
     "end": 16.6,
     "stop": 22.0,
+    # "words": one entry per word shown beside the phone, written by tools/build_video.py from the
+    # narration: {"t": seconds into the demo, "text": "word", "block": starts a new block, "line": starts a new line}
+    "words": [{"t": 1.6, "text": "Open", "block": True, "line": True}, {"t": 1.8, "text": "it", "block": False, "line": False},
+              {"t": 2.0, "text": "at", "block": False, "line": True}, {"t": 2.1, "text": "the", "block": False, "line": False},
+              {"t": 2.25, "text": "register.", "block": False, "line": False}],
 }
 
 
@@ -103,19 +105,13 @@ def main():
         at("title")
         page.evaluate("stage.begin(); stage.title()")
         at("open")
-        page.evaluate("stage.phone('app/index.html'); stage.say(['Open it', 'at the register.'])")
-        at("knows")
-        page.evaluate("stage.say(['It knows', 'where you are.'])")
-        try:
-            page.frame_locator("#app").locator(".where-chip.here").wait_for(timeout=6000)
-        except Exception as e:
-            print("store not found in time:", str(e).splitlines()[0][:80])
-        at("pulls")
-        page.evaluate("stage.say(['It pulls out the card', 'that <em>earns the most</em>.'])")
-        at("ranked")
-        page.evaluate("stage.say(['The rest of your wallet', 'sits under it, ranked.'])")
-        at("pledge")
-        page.evaluate("stage.say(['No ads.', 'No sponsors.', '<em>99 cents</em>, once.'])")
+        page.evaluate("stage.phone('app/index.html')")
+        # The words beside the phone, each as it is spoken.
+        for w in sorted(beats.get("words", []), key=lambda w: w["t"]):
+            wait = w["t"] - (time.time() - t0)
+            if wait > 0:
+                page.wait_for_timeout(int(wait * 1000))
+            page.evaluate("stage.word(%s, %s, %s)" % (json.dumps(w["text"]), "true" if w["block"] else "false", "true" if w["line"] else "false"))
         at("end")
         page.evaluate("stage.end()")
         at("stop")
