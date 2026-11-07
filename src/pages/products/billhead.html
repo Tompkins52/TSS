@@ -1,7 +1,7 @@
 <!--
 title: Billhead
 title_full: Billhead | Invoices from your phone, by Tompkins Software Systems
-description: Billhead makes invoices from your phone. Set up your company once, then make a simple or an advanced invoice by answering a few questions or by typing on the invoice itself. Jobs billed in stages, payments tracked, a locked PDF, and nothing leaves your device. No subscription; free while in testing.
+description: Billhead makes invoices from your phone and sends them to your customer. Set up your company once, then make a simple or an advanced invoice by answering a few questions or by typing on the invoice itself. Jobs billed in stages, payments tracked, a locked PDF, and nothing leaves your device. No subscription; any invoice under $100 is free, and everything is free during launch.
 nav: tools
 priority: 0.9
 styles: assets/css/product.css
@@ -16,7 +16,7 @@ scripts: assets/js/product.js
       <p class="lede">Invoices from your phone. Set up your company once, then make each invoice by answering a few questions or by typing straight onto it. Jobs billed in stages keep their own running totals, and the PDF goes out locked. Nothing leaves your device.</p>
       <div class="product-hero-meta">
         <span class="badge badge-ok">Web app: available</span>
-        <span class="badge badge-brass">Free while in testing</span>
+        <span class="badge badge-brass">Free during launch</span>
         <span class="badge badge-dark">No account</span>
         <span class="badge badge-dark">No subscription, no ads</span>
       </div>
@@ -39,17 +39,18 @@ scripts: assets/js/product.js
       <div class="demo-copy">
         <span class="eyebrow">What it will cost you</span>
         <h2>Pay for invoices, not for a subscription.</h2>
-        <p>Every invoice is free while Billhead is in testing. After that, your first invoice is free, then you pay once for each invoice when you download it: 99 cents for a simple invoice, $1.99 for an advanced one. Packs never expire, and a year of unlimited invoices is $99, paid once, with no auto-renew. Move the sliders to see the cheapest way to pay at your pace.</p>
+        <p>Any invoice under $100 is free, whichever kind, as many as you like. Above that you pay once for each invoice when you download or send it: 99 cents for a simple invoice, $1.99 for an advanced one, and your first one is free. Packs never expire, and a year of unlimited invoices is $99, paid once, with no auto-renew. Every invoice is free during launch. Move the sliders to see the cheapest way to pay at your pace.</p>
         <p class="bh-never">Billhead never takes a percentage of what your customer pays you.</p>
         <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}billhead/">Make an invoice now, free</a></div>
       </div>
       <div class="panel">
-        <div class="panel-head"><span>A year of invoicing</span><span class="muted">Prices after testing</span></div>
+        <div class="panel-head"><span>A year of invoicing</span><span class="muted">Prices after launch</span></div>
         <div class="panel-body bh-grid">
           <div class="pm-controls">
             <div><label for="bh-n">Invoices a month <span class="val" data-bh-n-v></span></label><input class="range" id="bh-n" type="range" min="1" max="60" step="1" value="6" data-bh-n></div>
             <div><label for="bh-adv">Advanced invoices <span class="val" data-bh-adv-v></span></label><input class="range" id="bh-adv" type="range" min="0" max="100" step="5" value="30" data-bh-adv></div>
-            <p class="bh-what">An invoice is advanced when it has a PO or a job site, progress billing on a project, retainage, freight, late fee terms, or your signature.</p>
+            <div><label for="bh-small">Under $100 <span class="val" data-bh-small-v></span></label><input class="range" id="bh-small" type="range" min="0" max="100" step="5" value="25" data-bh-small></div>
+            <p class="bh-what">An invoice under $100 is free and does not count. An invoice is advanced when it has a PO or a job site, progress billing on a project, retainage, freight, late fee terms, or your signature.</p>
           </div>
           <div class="bh-out">
             <ul class="bh-opts" data-bh-opts></ul>
@@ -82,10 +83,12 @@ scripts: assets/js/product.js
         <h3>Simple and advanced</h3>
         <p><strong>Simple:</strong> your name or logo and details, the customer, an invoice number, the date, terms, and the due date, line items with a quantity and a rate, one sales tax, a discount, a deposit received, payment instructions with a pay link, and a note. One page.</p>
         <p><strong>Advanced, everything in simple and:</strong> the customer's PO and your reference, an attention line, the job site or ship-to address, the service period, a units column, tax by line, freight, retainage, late fee or early-payment terms, progress billing on a project (contract amount, previously billed, this invoice, billed to date, remaining), your drawn signature, a line for the customer to sign, your tax ID or a VAT or GST number, another currency, and terms and conditions. A simple invoice can switch to advanced at any time; adding an advanced part asks first.</p>
+        <h3>Sending it</h3>
+        <p>Send to customer opens your email app with the PDF attached and the customer's address, the subject, and a short message already filled in: the invoice number, the amount due, the due date, the PO, how to pay. You press Send, and it goes from your own address; nothing passes through us. On a phone, Share PDF puts the invoice into Messages, Drive, or any other app, and Download or Save to phone keeps a copy. Each send is noted on the invoice.</p>
         <h3>The lock and the signature</h3>
         <p>The PDF opens in any viewer without a password, prints, and lets its text be copied, and it carries a permission that tells viewers not to allow edits. Acrobat, Preview, and the major browsers honor it. Software made to strip PDF permissions can still remove it, which is why every page also carries the Invoice ID: if a copy comes back with different numbers, the ID tells you which version you actually sent. A drawn signature prints above a line with your name, your title, and the date it was signed in the app.</p>
         <h3>Pricing, plainly</h3>
-        <p>Free while in testing. After that, your first invoice is free; then 99 cents for a simple invoice and $1.99 for an advanced one, paid once when you download it. Packs of 10 simple ($7.99), 10 advanced ($14.99), or 50 advanced ($49) never expire, and a year of unlimited invoices is $99, paid once, with no auto-renew. Editing or downloading again an invoice you have paid for is free. There is no account to keep and nothing renews on its own.</p>
+        <p>Any invoice under $100 is free, whichever kind, forever. Above that, your first invoice is free; then 99 cents for a simple invoice and $1.99 for an advanced one, paid once when you download or send it. Packs of 10 simple ($7.99), 10 advanced ($14.99), or 50 advanced ($49) never expire, and a year of unlimited invoices is $99, paid once, with no auto-renew. Editing or sending again an invoice you have paid for is free. There is no account to keep and nothing renews on its own. During launch, every invoice is free.</p>
         <h3>Where your invoices live</h3>
         <p>On your phone or computer, in the browser's own storage. There is no account and no server. A backup file under More holds your company, customers, projects, and invoices; keep one somewhere safe and use it to move to a new phone. More also saves every invoice as a CSV file for your accountant.</p>
         <h3>Coming from TSS Invoice Creator</h3>
@@ -112,7 +115,7 @@ scripts: assets/js/product.js
   <div class="wrap">
     <dl>
       <div><dt>Status</dt><dd>Web app available on any phone or computer; App Store and Google Play versions later</dd></div>
-      <div><dt>Price</dt><dd>Free while in testing. Then 99 cents an invoice, $1.99 advanced, packs, or $99 a year. No subscription and no ads, ever.</dd></div>
+      <div><dt>Price</dt><dd>Under $100: free. Then 99 cents an invoice, $1.99 advanced, packs, or $99 a year. Free during launch. No subscription and no ads, ever.</dd></div>
       <div><dt>Data lives</dt><dd>On your device. No account, no server.</dd></div>
       <div><dt>Works</dt><dd>In any modern browser, from the home screen, and offline once loaded</dd></div>
       <div><dt>Support and privacy</dt><dd><a href="{{root}}support.html#billhead">Support</a>, <a href="{{root}}privacy.html#billhead">privacy policy</a></dd></div>
@@ -130,7 +133,7 @@ scripts: assets/js/product.js
   <div class="wrap">
     <div>
       <h2>Send the next invoice from your phone.</h2>
-      <p>Open Billhead on any phone or computer and set up your company in about two minutes. It is free while in testing; subscribe to the newsletter and we will say before that changes.</p>
+      <p>Open Billhead on any phone or computer and set up your company in about two minutes. It is free during launch, and any invoice under $100 stays free; subscribe to the newsletter and we will say before the rest changes.</p>
     </div>
     <div class="actions">
       <a class="btn btn-brass" href="{{root}}billhead/">Open Billhead</a>

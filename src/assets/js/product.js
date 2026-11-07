@@ -313,12 +313,13 @@
   }
 
   /* ---------- Billhead: what a year of invoicing costs, the cheapest way ---------- */
-  /* Prices after testing, as the app will charge them: singles, packs that never expire, or a year pass. */
-  var BH = { simple: 0.99, advanced: 1.99, simplePacks: [{ n: 10, price: 7.99 }], advancedPacks: [{ n: 50, price: 49 }, { n: 10, price: 14.99 }], pass: 99 };
+  /* Prices after launch, as the app will charge them: singles, packs that never expire, or a year pass. Any invoice
+     under freeUnder is free and never counts. Must match M.PRICING in the app. */
+  var BH = { simple: 0.99, advanced: 1.99, freeUnder: 100, simplePacks: [{ n: 10, price: 7.99 }], advancedPacks: [{ n: 50, price: 49 }, { n: 10, price: 14.99 }], pass: 99 };
   var bh = document.getElementById("demo-bh");
   if (bh) {
-    var bhN = bh.querySelector("[data-bh-n]"), bhAdv = bh.querySelector("[data-bh-adv]");
-    wireRange(bhN, bhUpdate); wireRange(bhAdv, bhUpdate);
+    var bhN = bh.querySelector("[data-bh-n]"), bhAdv = bh.querySelector("[data-bh-adv]"), bhSmall = bh.querySelector("[data-bh-small]");
+    wireRange(bhN, bhUpdate); wireRange(bhAdv, bhUpdate); wireRange(bhSmall, bhUpdate);
     bhUpdate();
   }
   var from = document.querySelector("[data-bh-from]");
@@ -337,10 +338,12 @@
     return Math.round(best * 100) / 100;
   }
   function bhUpdate() {
-    var n = Number(bhN.value), share = Number(bhAdv.value) / 100, year = n * 12;
+    var n = Number(bhN.value), share = Number(bhAdv.value) / 100, small = Number(bhSmall.value) / 100, all = n * 12;
+    var free = Math.round(all * small), year = all - free;
     var adv = Math.round(year * share), simple = year - adv;
     bh.querySelector("[data-bh-n-v]").textContent = n + (n === 1 ? " invoice" : " invoices");
     bh.querySelector("[data-bh-adv-v]").textContent = Math.round(share * 100) + " percent";
+    bh.querySelector("[data-bh-small-v]").textContent = Math.round(small * 100) + " percent";
     var singles = Math.round((simple * BH.simple + adv * BH.advanced) * 100) / 100;
     var packs = Math.round((bhCheapest(simple, BH.simple, BH.simplePacks) + bhCheapest(adv, BH.advanced, BH.advancedPacks)) * 100) / 100;
     var opts = [
@@ -353,7 +356,9 @@
     list.innerHTML = opts.map(function (o) {
       return '<li class="' + (o === best ? "best" : "") + '"><span>' + esc(o.name) + "</span><b>" + dollars(o.total) + " a year</b><small>" + esc(o.how) + "</small></li>";
     }).join("");
-    bh.querySelector("[data-bh-best]").textContent = "At " + n + (n === 1 ? " invoice" : " invoices") + " a month, " + best.say + " the cheapest: " +
+    if (!year) { bh.querySelector("[data-bh-best]").textContent = "Every one of your " + all + " invoices a year is under $100, so Billhead costs you nothing."; return; }
+    var lead = "At " + n + (n === 1 ? " invoice" : " invoices") + " a month, " + (free ? free + " a year " + (free === 1 ? "is" : "are") + " under $100, so free; for the other " + year + ", " : "");
+    bh.querySelector("[data-bh-best]").textContent = lead + best.say + " the cheapest: " +
       dollars(best.total) + " a year, about " + dollars(best.total / 12) + " a month, or " + dollars(best.total / year) + " an invoice. Your first invoice is free on top of that.";
   }
 
