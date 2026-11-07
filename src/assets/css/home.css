@@ -612,7 +612,7 @@ body.home .site-nav li.nav-cta .btn-primary:hover { background: var(--brass-300)
 .door-stage { position: relative; height: 150px; overflow: hidden; border-bottom: 1px solid var(--rule-on-dark); }
 .door-stage img { position: absolute; display: block; height: auto; box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45); transition: translate 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), rotate 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); }
 .door-stage .dm { width: 44px; border-radius: 10px; box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35); z-index: 2; }
-/* Our products: the two families side by side, navy and night */
+/* Our products: a card per family, side by side; the cards wrap as families are added */
 .door-stage.ours { background: linear-gradient(90deg, #1c3f7a 0 50%, #101a2e 50% 100%); }
 .door-stage.ours .ph1, .door-stage.ours .ph2 { width: 27%; top: 30px; border-radius: 12px; border: 3px solid #05090f; }
 .door-stage.ours .ph1 { left: 14%; rotate: -4deg; }

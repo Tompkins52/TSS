@@ -10,12 +10,12 @@ Working draft. The site is complete except for the items under "Before going liv
 src/
   pages/          one file per page: a metadata comment, then the page body
   pages/products/ one page per product
-  pages/upfront/, pages/squared-away/  the two product family pages
+  pages/upfront/, pages/squared-away/  the product family pages (one folder per family)
   pages/products.html           Our products (the families, plus Painless PM and Witch Card)
   pages/customer-products.html  Customer products (IntelliSafe, Phantom Soldier) and how a build works
   partials/       head.html (doctype, head, header, nav) and footer.html
   assets/         css, js, fonts, img (img/products holds the product screens,
-                  img/families the two family marks; css/family.css the family styles)
+                  img/families the family marks; css/family.css the family styles)
   static/         files copied to the site root as is (manifest, .nojekyll)
 build.py          assembles src/ into dist/ and writes sitemap.xml and robots.txt
 tools/refresh_screens.py      captures the product screens from the live products
@@ -40,7 +40,7 @@ Inside a page, write `{{root}}` in front of any link to another page or asset (`
 
 ## The home page
 
-The home page opens by saying what the company does: we make our own apps, and we build software for partners under their name (`.intro`, with two doors to Our products and Customer products). Then 01 Our products (the two family cards and "Also from TSS"), 02 Customer products, 03 How a build goes, 04 Try it (the sample apps below), the veteran-owned band, Latest, and the newsletter. It lives in three files: `src/pages/index.html` (markup), `src/assets/css/home.css` (styles), and `src/assets/js/home.js` (behavior). Nothing is sent anywhere; everything runs in the visitor's browser and is gone when the tab closes.
+The home page opens by saying what the company does: we make our own apps, and we build software for partners under their name (`.intro`, with two doors to Our products and Customer products). Then 01 Our products (a card for each family, and "Also from TSS"), 02 Customer products, 03 How a build goes, 04 Try it (the sample apps below), the veteran-owned band, Latest, and the newsletter. It lives in three files: `src/pages/index.html` (markup), `src/assets/css/home.css` (styles), and `src/assets/js/home.js` (behavior). Nothing is sent anywhere; everything runs in the visitor's browser and is gone when the tab closes.
 
 - **Eleven sample apps** (`#try`). The visitor picks who they are and gets a working sample app in a device frame: work orders (public works), a permit desk (local government), reservations with a conflict check (park district), an estimate builder (small business), pre-trip inspections (fleet and trucking), resident requests, dues, and notices (property and HOAs), volunteer shifts (nonprofit), members, renewals, and events (membership organization), a season scheduler with standings (sports league), a course player with a quiz and a certificate (learning platform), and a licensing console (my own idea). Each app is an object in `home.js` with `views`, `init` (the sample data), `render`, `act` (clicks and form submits), and optionally `live` (inputs that update numbers without redrawing). The shell at the bottom of the file draws the top bar, the side navigation or phone tabs, and the main area, and wires events by delegation. Exports are real CSV and SVG downloads built in the browser.
 - **Each app has its own look.** Every audience in `AUD` carries a `look` (palette, font, layout, icon) that the app starts in, so switching apps changes the whole feel. The four layouts in `LAYOUTS` change where the navigation lives and the density and corner radius through CSS variables on `.screen[data-layout]`. On the desktop they are a sidebar (Classic), tabs across the top (Tabs), an icon rail (Compact), and pills (Friendly); on the phone the same four become bottom tabs, a scrolling strip under the title, a menu button with a slide-in drawer, and pills, so the phone has four looks of its own (`data-shell` on `.screen` names the shell actually drawn). Eleven palettes, one per app, in `PALETTES`.
@@ -71,7 +71,7 @@ Each product page starts with the real screens (`src/assets/img/products/`, WebP
 
 ## Product families
 
-The apps are published in families, each with its own name, mark, colors, and typeface; TSS is the maker of all of them, and every app keeps its own name and look.
+The apps are published in families, and more families will be added, so site copy never gives a count of them ("in families", "our families"). Each family is its own brand, with its own name, mark, colors, and typeface; TSS is the maker of all of them. Every app keeps its own name, and its logo is drawn from its family's mark: the family's tile, colors, and drawing style, with the app's own symbol.
 
 - **Upfront for Small Business** ("Upfront" after the first mention): apps for running a small business with the price on the tag: no subscription, no ads, never a cut of the customer's money, records that belong to the business. Billhead's navy and paper with a price-tag red (`#e4572e`), IBM Plex Sans. Page: `src/pages/upfront/index.html` (tompkinssoftwaresystems.com/upfront/). In it: Billhead. Planned: fleet tracking, timesheets.
 - **Squared Away Training** ("Squared Away" after the first mention): study apps for licenses, certifications, and entrance exams on one study engine. Part 107 Prep's night, cream, and amber, Barlow. Page: `src/pages/squared-away/index.html` (tompkinssoftwaresystems.com/squared-away/). In it: Part 107 Prep. Planned: PMP exam prep, CDL knowledge test prep, ASVAB prep.
@@ -80,6 +80,8 @@ The apps are published in families, each with its own name, mark, colors, and ty
 The family colors and type are CSS variables on `.fam-up` and `.fam-sq` at the top of `src/assets/css/family.css` (`--f-main`, `--f-deep`, `--f-accent`, `--f-font`, and so on); a family page puts the class on `<body>` through `body_class`, and the cards and blocks carry it themselves. The marks are `src/assets/img/families/upfront-mark.svg` and `squared-away-mark.svg`, also offered for download on the brand page. IBM Plex Sans and Barlow come from `assets/fonts/picker/`.
 
 To add an app to a family: its card goes in the family's block on `products.html` (`.fam-block`), in the family card on the home page (`.fam-card`, the `.fam-apps` list and the phones), and under "In the family" on the family page; its product page gets the `.fam-tag` link in the hero (in place of the "Product" eyebrow), a Family row in the facts strip, and `nav: products`; and the footer lists it under the family. A planned app is a dashed card (`.planned-card` in a `.planned-row` under a "Planned" heading) with a Planned badge until it is in testing; each family block ends with one newsletter sign-up (`.fam-signup`). The home page's Squared Away card also shows the next planned app as a drawn phone (`.phone-planned`). Store listings for a family's apps end with the family line, for example "Billhead is part of Upfront for Small Business, small business apps from Tompkins Software Systems with the price on the tag: tompkinssoftwaresystems.com/upfront".
+
+To add a family: give it a class with its own tokens at the top of `src/assets/css/family.css` (copy `.fam-up` and change the values), its mark in `src/assets/img/families/`, and a page in its own folder (`src/pages/<name>/index.html`, with `nav: products`, `styles: home.css, family.css`, and its class in `body_class`). Then add a block on `products.html` (a `.fam-block` with its own `.fam-signup`) and a link in the jump row at the top (`.fam-jump`), a card on the home page (`.fam-card` inside `.fam-duo`; the cards wrap to as many columns as fit), a sheet on the brand page (`.fam-sheet`), and a heading with its apps in the footer's Our products column. Then add its apps as above.
 
 The top navigation is Our products (`nav: products`), Customer products (`nav: customer`, also used by the Who we work with page), About, Updates, Contact, and the newsletter button; the two products pages share a pair of tabs at the top (`.ptabs`). The full navigation shows from 880 pixels up; narrower screens use the menu button. The sample apps are still at `index.html#try`.
 

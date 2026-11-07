@@ -2,7 +2,7 @@
    Tompkins Software Systems makes every app; each family has its own name, mark,
    colors, and type, and every app in it keeps its own name and look.
    Loaded after site.css (and home.css where the product cards are used) on the
-   home page, the products page, the two family pages, and the brand page. */
+   home page, the products page, the family pages, and the brand page. */
 
 @font-face { font-family: "IBM Plex Sans"; src: url("../fonts/picker/ibmplexsans-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
 @font-face { font-family: "IBM Plex Sans"; src: url("../fonts/picker/ibmplexsans-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
@@ -77,7 +77,7 @@ a.fam-lock:hover .fam-mark { transform: rotate(-6deg) scale(1.06); }
 
 /* ---------- The products page and the home page: a family block ---------- */
 .fam-duo { display: grid; gap: 1.5rem; }
-@media (min-width: 880px) { .fam-duo { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem; } }
+@media (min-width: 880px) { .fam-duo { grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap: 1.75rem; } }
 
 .fam-card, .fam-block { position: relative; border-radius: 14px; scroll-margin-top: 90px; }
 .fam-card { display: grid; gap: 1.1rem; align-content: start; padding: 1.35rem; }
