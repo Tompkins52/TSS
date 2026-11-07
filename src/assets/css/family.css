@@ -1,0 +1,319 @@
+/* Product families: Upfront for Small Business and Squared Away Training.
+   Tompkins Software Systems makes every app; each family has its own name, mark,
+   colors, and type, and every app in it keeps its own name and look.
+   Loaded after site.css (and home.css where the product cards are used) on the
+   home page, the products page, the two family pages, and the brand page. */
+
+@font-face { font-family: "IBM Plex Sans"; src: url("../fonts/picker/ibmplexsans-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "IBM Plex Sans"; src: url("../fonts/picker/ibmplexsans-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Barlow"; src: url("../fonts/picker/barlow-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Barlow"; src: url("../fonts/picker/barlow-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+
+/* ---------- Family tokens ---------- */
+/* Upfront: Billhead's navy on cool paper, with the red-orange of a price tag. */
+.fam-up {
+  --f-deep: #122a52;
+  --f-main: #1c3f7a;
+  --f-glow: #2f5ea8;
+  --f-paper: #f3f5f8;
+  --f-line: #d5dce7;
+  --f-ink: #14213d;
+  --f-text: #3d4a63;
+  --f-accent: #e4572e;
+  --f-accent-ink: #b83f1e;
+  --f-accent-on: #ff8a63;
+  --f-on: #f3f5f8;
+  --f-muted-on: #b8c4d9;
+  --f-rule-on: rgba(243, 245, 248, 0.18);
+  --f-font: "IBM Plex Sans", var(--font-body);
+}
+/* Squared Away: Part 107 Prep's night sky, cream, and signal amber. */
+.fam-sq {
+  --f-deep: #0a1220;
+  --f-main: #101a2e;
+  --f-glow: #23324f;
+  --f-paper: #f6f0e5;
+  --f-line: #e6dccb;
+  --f-ink: #101a2e;
+  --f-text: #3b4354;
+  --f-accent: #ffb020;
+  --f-accent-ink: #7a4e00;
+  --f-accent-on: #ffc65a;
+  --f-on: #f4ebdc;
+  --f-muted-on: #aeb6c6;
+  --f-rule-on: rgba(244, 235, 220, 0.16);
+  --f-font: "Barlow", var(--font-body);
+}
+
+/* ---------- The lockup: mark, name, descriptor ---------- */
+.fam-lock { display: inline-flex; align-items: center; gap: 0.7rem; text-decoration: none; color: inherit; }
+.fam-mark { display: block; flex: none; width: 40px; height: 40px; border-radius: 9px; }
+.fam-words { display: flex; flex-direction: column; line-height: 1; }
+.fam-name { font-family: var(--f-font); font-weight: 600; font-size: 1.5rem; letter-spacing: -0.01em; }
+.fam-desc { font-family: var(--f-font); font-weight: 600; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; margin-top: 0.32rem; color: var(--f-accent-ink); }
+.fhero .fam-desc, .fam-card.fam-sq .fam-desc, .fam-block.fam-sq .fam-desc { color: var(--f-accent-on); }
+.fam-card.fam-sq .fam-desc, .fam-block.fam-sq .fam-desc { color: var(--f-accent); }
+a.fam-lock:hover .fam-name { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.18em; }
+a.fam-lock .fam-mark { transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1); }
+a.fam-lock:hover .fam-mark { transform: rotate(-6deg) scale(1.06); }
+.fam-lock.big { gap: 1rem; }
+.fam-lock.big .fam-mark { width: 64px; height: 64px; border-radius: 14px; box-shadow: 0 10px 26px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.12); }
+.fam-lock.big .fam-name { font-size: clamp(2.5rem, 1.6rem + 3.4vw, 3.7rem); letter-spacing: -0.02em; }
+.fam-lock.big .fam-desc { font-size: clamp(0.8rem, 0.7rem + 0.4vw, 0.98rem); margin-top: 0.5rem; }
+
+/* Buttons in a family's colors (scoped so the site header keeps the company's) */
+.btn-fam { background: var(--f-main); color: #fff; border-color: var(--f-main); }
+.btn-fam:hover { background: var(--f-deep); border-color: var(--f-deep); color: #fff; }
+.btn-fam-outline { background: transparent; color: var(--f-main); border-color: var(--f-main); }
+.btn-fam-outline:hover { background: var(--f-paper); color: var(--f-deep); }
+.fam-sq .btn-fam { background: var(--f-accent); color: var(--f-ink); border-color: var(--f-accent); }
+.fam-sq .btn-fam:hover { background: var(--f-accent-on); border-color: var(--f-accent-on); color: var(--f-ink); }
+.fam-card.fam-sq .btn-fam-outline, .fam-block.fam-sq .btn-fam-outline { color: var(--f-on); border-color: rgba(244, 235, 220, 0.45); }
+.fam-card.fam-sq .btn-fam-outline:hover, .fam-block.fam-sq .btn-fam-outline:hover { background: rgba(244, 235, 220, 0.1); color: #fff; border-color: #fff; }
+.btn-paper { background: var(--f-on); color: var(--f-deep); border-color: var(--f-on); }
+.btn-paper:hover { background: #fff; color: var(--f-deep); border-color: #fff; box-shadow: 0 0 0 3px var(--f-accent), 0 8px 18px rgba(0, 0, 0, 0.2); }
+
+.badge-plan { background: transparent; border: 1px dashed currentColor; color: var(--f-accent-ink, var(--brass-700)); }
+
+/* ---------- The products page and the home page: a family block ---------- */
+.fam-duo { display: grid; gap: 1.5rem; }
+@media (min-width: 880px) { .fam-duo { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem; } }
+
+.fam-card, .fam-block { position: relative; border-radius: 14px; scroll-margin-top: 90px; }
+.fam-card { display: grid; gap: 1.1rem; align-content: start; padding: 1.35rem; }
+.fam-block { margin: 0 0 2.5rem; padding: 1.25rem; }
+@media (min-width: 880px) { .fam-card { padding: 1.6rem 1.75rem 1.75rem; } .fam-block { padding: 1.75rem 2rem 2.25rem; margin-bottom: 3rem; } }
+
+/* Upfront sits light, like a sheet of invoice paper with the navy rule across the top. */
+.fam-card.fam-up, .fam-block.fam-up { background: var(--surface); color: var(--f-ink); border: 1px solid var(--f-line); border-top: 4px solid var(--f-main); box-shadow: 0 16px 40px rgba(18, 42, 82, 0.1); }
+.fam-block.fam-up { background: var(--f-paper); }
+/* Squared Away sits dark, like the study site at night, with the amber rule. */
+.fam-card.fam-sq, .fam-block.fam-sq { background: linear-gradient(180deg, var(--f-main), var(--f-deep)); color: var(--f-on); border: 1px solid var(--f-deep); border-top: 4px solid var(--f-accent); box-shadow: 0 16px 40px rgba(10, 18, 32, 0.28); }
+.fam-card.fam-sq::before, .fam-block.fam-sq::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(244, 235, 220, 0.035) 0 1px, transparent 1px 28px), repeating-linear-gradient(90deg, rgba(244, 235, 220, 0.035) 0 1px, transparent 1px 28px); }
+.fam-card > *, .fam-block > * { position: relative; }
+
+.fam-card-head p { margin: 0.8rem 0 0; max-width: 46ch; color: var(--f-text); }
+.fam-sq .fam-card-head p { color: var(--f-muted-on); }
+.fam-card .actions { margin-top: 0.2rem; }
+
+/* The stage of phones inside a family card uses the family's own night or navy */
+.fam-up .phones { background: radial-gradient(90% 85% at 50% 108%, var(--f-glow) 0%, var(--f-main) 55%, var(--f-deep) 100%); }
+.fam-up .phones::before { background: radial-gradient(closest-side, rgba(228, 87, 46, 0.24), transparent); }
+.fam-sq .phones { background: radial-gradient(90% 85% at 50% 108%, var(--f-glow) 0%, #141f36 55%, var(--f-deep) 100%); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--f-rule-on); }
+.fam-sq .phones::before { background: radial-gradient(closest-side, rgba(255, 176, 32, 0.2), transparent); }
+.fam-card .phones { aspect-ratio: 16 / 9; }
+.fam-card .phones img, .fam-card .phones .phone-planned { width: 24%; }
+.fam-card:not(.seen) .phones img, .fam-card:not(.seen) .phones .phone-planned { translate: 0 45%; }
+.fam-up .phones:hover, .fam-up .shot:hover { box-shadow: 0 20px 44px rgba(18, 42, 82, 0.24), 0 0 0 2px var(--f-accent); }
+.fam-sq .phones:hover, .fam-sq .shot:hover { box-shadow: 0 20px 44px rgba(0, 0, 0, 0.35), 0 0 0 2px var(--f-accent); }
+
+/* A phone that does not exist yet: drawn, dashed, and labeled Planned */
+.phone-planned { position: absolute; display: grid; place-content: center; justify-items: center; gap: 0.35rem; aspect-ratio: 390 / 844; padding: 0.5rem; text-align: center; border-radius: 14px; border: 2px dashed rgba(244, 235, 220, 0.45); background: repeating-linear-gradient(0deg, rgba(244, 235, 220, 0.06) 0 1px, transparent 1px 14px), repeating-linear-gradient(90deg, rgba(244, 235, 220, 0.06) 0 1px, transparent 1px 14px), #0e1729; color: #f4ebdc; transition: translate 0.9s cubic-bezier(0.2, 0.7, 0.2, 1), rotate 0.9s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.phone-planned img { position: static; width: 34%; border: 0; border-radius: 22%; box-shadow: none; background: none; translate: none; rotate: none; }
+.phone-planned b { font-family: "Barlow", var(--font-body); font-weight: 600; font-size: clamp(0.62rem, 0.45rem + 0.5vw, 0.9rem); line-height: 1.1; }
+.phone-planned span { font-size: clamp(0.5rem, 0.4rem + 0.3vw, 0.66rem); font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #ffb020; }
+.phones .phone-planned.p3 { right: 10%; top: 21%; rotate: 6deg; transition-delay: 0.16s; }
+@media (max-width: 560px) { .phones .phone-planned.p3 { right: 6%; } }
+.phones:hover .phone-planned.p3 { rotate: 8deg; }
+
+/* The apps in a family, as a short list */
+.fam-apps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.fam-apps li { margin: 0; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.7rem 0.85rem; border-radius: var(--radius); border: 1px solid var(--f-line); background: var(--f-paper); }
+.fam-sq .fam-apps li { border-color: var(--f-rule-on); background: rgba(244, 235, 220, 0.05); }
+.fam-apps a { display: grid; gap: 0.12rem; min-width: 0; color: inherit; text-decoration: none; }
+.fam-apps strong { font-family: var(--f-font); font-size: 1.08rem; }
+.fam-apps a span { font-size: 0.9rem; color: var(--f-text); }
+.fam-sq .fam-apps a span { color: var(--f-muted-on); }
+.fam-apps a:hover strong { text-decoration: underline; text-underline-offset: 0.15em; }
+.fam-apps .badge { flex: none; }
+.fam-sq .badge-plan { color: var(--f-accent); }
+@media (max-width: 420px) { .fam-apps li { flex-direction: column; align-items: flex-start; } }
+
+/* The price tag, in one line, on Upfront's card */
+.fam-tagline { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0; }
+.fam-tagline span { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.22rem 0.65rem; border: 1px dashed #b9c4d6; border-radius: 4px; font-family: var(--f-font); font-size: 0.86rem; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--f-ink); background: #fff; }
+.fam-tagline span::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--f-accent); }
+
+/* The heading bar of a family block on the products page */
+.fam-bar { display: grid; gap: 0.7rem; padding-bottom: 1.25rem; margin-bottom: 1.6rem; border-bottom: 1px solid var(--f-line); }
+.fam-sq .fam-bar { border-bottom-color: var(--f-rule-on); }
+.fam-bar p { margin: 0; max-width: 58ch; color: var(--f-text); }
+.fam-sq .fam-bar p { color: var(--f-muted-on); }
+.fam-bar .fam-more { font-weight: 600; white-space: nowrap; color: var(--f-main); }
+.fam-sq .fam-bar .fam-more { color: var(--f-accent); }
+.fam-bar .fam-more:hover { color: var(--f-accent-ink); }
+.fam-sq .fam-bar .fam-more:hover { color: #fff; }
+@media (min-width: 880px) { .fam-bar { grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 2rem; } }
+.fam-block .prod-app { margin-top: 0; }
+.fam-block .built-grid { margin: 0; }
+
+/* Product cards inside a family block take the family's colors */
+.fam-block .shot::after, .fam-card .shot::after { background: var(--f-deep); }
+.fam-block.fam-up .btn-primary, .fam-card.fam-up .btn-primary { background: var(--f-main); border-color: var(--f-main); }
+.fam-block.fam-up .btn-primary:hover { background: var(--f-deep); border-color: var(--f-deep); }
+.fam-block.fam-up .btn-outline { color: var(--f-main); border-color: var(--f-main); }
+.fam-block.fam-up .btn-outline:hover { background: #fff; color: var(--f-deep); }
+.fam-block.fam-up .prod-copy h3 a:hover { color: var(--f-main); }
+.fam-block.fam-sq .prod-copy h3, .fam-block.fam-sq .prod-copy h3 a, .fam-block.fam-sq .prod-copy strong { color: var(--f-on); }
+.fam-block.fam-sq .prod-copy h3 a:hover { color: var(--f-accent); }
+.fam-block.fam-sq .prod-copy p { color: var(--f-muted-on); }
+.fam-block.fam-sq .btn-primary { background: var(--f-accent); color: var(--f-ink); border-color: var(--f-accent); }
+.fam-block.fam-sq .btn-primary:hover { background: var(--f-accent-on); border-color: var(--f-accent-on); color: var(--f-ink); }
+.fam-block.fam-sq .btn-outline { color: var(--f-on); border-color: rgba(244, 235, 220, 0.45); }
+.fam-block.fam-sq .btn-outline:hover { background: rgba(244, 235, 220, 0.1); color: #fff; border-color: #fff; }
+
+.fam-block .prod-copy h3 { font-family: var(--f-font); letter-spacing: -0.01em; }
+.fam-block.fam-sq .shot:not(.planned) { box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(244, 235, 220, 0.2); }
+
+/* A planned product's card: a drawn plan where the screenshot will go */
+.shot.planned { display: grid; place-content: center; justify-items: center; gap: 0.5rem; aspect-ratio: 1100 / 687; padding: 1rem; text-align: center; color: #f4ebdc; background: repeating-linear-gradient(0deg, rgba(244, 235, 220, 0.07) 0 1px, transparent 1px 22px), repeating-linear-gradient(90deg, rgba(244, 235, 220, 0.07) 0 1px, transparent 1px 22px), linear-gradient(160deg, #18243d, #0c1424); box-shadow: 0 0 0 1px rgba(244, 235, 220, 0.2), 0 16px 40px rgba(0, 0, 0, 0.3); outline: 2px dashed rgba(244, 235, 220, 0.35); outline-offset: -10px; }
+.shot.planned img { width: 56px; height: 56px; border-radius: 13px; }
+.shot.planned b { font-family: "Barlow", var(--font-body); font-weight: 600; font-size: 1.5rem; line-height: 1.1; }
+.shot.planned span { font-size: 0.74rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #ffb020; }
+.shot.planned:hover { transform: none; }
+.prod-planned form { margin-top: 0.4rem; }
+.prod-planned .inline-form input { background: rgba(244, 235, 220, 0.06); border-color: rgba(244, 235, 220, 0.3); color: #f4ebdc; }
+.prod-planned .inline-form input::placeholder { color: #8e97a8; }
+.prod-planned .inline-form input:focus { border-color: #ffb020; box-shadow: 0 0 0 3px rgba(255, 176, 32, 0.3); }
+.prod-planned .form-status { color: #ffc65a; }
+.prod-planned .form-label { display: block; font-size: 0.9rem; font-weight: 600; margin: 0 0 0.45rem; color: #f4ebdc; }
+
+/* Groups that are not families: departments, on its own */
+.prod-group { margin-top: 3rem; scroll-margin-top: 90px; }
+.prod-group:first-child { margin-top: 0; }
+.prod-group-head { display: flex; align-items: center; gap: 0.7rem; margin: 0 0 0.45rem; font-family: var(--font-body); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brass-600); }
+.prod-group-head::after { content: ""; flex: 1; height: 1px; background: var(--stone-300); }
+.prod-group-line { margin: 0 0 1.4rem; max-width: 62ch; color: var(--ink-2); }
+.prod-group .prod-app { margin-top: 0; }
+@media (min-width: 880px) { .built-grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Jump links under the products page head */
+.fam-jump { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+.band-dark .fam-jump a { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.85rem 0.35rem 0.35rem; border-radius: 999px; border: 1px solid var(--rule-on-dark); background: rgba(243, 244, 238, 0.06); color: var(--text-on-dark); font-size: 0.9rem; font-weight: 600; text-decoration: none; transition: border-color 0.2s ease, background-color 0.2s ease; }
+.band-dark .fam-jump a.plain { padding-left: 0.85rem; }
+.band-dark .fam-jump a:hover { border-color: var(--brass-400); background: rgba(243, 244, 238, 0.12); color: #fff; }
+.fam-jump img { width: 26px; height: 26px; border-radius: 7px; }
+
+/* ---------- A family's own page ---------- */
+.fam-page main h2, .fam-page main h3 { font-family: var(--f-font); letter-spacing: -0.01em; }
+.fam-page .section-head .num { color: var(--f-accent-ink); font-family: var(--f-font); }
+.fam-page .section-head .num::after { background: var(--f-accent); }
+
+.fhero { position: relative; overflow: hidden; padding: 2.75rem 0 0; color: var(--f-on); }
+.fhero > .wrap { position: relative; }
+.fhero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--f-accent); }
+.fhero h1 { margin: 0 0 1.1rem; color: #fff; }
+.fhero .eyebrow { color: var(--f-accent-on); }
+.fhero .lede { color: var(--f-muted-on); max-width: 52ch; }
+.fhero a:not(.btn) { color: var(--f-accent-on); }
+.fhero-grid { display: grid; gap: 1.5rem; }
+.fhero-copy { padding-bottom: 2.5rem; }
+@media (min-width: 880px) {
+  .fhero { padding-top: 4rem; }
+  .fhero-grid { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 3rem; align-items: end; }
+  .fhero-copy { padding-bottom: 4rem; }
+}
+/* Upfront: ledger paper in navy, with the red margin rule */
+.fam-up .fhero { background: linear-gradient(180deg, var(--f-main), var(--f-deep)); }
+.fam-up .fhero::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(180deg, transparent 0 31px, rgba(243, 245, 248, 0.07) 31px 32px); }
+@media (min-width: 880px) { .fam-up .fhero::before { background: linear-gradient(90deg, transparent calc(4.5% - 1px), rgba(228, 87, 46, 0.42) calc(4.5% - 1px), rgba(228, 87, 46, 0.42) calc(4.5% + 1px), transparent calc(4.5% + 1px)), repeating-linear-gradient(180deg, transparent 0 31px, rgba(243, 245, 248, 0.07) 31px 32px); } }
+/* Squared Away: a study grid at night */
+.fam-sq .fhero { background: radial-gradient(120% 90% at 85% 0%, var(--f-glow) 0%, var(--f-main) 46%, var(--f-deep) 100%); }
+.fam-sq .fhero::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(244, 235, 220, 0.045) 0 1px, transparent 1px 28px), repeating-linear-gradient(90deg, rgba(244, 235, 220, 0.045) 0 1px, transparent 1px 28px); -webkit-mask-image: linear-gradient(180deg, #000 40%, transparent); mask-image: linear-gradient(180deg, #000 40%, transparent); }
+
+.fam-chips { list-style: none; padding: 0; margin: 1.3rem 0 0; display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.fam-chips li { margin: 0; padding: 0.32em 0.8em; border-radius: 999px; border: 1px solid var(--f-rule-on); background: rgba(255, 255, 255, 0.06); color: var(--f-on); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.02em; animation: badge-in 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.fam-chips li::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 0.5em; border-radius: 50%; background: var(--f-accent); vertical-align: 0.1em; }
+.fam-chips li:nth-child(2) { animation-delay: 0.08s; }
+.fam-chips li:nth-child(3) { animation-delay: 0.16s; }
+.fam-chips li:nth-child(4) { animation-delay: 0.24s; }
+.fhero-copy h1, .fhero-copy .lede, .fhero-copy .actions { animation: head-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.fhero-copy .lede { animation-delay: 0.1s; }
+.fhero-copy .actions { animation-delay: 0.2s; }
+.fhero .fam-lock.big .fam-mark { animation: mark-in 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+@keyframes mark-in { 0% { opacity: 0; transform: rotate(-14deg) scale(0.8); } 100% { opacity: 1; transform: none; } }
+
+/* Upfront's hero picture: the price tag itself, hanging on its string */
+.tagviz { position: relative; display: flex; justify-content: center; align-self: stretch; min-height: 400px; }
+.tag-swing { position: relative; width: min(300px, 82vw); padding-top: 92px; transform-origin: 50% 0; animation: tag-in 1s cubic-bezier(0.2, 0.7, 0.2, 1) both, tag-swing 7s ease-in-out 1s infinite alternate; filter: drop-shadow(0 22px 30px rgba(0, 0, 0, 0.35)); }
+.tag-swing::before { content: ""; position: absolute; z-index: 2; left: 50%; top: -40px; width: 2px; height: 162px; translate: -50% 0; background: linear-gradient(180deg, transparent, var(--f-accent) 30%); border-radius: 2px; }
+.tag { position: relative; display: block; padding: 3.4rem 1.35rem 1.4rem; background: #fdfdfb; color: var(--f-ink); clip-path: polygon(24% 0, 76% 0, 100% 10%, 100% 100%, 0 100%, 0 10%); border-radius: 0 0 8px 8px; font-family: var(--f-font); }
+.tag-hole { position: absolute; left: 50%; top: 1.25rem; width: 20px; height: 20px; translate: -50% 0; border-radius: 50%; background: var(--f-deep); box-shadow: inset 0 0 0 3px #d5dce7; }
+.tag-brand { display: flex; align-items: baseline; justify-content: space-between; gap: 0.6rem; padding-bottom: 0.55rem; margin-bottom: 0.4rem; border-bottom: 2px solid var(--f-main); }
+.tag-brand b { font-size: 1.35rem; color: var(--f-main); }
+.tag-brand span { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--f-accent-ink); }
+.tag-prices { margin: 0; display: grid; }
+.tag-prices div { display: flex; justify-content: space-between; align-items: baseline; gap: 0.75rem; padding: 0.42rem 0; border-bottom: 1px dashed #c9d2df; }
+.tag-prices dt { font-size: 0.86rem; color: var(--f-text); }
+.tag-prices dd { margin: 0; font-weight: 600; font-size: 1rem; font-variant-numeric: tabular-nums; color: var(--f-ink); white-space: nowrap; }
+.tag-bottom { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-top: 0.85rem; }
+.tag-foot { margin: 0; font-size: 0.8rem; font-weight: 600; line-height: 1.35; color: var(--f-main); }
+.tag-stamp { flex: none; padding: 0.3rem 0.55rem; text-align: center; line-height: 1.2; border: 2px solid var(--f-accent); border-radius: 4px; color: var(--f-accent); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; background: rgba(253, 253, 251, 0.85); rotate: -9deg; animation: stamp-in 0.45s cubic-bezier(0.3, 1.5, 0.5, 1) 1.1s both; }
+@keyframes tag-in { 0% { opacity: 0; transform: translateY(-40px) rotate(6deg); } 100% { opacity: 1; transform: none; } }
+@keyframes tag-swing { 0% { transform: rotate(-2.2deg); } 100% { transform: rotate(2.2deg); } }
+@keyframes stamp-in { 0% { opacity: 0; scale: 1.8; } 100% { opacity: 1; scale: 1; } }
+@media (min-width: 880px) { .tagviz { min-height: 470px; } .tag-swing { width: 320px; padding-top: 110px; } .tag-swing::before { height: 180px; } }
+
+/* Squared Away's hero picture: the study site on two phones, and the plan for the next */
+.sq-stage { position: relative; align-self: end; width: 100%; max-width: 560px; height: clamp(340px, 92vw, 430px); margin: 0 auto; overflow: hidden; }
+.sq-stage > img, .sq-stage > .phone-planned { position: absolute; height: auto; border-radius: 26px; border: 6px solid #05090f; background: #fff; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.12); animation: phone-up 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.sq-stage .sq-front { left: 22%; top: 26px; width: 46%; z-index: 2; }
+.sq-stage .sq-back { left: 0; top: 78px; width: 38%; rotate: -5deg; animation-delay: 0.12s; }
+.sq-stage .phone-planned { right: 0; top: 78px; width: 38%; rotate: 5deg; border: 2px dashed rgba(244, 235, 220, 0.5); background-color: #0e1729; animation-delay: 0.22s; }
+.sq-stage .phone-planned b { font-size: 1.05rem; }
+.sq-stage .phone-planned span { font-size: 0.7rem; }
+.sq-chip { position: absolute; z-index: 3; display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.4rem 0.7rem; border-radius: 999px; background: rgba(16, 26, 46, 0.92); border: 1px solid rgba(244, 235, 220, 0.22); color: #f4ebdc; font-size: 0.78rem; font-weight: 600; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4); animation: chip-in 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both, chip-bob 5s ease-in-out infinite alternate; }
+.sq-chip svg { width: 22px; height: 22px; }
+.sq-chip .dots { display: inline-flex; gap: 3px; }
+.sq-chip .dots i { width: 7px; height: 7px; border-radius: 50%; background: #ffb020; }
+.sq-chip .dots i.off { background: rgba(244, 235, 220, 0.25); }
+.sq-chip.c1 { left: 2%; top: 18px; animation-delay: 0.6s, 1.2s; }
+.sq-chip.c2 { right: 3%; top: 30px; animation-delay: 0.75s, 1.6s; }
+.sq-chip.c3 { left: 50%; bottom: 26px; translate: -50% 0; animation-delay: 0.9s, 2s; }
+@keyframes phone-up { 0% { opacity: 0; transform: translateY(60px); } 100% { opacity: 1; transform: none; } }
+@keyframes chip-in { 0% { opacity: 0; scale: 0.7; } 100% { opacity: 1; scale: 1; } }
+@keyframes chip-bob { 0% { transform: translateY(0); } 100% { transform: translateY(-6px); } }
+@media (min-width: 880px) { .sq-stage { height: 540px; } .sq-stage .sq-front { top: 40px; } .sq-stage .sq-back, .sq-stage .phone-planned { top: 96px; } }
+
+/* The rules every app in a family keeps */
+.fam-rules { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; counter-reset: rule; }
+@media (min-width: 640px) { .fam-rules { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 960px) { .fam-rules { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; } }
+.fam-rules li { margin: 0; padding: 1.1rem 1.2rem 1.2rem; background: var(--surface); border: 1px solid var(--stone-200); border-top: 3px solid var(--f-main); border-radius: var(--radius); }
+.fam-sq .fam-rules li { border-top-color: var(--f-accent); }
+.fam-rules li::before { counter-increment: rule; content: counter(rule, decimal-leading-zero); display: block; margin-bottom: 0.35rem; font-family: var(--f-font); font-weight: 600; font-size: 0.95rem; color: var(--f-accent-ink); }
+.fam-rules h3 { font-size: 1.18rem; margin: 0 0 0.3rem; }
+.fam-rules p { margin: 0; color: var(--ink-2); font-size: 0.98rem; }
+.fam-note { margin-top: 1.75rem; max-width: 70ch; border-left-color: var(--f-accent); }
+
+/* Where to get the apps */
+.fam-where { padding: 2.25rem 0; background: var(--f-paper); border-top: 1px solid var(--f-line); border-bottom: 1px solid var(--f-line); }
+.fam-where h2 { font-size: 1.35rem; margin-bottom: 1rem; }
+.fam-where dl { display: grid; gap: 1rem 2rem; margin: 0; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
+.fam-where dt { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--f-accent-ink); margin-bottom: 0.2rem; }
+.fam-where dd { margin: 0; color: var(--ink); font-size: 0.98rem; }
+
+/* Closing band in the family's deep color */
+.fam-cta { padding: 3rem 0; background: var(--f-deep); color: var(--f-on); position: relative; overflow: hidden; }
+.fam-cta::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: var(--f-accent); }
+.fam-cta .wrap { display: grid; gap: 1.25rem; }
+.fam-cta h2 { color: #fff; margin: 0 0 0.5rem; max-width: 26ch; }
+.fam-cta p { margin: 0; max-width: 58ch; color: var(--f-muted-on); }
+.fam-cta .actions { margin: 0; }
+@media (min-width: 880px) { .fam-cta .wrap { grid-template-columns: 1fr auto; align-items: center; gap: 3rem; } }
+
+.fam-fine { margin: 1.25rem 0 0; font-size: 0.85rem; color: var(--muted); max-width: 70ch; }
+
+/* ---------- Brand page: one sheet per family ---------- */
+.fam-sheet { display: grid; gap: 1rem; margin: 0 0 1.25rem; padding: 1.25rem 1.35rem; border-radius: var(--radius-lg); border: 1px solid var(--stone-200); background: var(--surface); }
+.fam-sheet.fam-up { border-top: 4px solid var(--f-main); }
+.fam-sheet.fam-sq { border-top: 4px solid var(--f-accent); }
+.fam-sheet ul { margin: 0; }
+.fam-sheet .swatches { margin: 0; }
+.fam-sheet .fam-lock .fam-desc { color: var(--f-accent-ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  .tag-swing, .tag-stamp, .sq-stage > img, .sq-stage > .phone-planned, .sq-chip, .fam-chips li, .fhero-copy h1, .fhero-copy .lede, .fhero-copy .actions, .fhero .fam-lock.big .fam-mark { animation: none; }
+  .fam-card:not(.seen) .phones img, .fam-card:not(.seen) .phones .phone-planned { translate: none; }
+  .phone-planned { transition: none; }
+}

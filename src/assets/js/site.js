@@ -70,12 +70,15 @@
     });
   }
 
-  wireForm(
-    document.querySelector("form[data-form=newsletter]"),
-    NEWSLETTER_ENDPOINT,
-    "The mailing list is not open yet. The first issue goes out after the company launch; check back here or on the Updates page.",
-    "Thanks. Check your inbox for a confirmation email."
-  );
+  // A page can carry more than one newsletter form (a family page, and a planned app's card).
+  Array.prototype.forEach.call(document.querySelectorAll("form[data-form=newsletter]"), function (f) {
+    wireForm(
+      f,
+      NEWSLETTER_ENDPOINT,
+      "The mailing list is not open yet. The first issue goes out after the company launch; check back here or on the Updates page.",
+      "Thanks. Check your inbox for a confirmation email."
+    );
+  });
   wireForm(
     document.querySelector("form[data-form=contact]"),
     CONTACT_ENDPOINT,
@@ -101,7 +104,7 @@
   /* ---- Motion: things fade in as they arrive and out as they leave; the map drifts; a reading line ---- */
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!reduceMotion) {
-    var REVEAL = ".card, .feat-grid > li, .timeline > li, .values > li, .sectors > li, .screens-grid figure, .checklist > li, .sidebar-note, .facts dl > div, .section-head, .demo-copy, .demo .panel, .phero-shots, .phero-phones, .grp, .how-list > li, .prose > h2, .callout, .spec";
+    var REVEAL = ".card, .feat-grid > li, .timeline > li, .values > li, .sectors > li, .screens-grid figure, .checklist > li, .sidebar-note, .facts dl > div, .section-head, .demo-copy, .demo .panel, .phero-shots, .phero-phones, .grp, .how-list > li, .prose > h2, .callout, .spec, .fam-rules > li, .fam-where dl > div";
     var items = document.querySelectorAll(REVEAL), counts = [];
     Array.prototype.forEach.call(items, function (el) {
       if (el.closest("#try")) return;
@@ -133,7 +136,7 @@
 
   /* ---- Product cards and section labels draw in once, the first time they are seen ---- */
   // Used by the home page and the products page. With reduced motion the CSS shows them at once.
-  var seenEls = document.querySelectorAll("[data-seen], .prod, .probono, .gift, .latest");
+  var seenEls = document.querySelectorAll("[data-seen], .prod, .probono, .gift, .latest, .fam-card");
   if (seenEls.length) {
     if ("IntersectionObserver" in window) {
       var seenIo = new IntersectionObserver(function (entries) { entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("seen"); seenIo.unobserve(en.target); } }); }, { rootMargin: "0px 0px -12% 0px", threshold: 0.15 });

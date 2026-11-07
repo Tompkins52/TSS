@@ -1,90 +1,142 @@
 <!--
 title: Products
-description: Software built by Tompkins Software Systems: IntelliSafe, Painless Project Management, Part 107 Prep, Witch Card, Billhead, and the Phantom Soldier site for Project Veteran Overwatch. Each one has a piece you can try on its page.
+description: Software from Tompkins Software Systems, by family: Upfront for Small Business (Billhead), Squared Away Training (Part 107 Prep, with PMP exam prep planned), IntelliSafe and Painless Project Management for departments, Witch Card, and the Phantom Soldier site for Project Veteran Overwatch.
 nav: products
 priority: 0.9
-styles: assets/css/home.css
+styles: assets/css/home.css, assets/css/family.css
 -->
 <section class="page-head band-dark on-dark">
   <div class="wrap">
     <span class="eyebrow">Products</span>
-    <h1>Five products and one pro bono build.</h1>
-    <p class="lede">Everything here is in use today. The status label on each one says exactly where it stands, every page has a piece of the product you can try, and every page links to its support channel.</p>
+    <h1>Two families of apps, and the software we build for departments.</h1>
+    <p class="lede">Upfront for Small Business is for running a small business. Squared Away Training is for studying toward a license or a certification. IntelliSafe and Painless Project Management are platforms for departments, Witch Card stands on its own, and Phantom Soldier is our pro bono work. Every status label says exactly where a product stands, and every product page has a piece of it you can try.</p>
+    <nav class="fam-jump" aria-label="Jump to a group">
+      <a href="#upfront"><img src="{{root}}assets/img/families/upfront-mark.svg" alt="" width="26" height="26">Upfront for Small Business</a>
+      <a href="#squared-away"><img src="{{root}}assets/img/families/squared-away-mark.svg" alt="" width="26" height="26">Squared Away Training</a>
+      <a class="plain" href="#departments">For departments</a>
+      <a class="plain" href="#on-its-own">Witch Card</a>
+      <a class="plain" href="#pro-bono">Pro bono</a>
+    </nav>
   </div>
 </section>
 
 <section class="built">
   <div class="wrap">
-    <div class="built-grid">
-      <article class="prod">
-        <a class="shot" href="{{root}}products/intellisafe.html" aria-label="IntelliSafe, product page">
-          <img src="{{root}}assets/img/products/safe-training.webp" alt="IntelliSafe: the training dashboard with nineteen modules and their status" width="1100" height="687">
-          <img class="ph" src="{{root}}assets/img/products/safe-phone.webp" alt="" width="390" height="844">
-        </a>
-        <div class="prod-copy">
-          <div class="status"><span class="badge badge-ok">Available</span><span class="badge">Browser and self-hosted</span></div>
-          <h3><a href="{{root}}products/intellisafe.html">IntelliSafe</a></h3>
-          <p>Annual OSHA training in nineteen modules, eight-section incident reports with diagrams and signed statements, and site inspections and annual audits. Licensed by IntelliSafe Systems LLC, developed by Tompkins Software Systems. Formerly Public Works Safety Training.</p>
-          <p><strong>For:</strong> public works directors, safety managers, investigators, and division supervisors.</p>
-          <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/intellisafe.html">Product page</a><a class="btn btn-outline btn-small" href="https://tompkins52.github.io/Safety-Training/" rel="noopener">Open IntelliSafe</a></div>
-        </div>
-      </article>
-      <article class="prod">
-        <a class="shot" href="{{root}}products/painless-project-management.html" aria-label="Painless Project Management, product page">
-          <img src="{{root}}assets/img/products/pm-rollup.webp" alt="Painless Project Management: the roll-up of every project, sorted by who needs attention" width="1100" height="687">
-          <img class="ph" src="{{root}}assets/img/products/pm-phone.webp" alt="" width="390" height="844">
-        </a>
-        <div class="prod-copy">
-          <div class="status"><span class="badge badge-ok">Available</span><span class="badge">Web</span></div>
-          <h3><a href="{{root}}products/painless-project-management.html">Painless Project Management</a></h3>
-          <p>A one-page way to run a project without becoming a project manager. A charter gate, up to eight milestones, three money numbers, a two-minute weekly update, and a roll-up that sorts projects by who needs attention.</p>
-          <p><strong>For:</strong> department heads and anyone handed a project without a project manager.</p>
-          <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/painless-project-management.html">Product page</a><a class="btn btn-outline btn-small" href="https://tompkins52.github.io/painless-pm/" rel="noopener">Open the demo</a></div>
-        </div>
-      </article>
-      <article class="prod">
-        <a class="shot" href="{{root}}products/part-107-prep.html" aria-label="Part 107 Prep, product page">
-          <img src="{{root}}assets/img/products/p107-home.webp" alt="Part 107 Prep: the study home page with the five knowledge areas and the daily plan" width="1100" height="687">
-          <img class="ph" src="{{root}}assets/img/products/p107-phone-exam.webp" alt="" width="390" height="844">
-        </a>
-        <div class="prod-copy">
-          <div class="status"><span class="badge badge-ok">Web: available</span><span class="badge badge-brass">Apps: in preparation</span></div>
-          <h3><a href="{{root}}products/part-107-prep.html">Part 107 Prep</a></h3>
-          <p>A free study site and a mobile app for the FAA remote pilot certificate, the commercial drone license. Study modules, more than 200 original practice questions with explanations, timed exams, a daily goal, and spaced review. All progress stays on your own device.</p>
-          <p><strong>For:</strong> anyone studying for the Part 107 knowledge test, including municipal drone programs.</p>
-          <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/part-107-prep.html">Product page</a><a class="btn btn-outline btn-small" href="https://tompkins52.github.io/part107-prep/" rel="noopener">Open the study site</a></div>
-        </div>
-      </article>
-    </div>
-    <article class="prod prod-app">
-      <a class="phones" href="{{root}}products/witch-card.html" aria-label="Witch Card, product page">
-        <img class="p1" src="{{root}}assets/img/products/wc-phone-wallet.webp" alt="" width="390" height="844">
-        <img class="p2" src="{{root}}assets/img/products/wc-phone.webp" alt="Witch Card opened at a gas station: it says You're at Shell and shows the card to use, drawn big, with what it earns on the purchase" width="390" height="844">
-        <img class="p3" src="{{root}}assets/img/products/wc-phone-perks.webp" alt="" width="390" height="844">
-      </a>
-      <div class="prod-copy">
-        <div class="status"><span class="badge badge-ok">Phone web app: available</span><span class="badge badge-brass">App Store and Google Play: in testing</span></div>
-        <h3><a href="{{root}}products/witch-card.html">Witch Card</a></h3>
-        <p>A phone app that tells you which credit card to use at the register. Open it at the store and it tells you where you are standing and which of your cards earns the most there, with the rest ranked under it and caps, rotating categories, and Visa-only stores worked out. A perks checklist links to each bank's activation page. It covers 229 cards from 25 issuers, reads a card with the camera, and has no ads, sponsors, or referral links.</p>
-        <p><strong>For:</strong> anyone who carries more than one credit card and pays the statement in full.</p>
-        <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/witch-card.html">Product page</a><a class="btn btn-outline btn-small" href="{{root}}witch-card/">Open Witch Card</a></div>
+    <section class="fam-block fam-up" id="upfront" aria-label="Upfront for Small Business">
+      <div class="fam-bar">
+        <a class="fam-lock" href="{{root}}upfront/"><img class="fam-mark" src="{{root}}assets/img/families/upfront-mark.svg" alt="" width="40" height="40"><span class="fam-words"><span class="fam-name">Upfront</span><span class="fam-desc">for Small Business</span></span></a>
+        <p>Apps for running a small business, with the price on the tag. No subscription, no account, and your records stay on your device.</p>
+        <a class="fam-more" href="{{root}}upfront/">About the family</a>
       </div>
-    </article>
-    <article class="prod prod-app flip">
-      <a class="phones" href="{{root}}products/billhead.html" aria-label="Billhead, product page">
-        <img class="p1" src="{{root}}assets/img/products/bh-phone-ask.webp" alt="" width="390" height="844">
-        <img class="p2" src="{{root}}assets/img/products/bh-phone.webp" alt="Billhead's home screen: a new simple or advanced invoice, what is outstanding and overdue, and the invoices that need attention" width="390" height="844">
-        <img class="p3" src="{{root}}assets/img/products/bh-phone-project.webp" alt="" width="390" height="844">
-      </a>
-      <div class="prod-copy">
-        <div class="status"><span class="badge badge-ok">Web app: available</span><span class="badge badge-brass">Free during launch</span></div>
-        <h3><a href="{{root}}products/billhead.html">Billhead</a></h3>
-        <p>Invoices from your phone. Set up your company once, then make a simple or an advanced invoice by answering a few questions or by typing on the invoice itself. Projects billed in stages say which invoice this is, what was billed before, and what remains; payments turn invoices partly paid and paid; and the PDF goes out locked, with an Invoice ID on every page. No account, no subscription, and nothing leaves your device. It replaces TSS Invoice Creator.</p>
-        <p><strong>For:</strong> contractors, tradespeople, freelancers, and small businesses, from a few invoices a month to a few hundred a year.</p>
-        <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/billhead.html">Product page</a><a class="btn btn-outline btn-small" href="{{root}}billhead/">Open Billhead</a></div>
+      <article class="prod prod-app flip">
+        <a class="phones" href="{{root}}products/billhead.html" aria-label="Billhead, product page">
+          <img class="p1" src="{{root}}assets/img/products/bh-phone-ask.webp" alt="" width="390" height="844">
+          <img class="p2" src="{{root}}assets/img/products/bh-phone.webp" alt="Billhead's home screen: a new simple or advanced invoice, what is outstanding and overdue, and the invoices that need attention" width="390" height="844">
+          <img class="p3" src="{{root}}assets/img/products/bh-phone-project.webp" alt="" width="390" height="844">
+        </a>
+        <div class="prod-copy">
+          <div class="status"><span class="badge badge-ok">Web app: available</span><span class="badge badge-brass">Free during launch</span></div>
+          <h3><a href="{{root}}products/billhead.html">Billhead</a></h3>
+          <p>Invoices from your phone. Set up your company once, then make a simple or an advanced invoice by answering a few questions or by typing on the invoice itself. Projects billed in stages say which invoice this is, what was billed before, and what remains; payments turn invoices partly paid and paid; and the PDF goes out locked, with an Invoice ID on every page. Any invoice under $100 is free. It replaces TSS Invoice Creator.</p>
+          <p><strong>For:</strong> contractors, tradespeople, freelancers, and small businesses, from a few invoices a month to a few hundred a year.</p>
+          <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/billhead.html">Product page</a><a class="btn btn-outline btn-small" href="{{root}}billhead/">Open Billhead</a></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="fam-block fam-sq" id="squared-away" aria-label="Squared Away Training">
+      <div class="fam-bar">
+        <a class="fam-lock" href="{{root}}squared-away/"><img class="fam-mark" src="{{root}}assets/img/families/squared-away-mark.svg" alt="" width="40" height="40"><span class="fam-words"><span class="fam-name">Squared Away</span><span class="fam-desc">Training</span></span></a>
+        <p>Study apps for licenses and certifications. A few minutes a day, and what you miss comes back until it sticks. No account.</p>
+        <a class="fam-more" href="{{root}}squared-away/">About the family</a>
       </div>
-    </article>
-    <div class="probono">
+      <div class="built-grid two">
+        <article class="prod">
+          <a class="shot" href="{{root}}products/part-107-prep.html" aria-label="Part 107 Prep, product page">
+            <img src="{{root}}assets/img/products/p107-home.webp" alt="Part 107 Prep: the study home page with the five knowledge areas and the daily plan" width="1100" height="687">
+            <img class="ph" src="{{root}}assets/img/products/p107-phone-exam.webp" alt="" width="390" height="844">
+          </a>
+          <div class="prod-copy">
+            <div class="status"><span class="badge badge-ok">Web: available</span><span class="badge badge-brass">Apps: in preparation</span></div>
+            <h3><a href="{{root}}products/part-107-prep.html">Part 107 Prep</a></h3>
+            <p>A free study site and a mobile app for the FAA remote pilot certificate, the commercial drone license. Study modules, more than 200 original practice questions with explanations, timed exams, a daily goal, and spaced review. All progress stays on your own device.</p>
+            <p><strong>For:</strong> anyone studying for the Part 107 knowledge test, including municipal drone programs.</p>
+            <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/part-107-prep.html">Product page</a><a class="btn btn-outline btn-small" href="https://tompkins52.github.io/part107-prep/" rel="noopener">Open the study site</a></div>
+          </div>
+        </article>
+        <article class="prod prod-planned" id="pmp">
+          <div class="shot planned" aria-hidden="true"><img src="{{root}}assets/img/families/squared-away-mark.svg" alt="" width="56" height="56"><b>PMP exam prep</b><span>Planned</span></div>
+          <div class="prod-copy">
+            <div class="status"><span class="badge badge-plan">Planned</span></div>
+            <h3>PMP exam prep</h3>
+            <p>The same daily study for the Project Management Professional exam: situational questions with an explanation for every answer, earned value and the other formulas drilled until they stick, and timed practice exams that mix every domain.</p>
+            <p><strong>For:</strong> project managers preparing for the PMP exam.</p>
+            <form data-form="newsletter" novalidate>
+              <label class="form-label" for="nl-email-pmp">The Work Order, our monthly email, will say when it opens for testing.</label>
+              <div class="inline-form">
+                <input type="email" id="nl-email-pmp" name="email" placeholder="you@example.com" autocomplete="email" required>
+                <button class="btn btn-primary btn-small" type="submit">Subscribe</button>
+              </div>
+              <p class="hp" aria-hidden="true"><label>Leave this field empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label></p>
+              <p class="form-status" role="status" aria-live="polite" hidden></p>
+            </form>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="prod-group" id="departments" aria-labelledby="grp-dept">
+      <h2 class="prod-group-head" id="grp-dept">For departments</h2>
+      <p class="prod-group-line">Platforms a department licenses for its crews and its projects, run in the browser or on the department's own server.</p>
+      <div class="built-grid two">
+        <article class="prod">
+          <a class="shot" href="{{root}}products/intellisafe.html" aria-label="IntelliSafe, product page">
+            <img src="{{root}}assets/img/products/safe-training.webp" alt="IntelliSafe: the training dashboard with nineteen modules and their status" width="1100" height="687" loading="lazy">
+            <img class="ph" src="{{root}}assets/img/products/safe-phone.webp" alt="" width="390" height="844" loading="lazy">
+          </a>
+          <div class="prod-copy">
+            <div class="status"><span class="badge badge-ok">Available</span><span class="badge">Browser and self-hosted</span></div>
+            <h3><a href="{{root}}products/intellisafe.html">IntelliSafe</a></h3>
+            <p>Annual OSHA training in nineteen modules, eight-section incident reports with diagrams and signed statements, and site inspections and annual audits. Licensed by IntelliSafe Systems LLC, developed by Tompkins Software Systems. Formerly Public Works Safety Training.</p>
+            <p><strong>For:</strong> public works directors, safety managers, investigators, and division supervisors.</p>
+            <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/intellisafe.html">Product page</a><a class="btn btn-outline btn-small" href="https://tompkins52.github.io/Safety-Training/" rel="noopener">Open IntelliSafe</a></div>
+          </div>
+        </article>
+        <article class="prod">
+          <a class="shot" href="{{root}}products/painless-project-management.html" aria-label="Painless Project Management, product page">
+            <img src="{{root}}assets/img/products/pm-rollup.webp" alt="Painless Project Management: the roll-up of every project, sorted by who needs attention" width="1100" height="687" loading="lazy">
+            <img class="ph" src="{{root}}assets/img/products/pm-phone.webp" alt="" width="390" height="844" loading="lazy">
+          </a>
+          <div class="prod-copy">
+            <div class="status"><span class="badge badge-ok">Available</span><span class="badge">Web</span></div>
+            <h3><a href="{{root}}products/painless-project-management.html">Painless Project Management</a></h3>
+            <p>A one-page way to run a project without becoming a project manager. A charter gate, up to eight milestones, three money numbers, a two-minute weekly update, and a roll-up that sorts projects by who needs attention.</p>
+            <p><strong>For:</strong> department heads and anyone handed a project without a project manager.</p>
+            <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/painless-project-management.html">Product page</a><a class="btn btn-outline btn-small" href="https://tompkins52.github.io/painless-pm/" rel="noopener">Open the demo</a></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="prod-group" id="on-its-own" aria-labelledby="grp-own">
+      <h2 class="prod-group-head" id="grp-own">On its own</h2>
+      <article class="prod prod-app">
+        <a class="phones" href="{{root}}products/witch-card.html" aria-label="Witch Card, product page">
+          <img class="p1" src="{{root}}assets/img/products/wc-phone-wallet.webp" alt="" width="390" height="844" loading="lazy">
+          <img class="p2" src="{{root}}assets/img/products/wc-phone.webp" alt="Witch Card opened at a gas station: it says You're at Shell and shows the card to use, drawn big, with what it earns on the purchase" width="390" height="844" loading="lazy">
+          <img class="p3" src="{{root}}assets/img/products/wc-phone-perks.webp" alt="" width="390" height="844" loading="lazy">
+        </a>
+        <div class="prod-copy">
+          <div class="status"><span class="badge badge-ok">Phone web app: available</span><span class="badge badge-brass">App Store and Google Play: in testing</span></div>
+          <h3><a href="{{root}}products/witch-card.html">Witch Card</a></h3>
+          <p>A phone app that tells you which credit card to use at the register. Open it at the store and it tells you where you are standing and which of your cards earns the most there, with the rest ranked under it and caps, rotating categories, and Visa-only stores worked out. A perks checklist links to each bank's activation page. It covers 229 cards from 25 issuers, reads a card with the camera, and has no ads, sponsors, or referral links.</p>
+          <p><strong>For:</strong> anyone who carries more than one credit card and pays the statement in full.</p>
+          <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/witch-card.html">Product page</a><a class="btn btn-outline btn-small" href="{{root}}witch-card/">Open Witch Card</a></div>
+        </div>
+      </article>
+    </section>
+
+    <div class="probono" id="pro-bono">
       <a class="shot" href="{{root}}products/phantom-soldier.html" aria-label="Phantom Soldier, what we built">
         <img src="{{root}}assets/img/products/ps-home.webp" alt="The phantomsoldier.org home page" width="1100" height="687" loading="lazy">
         <img class="ph" src="{{root}}assets/img/products/ps-phone.webp" alt="" width="390" height="844" loading="lazy">
@@ -104,6 +156,8 @@ styles: assets/css/home.css
     <div class="prose">
       <h2>How we decide what to build</h2>
       <p>A product gets on this list when three things are true: we needed it ourselves, other people or organizations have the same problem, and the software already out there is priced or designed for someone else. We would rather publish five tools that work than a roadmap of twenty. Pro bono work gets on the list when a veteran-serving organization needs something built and we can finish it.</p>
+      <h2>Why families</h2>
+      <p>Apps for the same people live together under one name and one set of rules, so once you know one, you know what to expect from the next. Every Upfront app puts its price on the tag and never asks for a subscription. Every Squared Away app runs on the same study engine. Each app keeps its own name and look, and its page says which family it belongs to.</p>
       <h2>What every product comes with</h2>
       <ul>
         <li>A product page with an honest status label, a piece of the product to try, and a dated changelog.</li>

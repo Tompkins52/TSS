@@ -60,6 +60,15 @@ def render(template, values):
     return out
 
 
+def pretty_path(rel):
+    """The address a page is linked by: the site root for index.html, a folder for folder/index.html."""
+    if rel == "index.html":
+        return ""
+    if rel.endswith("/index.html"):
+        return rel[: -len("index.html")]
+    return rel
+
+
 def mark_active_nav(head, nav_key):
     if not nav_key:
         return head
@@ -96,7 +105,7 @@ def main():
             root = base if meta.get("absolute") == "true" else "../" * depth
             if "title" not in meta or "description" not in meta:
                 sys.exit("missing title or description in %s" % rel)
-            canonical = base + ("" if rel == "index.html" else rel)
+            canonical = base + pretty_path(rel)
             page_title = meta.get("title_full") or "%s | %s" % (meta["title"], SITE_NAME)
             extra_head = ""
             if meta.get("jsonld") == "organization":
@@ -150,7 +159,7 @@ def main():
     today = dt.date.today().isoformat()
     lines = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for rel, prio in sorted(written):
-        loc = base + ("" if rel == "index.html" else rel)
+        loc = base + pretty_path(rel)
         lines.append("  <url><loc>%s</loc><lastmod>%s</lastmod><priority>%s</priority></url>" % (loc, today, prio))
     lines.append("</urlset>")
     open(os.path.join(out, "sitemap.xml"), "w", encoding="utf-8").write("\n".join(lines) + "\n")

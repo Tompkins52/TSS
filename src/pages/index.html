@@ -6,7 +6,7 @@ nav: home
 jsonld: organization
 priority: 1.0
 body_class: home
-styles: assets/css/home.css
+styles: assets/css/home.css, assets/css/family.css
 scripts: assets/js/sfx.js, assets/js/home.js
 -->
 <section class="try" id="try" aria-labelledby="try-title">
@@ -104,9 +104,45 @@ scripts: assets/js/sfx.js, assets/js/home.js
     <div class="sec-label" data-seen><span class="n">03</span>Products</div>
     <div class="built-head">
       <h2 id="built-title">Built, shipped, in use.</h2>
-      <p>Five products and one pro bono site. Every product page has a working piece of it, and a button that opens the real thing.</p>
+      <p>Two families of apps, two platforms for departments, Witch Card, and one pro bono site. Every product page has a working piece of it, and a button that opens the real thing.</p>
     </div>
-    <div class="built-grid">
+    <div class="fam-duo">
+      <article class="fam-card fam-up">
+        <div class="fam-card-head">
+          <a class="fam-lock" href="{{root}}upfront/"><img class="fam-mark" src="{{root}}assets/img/families/upfront-mark.svg" alt="" width="40" height="40"><span class="fam-words"><span class="fam-name">Upfront</span><span class="fam-desc">for Small Business</span></span></a>
+          <p>Apps for running a small business, with the price on the tag. No subscription, no account, and your records stay on your device.</p>
+        </div>
+        <a class="phones" href="{{root}}upfront/" aria-label="Upfront for Small Business, the family page">
+          <img class="p1" src="{{root}}assets/img/products/bh-phone-ask.webp" alt="" width="390" height="844" loading="lazy">
+          <img class="p2" src="{{root}}assets/img/products/bh-phone.webp" alt="Billhead's home screen: a new simple or advanced invoice, what is outstanding and overdue, and the invoices that need attention" width="390" height="844" loading="lazy">
+          <img class="p3" src="{{root}}assets/img/products/bh-phone-project.webp" alt="" width="390" height="844" loading="lazy">
+        </a>
+        <ul class="fam-apps">
+          <li><a href="{{root}}products/billhead.html"><strong>Billhead</strong><span>Invoices from your phone, with jobs billed in stages and a locked PDF.</span></a><span class="badge badge-ok">Web app: available</span></li>
+        </ul>
+        <p class="fam-tagline"><span>Under $100: free</span><span>Simple: 99&cent;</span><span>Advanced: $1.99</span><span>A year: $99</span></p>
+        <div class="actions"><a class="btn btn-fam btn-small" href="{{root}}upfront/">See Upfront</a><a class="btn btn-fam-outline btn-small" href="{{root}}billhead/">Open Billhead</a></div>
+      </article>
+      <article class="fam-card fam-sq">
+        <div class="fam-card-head">
+          <a class="fam-lock" href="{{root}}squared-away/"><img class="fam-mark" src="{{root}}assets/img/families/squared-away-mark.svg" alt="" width="40" height="40"><span class="fam-words"><span class="fam-name">Squared Away</span><span class="fam-desc">Training</span></span></a>
+          <p>Study apps for licenses and certifications. A few minutes a day, and what you miss comes back until it sticks.</p>
+        </div>
+        <a class="phones" href="{{root}}squared-away/" aria-label="Squared Away Training, the family page">
+          <img class="p1" src="{{root}}assets/img/products/p107-phone.webp" alt="" width="390" height="844" loading="lazy">
+          <img class="p2" src="{{root}}assets/img/products/p107-phone-exam.webp" alt="Part 107 Prep on a phone: a timed practice exam" width="390" height="844" loading="lazy">
+          <span class="p3 phone-planned"><img src="{{root}}assets/img/families/squared-away-mark.svg" alt="" width="40" height="40"><b>PMP exam prep</b><span>Planned</span></span>
+        </a>
+        <ul class="fam-apps">
+          <li><a href="{{root}}products/part-107-prep.html"><strong>Part 107 Prep</strong><span>The FAA drone pilot test. Free.</span></a><span class="badge badge-ok">Web: available</span></li>
+          <li><a href="{{root}}squared-away/#pmp"><strong>PMP exam prep</strong><span>The Project Management Professional exam.</span></a><span class="badge badge-plan">Planned</span></li>
+        </ul>
+        <div class="actions"><a class="btn btn-fam btn-small" href="{{root}}squared-away/">See Squared Away</a><a class="btn btn-fam-outline btn-small" href="https://tompkins52.github.io/part107-prep/" rel="noopener">Open Part 107 Prep</a></div>
+      </article>
+    </div>
+    <div class="prod-group">
+      <h3 class="prod-group-head">For departments</h3>
+      <div class="built-grid two">
       <article class="prod">
         <a class="shot" href="{{root}}products/intellisafe.html" aria-label="IntelliSafe, product page">
           <img src="{{root}}assets/img/products/safe-training.webp" alt="IntelliSafe: the training dashboard with nineteen modules and their status" width="1100" height="687" loading="lazy">
@@ -131,19 +167,10 @@ scripts: assets/js/sfx.js, assets/js/home.js
           <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/painless-project-management.html#try">Try a piece of it</a><a class="btn btn-outline btn-small" href="https://tompkins52.github.io/painless-pm/" rel="noopener">Open the demo</a></div>
         </div>
       </article>
-      <article class="prod">
-        <a class="shot" href="{{root}}products/part-107-prep.html" aria-label="Part 107 Prep, product page">
-          <img src="{{root}}assets/img/products/p107-home.webp" alt="Part 107 Prep: the study home page with the five knowledge areas and the daily plan" width="1100" height="687" loading="lazy">
-          <img class="ph" src="{{root}}assets/img/products/p107-phone-exam.webp" alt="" width="390" height="844" loading="lazy">
-        </a>
-        <div class="prod-copy">
-          <div class="status"><span class="badge badge-ok">Web: available</span><span class="badge badge-brass">Apps: in preparation</span></div>
-          <h3><a href="{{root}}products/part-107-prep.html">Part 107 Prep</a></h3>
-          <p>A free study site and mobile app for the FAA remote pilot certificate: more than 200 original questions with explanations, timed exams, a daily goal, and spaced review.</p>
-          <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/part-107-prep.html#try">Try a piece of it</a><a class="btn btn-outline btn-small" href="https://tompkins52.github.io/part107-prep/" rel="noopener">Open the study site</a></div>
-        </div>
-      </article>
+      </div>
     </div>
+    <div class="prod-group">
+      <h3 class="prod-group-head">On its own</h3>
     <article class="prod prod-app">
       <a class="phones" href="{{root}}products/witch-card.html" aria-label="Witch Card, product page">
         <img class="p1" src="{{root}}assets/img/products/wc-phone-wallet.webp" alt="" width="390" height="844" loading="lazy">
@@ -157,19 +184,7 @@ scripts: assets/js/sfx.js, assets/js/home.js
         <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/witch-card.html#try">Try a piece of it</a><a class="btn btn-outline btn-small" href="{{root}}witch-card/">Open Witch Card</a></div>
       </div>
     </article>
-    <article class="prod prod-app flip">
-      <a class="phones" href="{{root}}products/billhead.html" aria-label="Billhead, product page">
-        <img class="p1" src="{{root}}assets/img/products/bh-phone-ask.webp" alt="" width="390" height="844" loading="lazy">
-        <img class="p2" src="{{root}}assets/img/products/bh-phone.webp" alt="Billhead's home screen: a new simple or advanced invoice, what is outstanding and overdue, and the invoices that need attention" width="390" height="844" loading="lazy">
-        <img class="p3" src="{{root}}assets/img/products/bh-phone-project.webp" alt="" width="390" height="844" loading="lazy">
-      </a>
-      <div class="prod-copy">
-        <div class="status"><span class="badge badge-ok">Web app: available</span><span class="badge badge-brass">Free during launch</span></div>
-        <h3><a href="{{root}}products/billhead.html">Billhead</a></h3>
-        <p>Invoices from your phone: your company set up once, a simple or an advanced invoice made by answering questions or by typing on the invoice, jobs billed in stages, payments tracked, a locked PDF, and one tap to email it to the customer. No account, no subscription, and nothing leaves your device.</p>
-        <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/billhead.html#try">What it will cost you</a><a class="btn btn-outline btn-small" href="{{root}}billhead/">Open Billhead</a></div>
-      </div>
-    </article>
+    </div>
     <div class="probono">
       <a class="shot" href="{{root}}products/phantom-soldier.html" aria-label="Phantom Soldier, what we built">
         <img src="{{root}}assets/img/products/ps-home.webp" alt="The phantomsoldier.org home page" width="1100" height="687" loading="lazy">
@@ -188,7 +203,7 @@ scripts: assets/js/sfx.js, assets/js/home.js
 <section class="gift" aria-labelledby="gift-title">
   <div class="wrap gift-grid">
     <div class="gift-copy">
-      <div class="sec-label" data-seen><span class="n">04</span>For every small business</div>
+      <div class="sec-label" data-seen><span class="n">04</span>Upfront for Small Business</div>
       <h2 id="gift-title">Invoices without the subscription.</h2>
       <p>Billhead makes the invoice on your phone from a company profile you set up once: line items, sales tax, a discount or a deposit, and on an advanced invoice the PO, the job site, retainage, and progress billing (invoice 2 of 3). It keeps track of what went out and what came in, and the PDF goes out locked. Nothing is sent to us.</p>
       <p><strong>Any invoice under $100 is free.</strong> Then 99 cents an invoice, or $1.99 for an advanced one, paid once; free during launch. Packs never expire, and a year of unlimited invoices is $99 with no auto-renew. Never a percentage of what your customer pays you.</p>
@@ -209,9 +224,9 @@ scripts: assets/js/sfx.js, assets/js/home.js
   <div class="wrap">
     <h2>Latest</h2>
     <ul>
+      <li><time datetime="2026-11-07">November 7</time><span>Two families of apps: <a href="{{root}}upfront/">Upfront for Small Business</a>, starting with Billhead, and <a href="{{root}}squared-away/">Squared Away Training</a>, starting with Part 107 Prep. PMP exam prep is planned.</span></li>
+      <li><time datetime="2026-11-07">November 7</time><span>Billhead: any invoice under $100 is free, and Send to customer fills in the email with the invoice's details.</span></li>
       <li><time datetime="2026-11-04">November 4</time><span>Witch Card in sixty seconds: a cartoon about Dave and his five cards, then the real app at the register, on the product page.</span></li>
-      <li><time datetime="2026-11-03">November 3</time><span>Billhead opens: invoices from your phone, with jobs billed in stages, payments tracked, and a locked PDF. It takes over from TSS Invoice Creator and is free while in testing.</span></li>
-      <li><time datetime="2026-11-01">November 1</time><span>Witch Card gets a new mascot on its icon and welcome note, Compare counts flights and hotels as travel, and a row says when one of your cards pays extra at one company.</span></li>
     </ul>
     <a href="{{root}}updates.html">All updates</a>
   </div>
