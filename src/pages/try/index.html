@@ -1,0 +1,74 @@
+<!--
+title: Try it
+title_full: Try a sample app | Tompkins Software Systems
+description: Eleven working sample apps, one for each kind of organization Tompkins Software Systems builds for: work orders, permits, reservations, estimates, inspections and more. Nothing you type leaves the page.
+body_class: home
+priority: 0.6
+styles: assets/css/home.css
+scripts: assets/js/sfx.js, assets/js/home.js
+-->
+<section class="try" id="try" aria-labelledby="try-title">
+  <div class="topo" aria-hidden="true" data-topo></div>
+  <div class="wrap">
+    <div class="try-grid">
+      <div class="try-left">
+        <span class="eyebrow">Try it</span>
+        <h1 id="try-title" class="try-title" data-words>Pick who you are. <em>Use the tool.</em></h1>
+        <p class="try-intro">Eleven working sample apps, one for each kind of organization we build for.</p>
+        <fieldset class="auds" data-aud>
+          <legend class="visually-hidden">Who is it for?</legend>
+          <label><input type="radio" name="aud" value="works" checked><span class="al">Public works</span><span class="ak">Work orders</span></label>
+          <label><input type="radio" name="aud" value="gov"><span class="al">Local government</span><span class="ak">Permit desk</span></label>
+          <label><input type="radio" name="aud" value="park"><span class="al">Park district</span><span class="ak">Reservations</span></label>
+          <label><input type="radio" name="aud" value="biz"><span class="al">Small business</span><span class="ak">Estimates</span></label>
+          <label><input type="radio" name="aud" value="fleet"><span class="al">Fleet and trucking</span><span class="ak">Pre-trip inspections</span></label>
+          <label><input type="radio" name="aud" value="hoa"><span class="al">Property and HOAs</span><span class="ak">Resident requests</span></label>
+          <label><input type="radio" name="aud" value="np"><span class="al">Nonprofit</span><span class="ak">Volunteer shifts</span></label>
+          <label><input type="radio" name="aud" value="club"><span class="al">Membership organization</span><span class="ak">Members and dues</span></label>
+          <label><input type="radio" name="aud" value="league"><span class="al">Sports league</span><span class="ak">Season scheduler</span></label>
+          <label><input type="radio" name="aud" value="learn"><span class="al">Learning platform</span><span class="ak">Course player</span></label>
+          <label><input type="radio" name="aud" value="idea"><span class="al">My own idea</span><span class="ak">Licensing console</span></label>
+        </fieldset>
+      </div>
+
+      <div class="try-right">
+        <div class="try-head" data-head>
+          <h2 data-title>Work orders for a streets crew</h2>
+          <p data-why>Requests come in from the website, the front desk, and the phone. The board is the one list the crew works from, and the Friday report writes itself.</p>
+        </div>
+        <div class="device-bar">
+          <fieldset class="seg" data-devseg>
+            <legend class="visually-hidden">Show it on</legend>
+            <label><input type="radio" name="device" value="desktop" checked><span>Desktop</span></label>
+            <label><input type="radio" name="device" value="phone"><span>Phone</span></label>
+          </fieldset>
+          <fieldset class="seg lays" data-layseg>
+            <legend class="visually-hidden">Layout</legend>
+          </fieldset>
+          <fieldset class="swatches" data-swatches>
+            <legend>Color palette</legend>
+          </fieldset>
+          <div class="fontpick" data-fontpick>
+            <button type="button" class="fontbtn" data-fontbtn aria-expanded="false" aria-haspopup="listbox"><span>Font</span><b data-fontname>Public Sans</b></button>
+            <div class="fontmenu" data-fontmenu role="listbox" aria-label="Font" hidden></div>
+          </div>
+          <button class="reset sound" type="button" data-sound aria-pressed="false" title="Sounds for the sample apps: a page turn, a stamp, a splash. Tap to turn them off."><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M2 6h3l4-3v10l-4-3H2z" fill="currentColor"/><path class="wave" d="M11 5.5a3.5 3.5 0 0 1 0 5M12.8 3.5a6 6 0 0 1 0 9" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg><span class="visually-hidden" data-sound-label>Sound off</span></button>
+          <button class="reset" type="button" data-reset>Reset</button>
+        </div>
+        <div class="device desktop" data-device>
+          <div class="screen" data-screen role="region" aria-label="Sample app">
+            <noscript><p style="padding:1rem">The sample apps need JavaScript. Everything else on the site works without it.</p></noscript>
+          </div>
+        </div>
+        <p class="device-caption">Sample data. Nothing you type is saved or sent.</p>
+        <form class="start" data-start action="{{root}}contact.html" method="get">
+          <label for="need"><span data-start-label>Want work orders like this for your department?</span> Say what your version would need and we will write back within three business days.</label>
+          <div class="start-row">
+            <input id="need" type="text" name="need" data-need placeholder="For example: photos from the truck, and a public map of what is open" maxlength="240" autocomplete="off">
+            <button class="btn btn-brass" type="submit">Send it to us</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

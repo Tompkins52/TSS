@@ -144,6 +144,25 @@
     } else { Array.prototype.forEach.call(seenEls, function (e) { e.classList.add("seen"); }); }
   }
 
+  /* ---- Headlines marked data-words arrive a word at a time (the home page, the sample apps) ---- */
+  if (!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches)) {
+    Array.prototype.forEach.call(document.querySelectorAll("[data-words]"), function (el) {
+      var n = 0;
+      function split(text, into) {
+        text.split(/(\s+)/).forEach(function (part) {
+          if (!part) return;
+          if (/^\s+$/.test(part)) { into.appendChild(document.createTextNode(part)); return; }
+          var w = document.createElement("span"); w.className = "w"; w.style.setProperty("--i", n++); w.textContent = part; into.appendChild(w);
+        });
+      }
+      Array.prototype.slice.call(el.childNodes).forEach(function (node) {
+        if (node.nodeType === 3) { var frag = document.createDocumentFragment(); split(node.textContent, frag); el.replaceChild(frag, node); }
+        else if (node.nodeType === 1 && node.tagName !== "BR") { var inner = node.textContent; node.textContent = ""; split(inner, node); }
+      });
+      el.classList.add("words");
+    });
+  }
+
   /* ---- Footer year ----------------------------------------------------------- */
   var year = document.querySelector("[data-year]");
   if (year) year.textContent = String(new Date().getFullYear());

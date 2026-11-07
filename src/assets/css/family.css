@@ -234,7 +234,7 @@ a.fam-lock:hover .fam-mark { transform: rotate(-6deg) scale(1.06); }
 .fam-jump img { width: 26px; height: 26px; border-radius: 7px; }
 
 /* ---------- A family's own page ---------- */
-.fam-page main h2, .fam-page main h3 { font-family: var(--f-font); letter-spacing: -0.01em; }
+.fam-page main h2, .fam-page main h3, .fam-prod main h2, .fam-prod main h3 { font-family: var(--f-font); letter-spacing: -0.01em; }
 .fam-page .section-head .num { color: var(--f-accent-ink); font-family: var(--f-font); }
 .fam-page .section-head .num::after { background: var(--f-accent); }
 
@@ -253,12 +253,12 @@ a.fam-lock:hover .fam-mark { transform: rotate(-6deg) scale(1.06); }
   .fhero-copy { padding-bottom: 4rem; }
 }
 /* Upfront: ledger paper in navy, with the red margin rule */
-.fam-up .fhero { background: linear-gradient(180deg, var(--f-main), var(--f-deep)); }
-.fam-up .fhero::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(180deg, transparent 0 31px, rgba(243, 245, 248, 0.07) 31px 32px); }
-@media (min-width: 880px) { .fam-up .fhero::before { background: linear-gradient(90deg, transparent calc(4.5% - 1px), rgba(228, 87, 46, 0.42) calc(4.5% - 1px), rgba(228, 87, 46, 0.42) calc(4.5% + 1px), transparent calc(4.5% + 1px)), repeating-linear-gradient(180deg, transparent 0 31px, rgba(243, 245, 248, 0.07) 31px 32px); } }
+.fam-up .fhero, .fam-prod.fam-up .phero { background: linear-gradient(180deg, var(--f-main), var(--f-deep)); }
+.fam-up .fhero::before, .fam-prod.fam-up .phero::before { content: ""; position: absolute; inset: 0; opacity: 1; pointer-events: none; background: repeating-linear-gradient(180deg, transparent 0 31px, rgba(243, 245, 248, 0.07) 31px 32px); }
+@media (min-width: 880px) { .fam-up .fhero::before, .fam-prod.fam-up .phero::before { background: linear-gradient(90deg, transparent calc(4.5% - 1px), rgba(228, 87, 46, 0.42) calc(4.5% - 1px), rgba(228, 87, 46, 0.42) calc(4.5% + 1px), transparent calc(4.5% + 1px)), repeating-linear-gradient(180deg, transparent 0 31px, rgba(243, 245, 248, 0.07) 31px 32px); } }
 /* Pass Muster: a study grid at night */
-.fam-sq .fhero { background: radial-gradient(120% 90% at 85% 0%, var(--f-glow) 0%, var(--f-main) 46%, var(--f-deep) 100%); }
-.fam-sq .fhero::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(244, 235, 220, 0.045) 0 1px, transparent 1px 28px), repeating-linear-gradient(90deg, rgba(244, 235, 220, 0.045) 0 1px, transparent 1px 28px); -webkit-mask-image: linear-gradient(180deg, #000 40%, transparent); mask-image: linear-gradient(180deg, #000 40%, transparent); }
+.fam-sq .fhero, .fam-prod.fam-sq .phero { background: radial-gradient(120% 90% at 85% 0%, var(--f-glow) 0%, var(--f-main) 46%, var(--f-deep) 100%); }
+.fam-sq .fhero::before, .fam-prod.fam-sq .phero::before { content: ""; position: absolute; inset: 0; opacity: 1; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(244, 235, 220, 0.045) 0 1px, transparent 1px 28px), repeating-linear-gradient(90deg, rgba(244, 235, 220, 0.045) 0 1px, transparent 1px 28px); -webkit-mask-image: linear-gradient(180deg, #000 40%, transparent); mask-image: linear-gradient(180deg, #000 40%, transparent); }
 
 .fam-chips { list-style: none; padding: 0; margin: 1.3rem 0 0; display: flex; flex-wrap: wrap; gap: 0.45rem; }
 .fam-chips li { margin: 0; padding: 0.32em 0.8em; border-radius: 999px; border: 1px solid var(--f-rule-on); background: rgba(255, 255, 255, 0.06); color: var(--f-on); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.02em; animation: badge-in 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
@@ -312,13 +312,53 @@ a.fam-lock:hover .fam-mark { transform: rotate(-6deg) scale(1.06); }
 .fam-where dd { margin: 0; color: var(--ink); font-size: 0.98rem; }
 
 /* Closing band in the family's deep color */
-.fam-cta { padding: 3rem 0; background: var(--f-deep); color: var(--f-on); position: relative; overflow: hidden; }
-.fam-cta::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: var(--f-accent); }
+/* The last band before the company footer is always light, so a family's navy or night never sits on the evergreen. */
+.fam-cta { padding: 2.75rem 0 3rem; background: var(--surface); color: var(--f-ink); border-top: 1px solid var(--f-line); position: relative; }
+.fam-cta::before { content: ""; position: absolute; left: 0; top: -1px; width: min(9rem, 30%); height: 4px; background: var(--f-accent); }
 .fam-cta .wrap { display: grid; gap: 1.25rem; }
-.fam-cta h2 { color: #fff; margin: 0 0 0.5rem; max-width: 26ch; }
-.fam-cta p { margin: 0; max-width: 58ch; color: var(--f-muted-on); }
+.fam-cta h2 { color: var(--f-ink); margin: 0 0 0.4rem; max-width: 26ch; }
+.fam-cta p { margin: 0; max-width: 58ch; color: var(--f-text); }
+.fam-cta .btn-fam-outline { color: var(--f-ink); border-color: var(--f-ink); }
+.fam-cta .btn-fam-outline:hover { background: var(--f-paper); color: var(--f-ink); }
 .fam-cta .actions { margin: 0; }
 @media (min-width: 880px) { .fam-cta .wrap { grid-template-columns: 1fr auto; align-items: center; gap: 3rem; } }
+
+/* ---------- A family app's product page ----------
+   The header and footer stay the company's. Inside main, the page wears its family:
+   the company's palette variables are pointed at the family's colors, and the hero
+   takes the family's texture in place of the survey map. */
+.fam-prod.fam-up main {
+  --green-950: #0d1f3d; --green-900: #122a52; --green-800: #1c3f7a; --green-700: #1c3f7a; --green-600: #2d5597;
+  --green-100: #dde4f0; --green-50: #eef2f8;
+  --brass-700: #b83f1e; --brass-600: #b83f1e; --brass-500: #e4572e; --brass-400: #ff8a63; --brass-300: #ffb39b;
+  --text-on-dark: #f3f5f8; --muted-on-dark: #b8c4d9; --rule-on-dark: rgba(243, 245, 248, 0.18);
+  --ok: #2d5597; --focus: 0 0 0 3px rgba(45, 85, 151, 0.35);
+}
+.fam-prod.fam-sq main {
+  --green-950: #0a1220; --green-900: #101a2e; --green-800: #16223b; --green-700: #24365c; --green-600: #33497a;
+  --green-100: #efe4d0; --green-50: #f7f1e6;
+  --brass-700: #7a4e00; --brass-600: #7a4e00; --brass-500: #ffb020; --brass-400: #ffb020; --brass-300: #ffc65a;
+  --text-on-dark: #f4ebdc; --muted-on-dark: #aeb6c6; --rule-on-dark: rgba(244, 235, 220, 0.16);
+  --ok: #33497a; --focus: 0 0 0 3px rgba(51, 73, 122, 0.35);
+}
+.fam-prod .phero-rule { background: var(--f-accent); }
+.fam-prod .phero h1 { font-family: var(--f-font); font-weight: 600; letter-spacing: -0.02em; }
+.fam-prod .phero .eyebrow { color: var(--f-accent-on); }
+.fam-prod main { --font-display: var(--f-font); }
+/* Status badges in the family's colors: on its dark grounds, and on Upfront's paper */
+.fam-prod .phero .badge-ok, .fam-block.fam-sq .badge-ok, .fam-card.fam-sq .badge-ok { background: rgba(255, 255, 255, 0.1); border-color: var(--f-rule-on); color: var(--f-on); }
+.fam-prod .phero .badge-brass, .fam-block.fam-sq .badge-brass, .fam-card.fam-sq .badge-brass { background: transparent; border-color: var(--f-accent); color: var(--f-accent-on); }
+.fam-prod .phero .badge-dark { background: rgba(0, 0, 0, 0.18); border-color: var(--f-rule-on); color: var(--f-on); }
+.fam-block.fam-up .badge-ok, .fam-card.fam-up .badge-ok, .fam-page.fam-up main .badge-ok { background: #e8eef7; border-color: var(--f-line); color: var(--f-main); }
+.fam-block.fam-up .badge-brass, .fam-card.fam-up .badge-brass, .fam-page.fam-up main .badge-brass { background: #fdece6; border-color: #f4c4b3; color: var(--f-accent-ink); }
+.fam-prod .facts { border-color: var(--f-line); }
+.fam-prod .bh-from { background: rgba(255, 255, 255, 0.1); color: var(--f-accent-on); }
+.fam-prod .frame-phone, .fam-prod .screens-grid figure.tall img { border-color: var(--f-deep); }
+.fam-prod .panel-head { background: var(--f-main); }
+.fam-prod.fam-sq .panel-head { background: var(--f-deep); }
+.fam-prod .bh-opts li.best { background: var(--f-paper); }
+.fam-prod.fam-sq .q-explain { border-left-color: var(--f-accent); }
+.fam-prod.fam-sq .feat-grid li { border-top-color: var(--f-accent); }
 
 .fam-fine { margin: 1.25rem 0 0; font-size: 0.85rem; color: var(--muted); max-width: 70ch; }
 

@@ -305,7 +305,7 @@ code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-si
 .lede { font-size: 1.15rem; line-height: 1.55; max-width: 56ch; color: var(--ink-2); }
 
 .fact-panel {
-  background: rgba(243, 244, 238, 0.06);
+  background: #1a3a30;
   border: 1px solid var(--rule-on-dark);
   border-radius: var(--radius-lg);
   padding: 1.25rem 1.35rem;

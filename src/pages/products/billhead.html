@@ -4,7 +4,8 @@ title_full: Billhead | Invoices from your phone, by Tompkins Software Systems
 description: Billhead makes invoices from your phone and sends them to your customer. Set up your company once, then make a simple or an advanced invoice by answering a few questions or by typing on the invoice itself. Jobs billed in stages, payments tracked, a locked PDF, and nothing leaves your device. No subscription; any invoice under $100 is free, and everything is free during launch.
 nav: products
 priority: 0.9
-styles: assets/css/product.css
+body_class: fam-prod fam-up
+styles: assets/css/product.css, assets/css/family.css
 scripts: assets/js/product.js
 -->
 <section class="phero band-dark on-dark">
@@ -13,16 +14,15 @@ scripts: assets/js/product.js
       <a class="fam-tag" href="{{root}}upfront/"><img src="{{root}}assets/img/families/upfront-mark.svg" alt="" width="26" height="26"><span><span class="k">Part of</span> Upfront for Small Business</span></a>
       <p class="bh-from" data-bh-from hidden>TSS Invoice Creator is now Billhead: everything it did, and a good deal more.</p>
       <h1 class="app-title"><img class="app-mark" src="{{root}}assets/img/products/billhead-icon.svg" alt="" width="64" height="64">Billhead</h1>
-      <p class="lede">Invoices from your phone. Set up your company once, then make each invoice by answering a few questions or by typing straight onto it. Jobs billed in stages keep their own running totals, and the PDF goes out locked. Nothing leaves your device.</p>
+      <p class="lede">Invoices from your phone. Set up your company once, answer a few questions, and send a locked PDF. Nothing leaves your device.</p>
       <div class="product-hero-meta">
         <span class="badge badge-ok">Web app: available</span>
         <span class="badge badge-brass">Free during launch</span>
-        <span class="badge badge-dark">No account</span>
-        <span class="badge badge-dark">No subscription, no ads</span>
+        <span class="badge badge-dark">No account, no subscription</span>
       </div>
       <div class="actions">
-        <a class="btn btn-brass" href="{{root}}billhead/">Open Billhead</a>
-        <a class="btn btn-ghost" href="#try">What it will cost you</a>
+        <a class="btn btn-paper" href="{{root}}billhead/">Open Billhead</a>
+        <a class="btn btn-ghost" href="#try">What it costs</a>
       </div>
     </div>
     <div class="phero-shots">
@@ -37,10 +37,9 @@ scripts: assets/js/product.js
   <div class="wrap">
     <div class="demo" id="demo-bh">
       <div class="demo-copy">
-        <span class="eyebrow">What it will cost you</span>
+        <span class="eyebrow">What it costs</span>
         <h2>Pay for invoices, not for a subscription.</h2>
-        <p>Any invoice under $100 is free, whichever kind, as many as you like. Above that you pay once for each invoice when you download or send it: 99 cents for a simple invoice, $1.99 for an advanced one, and your first one is free. Packs never expire, and a year of unlimited invoices is $99, paid once, with no auto-renew. Every invoice is free during launch. Move the sliders to see the cheapest way to pay at your pace.</p>
-        <p class="bh-never">Billhead never takes a percentage of what your customer pays you.</p>
+        <p>Under $100 is always free. Above that, 99 cents for a simple invoice or $1.99 for an advanced one, packs that never expire, or $99 for a year. Everything is free during launch. Move the sliders to find your cheapest way.</p>
         <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}billhead/">Make an invoice now, free</a></div>
       </div>
       <div class="panel">
@@ -50,7 +49,7 @@ scripts: assets/js/product.js
             <div><label for="bh-n">Invoices a month <span class="val" data-bh-n-v></span></label><input class="range" id="bh-n" type="range" min="1" max="60" step="1" value="6" data-bh-n></div>
             <div><label for="bh-adv">Advanced invoices <span class="val" data-bh-adv-v></span></label><input class="range" id="bh-adv" type="range" min="0" max="100" step="5" value="30" data-bh-adv></div>
             <div><label for="bh-small">Under $100 <span class="val" data-bh-small-v></span></label><input class="range" id="bh-small" type="range" min="0" max="100" step="5" value="25" data-bh-small></div>
-            <p class="bh-what">An invoice under $100 is free and does not count. An invoice is advanced when it has a PO or a job site, progress billing on a project, retainage, freight, late fee terms, or your signature.</p>
+            <p class="bh-what">Under $100 does not count. Advanced means a PO, a job site, progress billing, retainage, freight, late fees, or your signature.</p>
           </div>
           <div class="bh-out">
             <ul class="bh-opts" data-bh-opts></ul>
@@ -59,7 +58,7 @@ scripts: assets/js/product.js
         </div>
       </div>
     </div>
-    <p class="bh-ref">For comparison, invoicing subscriptions commonly run $7 to $45 a month, and the cheaper plans cap how many invoices you can send. Apps that are free to send often take 2.9 percent plus 60 cents when your customer pays by card through them, which is $29.60 on a $1,000 invoice.</p>
+    <p class="bh-ref">For comparison: invoicing subscriptions run $7 to $45 a month, and apps that are free to send often take 2.9 percent plus 60 cents of a card payment, $29.60 on a $1,000 invoice.</p>
   </div>
 </section>
 
@@ -67,18 +66,18 @@ scripts: assets/js/product.js
   <div class="wrap">
     <div class="section-head">
       <h2>What it does</h2>
-      <p>Most small businesses invoice the same way every time: the same company details, the same terms, often the same customers and the same kinds of work. Billhead remembers all of it, so an invoice is the customer, the work, and the price. Jobs that are billed in stages get the arithmetic most apps leave to you.</p>
+      <p>Billhead remembers your company, your customers, and the work you bill, so an invoice is the customer, the work, and the price.</p>
     </div>
     <ul class="feat-grid">
-      <li><strong>Your company, set up once</strong><span>Your name or your logo, address, terms, tax rate, invoice numbering, and how to pay you, with a payment link if you have one. Every new invoice starts filled in, customers are saved the first time you bill them, and the lines you have billed before are a tap away.</span></li>
-      <li><strong>Simple or advanced</strong><span>A simple invoice is who, what, how much, sales tax, a discount or a deposit, when it is due, and how to pay. An advanced invoice adds a PO and a reference, the job site, the service period, units and tax by line, freight, retainage, late fee terms, and your signature.</span></li>
-      <li><strong>Ask me, or type on the page</strong><span>Ask me walks through one question at a time and ends on the finished invoice. On the page, the invoice is the form: tap any part of it and type, and dashed links add the parts you need. Switch between the two whenever you like.</span></li>
-      <li><strong>Jobs billed in stages</strong><span>A project holds the contract amount, approved change orders, the PO, and retainage. Each new invoice on it says which one it is (2 of 3), what was billed before, and what remains, and the project shows billed, paid, outstanding, and retainage held. Several projects can run at once.</span></li>
-      <li><strong>Sent, overdue, paid</strong><span>Downloading an invoice marks it sent. It turns overdue on its due date, partly paid or paid as you record payments by check, ACH, card, or anything else, and a paid invoice gets a PAID stamp. Home shows what is outstanding and what needs attention.</span></li>
-      <li><strong>A PDF that stays as you sent it</strong><span>Drawn on your phone in clean type with your logo, signed in the app if you choose, and locked so viewers will not let it be edited. Every page carries an Invoice ID made from what the invoice says, so a copy that comes back can be checked against the one you sent.</span></li>
+      <li><strong>Your company, set up once</strong><span>Name or logo, address, terms, tax, and how to pay you. Every invoice starts filled in.</span></li>
+      <li><strong>Simple or advanced</strong><span>Simple is who, what, and how much. Advanced adds a PO, the job site, retainage, freight, late fees, and your signature.</span></li>
+      <li><strong>Ask me, or type on the page</strong><span>Answer one question at a time, or tap the invoice and type. Switch whenever you like.</span></li>
+      <li><strong>Jobs billed in stages</strong><span>A project keeps the contract, change orders, and retainage. Each invoice shows what was billed before and what is left.</span></li>
+      <li><strong>Sent, overdue, paid</strong><span>Invoices turn overdue on the due date and paid as you record payments. Home shows what needs attention.</span></li>
+      <li><strong>A PDF that stays as you sent it</strong><span>Locked against edits, with an Invoice ID on every page to check a copy against.</span></li>
     </ul>
     <details class="more">
-      <summary>What is in each invoice, the lock, pricing, and where your invoices live</summary>
+      <summary>The details: each invoice, the lock, pricing, your data</summary>
       <div class="prose">
         <h3>Simple and advanced</h3>
         <p><strong>Simple:</strong> your name or logo and details, the customer, an invoice number, the date, terms, and the due date, line items with a quantity and a rate, one sales tax, a discount, a deposit received, payment instructions with a pay link, and a note. One page.</p>
@@ -115,10 +114,10 @@ scripts: assets/js/product.js
   <div class="wrap">
     <dl>
       <div><dt>Family</dt><dd><a href="{{root}}upfront/">Upfront for Small Business</a></dd></div>
-      <div><dt>Status</dt><dd>Web app available on any phone or computer; App Store and Google Play versions later</dd></div>
-      <div><dt>Price</dt><dd>Under $100: free. Then 99 cents an invoice, $1.99 advanced, packs, or $99 a year. Free during launch. No subscription and no ads, ever.</dd></div>
+      <div><dt>Status</dt><dd>Web app now; Google Play and the App Store later</dd></div>
+      <div><dt>Price</dt><dd>Under $100 free. Then 99 cents, $1.99 advanced, or $99 a year. Free during launch.</dd></div>
       <div><dt>Data lives</dt><dd>On your device. No account, no server.</dd></div>
-      <div><dt>Works</dt><dd>In any modern browser, from the home screen, and offline once loaded</dd></div>
+      <div><dt>Works</dt><dd>In any browser, from the home screen, and offline</dd></div>
       <div><dt>Support and privacy</dt><dd><a href="{{root}}support.html#billhead">Support</a>, <a href="{{root}}privacy.html#billhead">privacy policy</a></dd></div>
     </dl>
     <details class="history">
@@ -131,15 +130,15 @@ scripts: assets/js/product.js
   </div>
 </section>
 
-<section class="cta band-dark on-dark">
+<section class="fam-cta">
   <div class="wrap">
     <div>
       <h2>Send the next invoice from your phone.</h2>
-      <p>Open Billhead on any phone or computer and set up your company in about two minutes. It is free during launch, and any invoice under $100 stays free; subscribe to the newsletter and we will say before the rest changes.</p>
+      <p>Set up your company in about two minutes. Free during launch, and under $100 stays free.</p>
     </div>
     <div class="actions">
-      <a class="btn btn-brass" href="{{root}}billhead/">Open Billhead</a>
-      <a class="btn btn-ghost" href="{{root}}newsletter.html">Get the newsletter</a>
+      <a class="btn btn-fam" href="{{root}}billhead/">Open Billhead</a>
+      <a class="btn btn-fam-outline" href="{{root}}newsletter.html">Get the newsletter</a>
     </div>
   </div>
 </section>

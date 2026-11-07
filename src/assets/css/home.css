@@ -59,6 +59,7 @@ body.home .site-nav li.nav-cta .btn-primary:hover { background: var(--brass-300)
 /* A survey map under everything: contour lines drawn once at build time (assets/img/contours.svg) */
 .topo { position: absolute; left: 0; right: 0; top: -12%; height: 124%; pointer-events: none; background: url("../img/contours.svg") center / cover no-repeat; opacity: 0.3; will-change: transform; }
 .try .wrap { position: relative; }
+.try .eyebrow { color: var(--brass-300); }
 .try .try-title em { font-style: italic; color: var(--brass-300); }
 .try .try-title .w, .intro h1 .w { display: inline-block; }
 @keyframes word-in { 0% { opacity: 0; translate: 0 0.35em; filter: blur(4px); } 100% { opacity: 1; translate: none; filter: none; } }
@@ -471,7 +472,7 @@ body.home .site-nav li.nav-cta .btn-primary:hover { background: var(--brass-300)
 .screen .chips.wrap { flex-wrap: wrap; }
 
 /* ---------- Start from this ---------- */
-.start { background: rgba(243, 244, 238, 0.06); border: 1px solid var(--table-rule); border-radius: var(--radius-lg); padding: 0.9rem 1rem 1rem; }
+.start { background: #1a3a30; border: 1px solid var(--table-rule); border-radius: var(--radius-lg); padding: 0.9rem 1rem 1rem; }
 .start label { display: block; font-size: 0.92rem; color: var(--muted-on-dark); margin-bottom: 0.55rem; }
 .start label span { color: #fff; font-weight: 600; }
 .start-row { display: flex; flex-direction: column; gap: 0.5rem; }
@@ -538,6 +539,13 @@ body.home .site-nav li.nav-cta .btn-primary:hover { background: var(--brass-300)
 @media (min-width: 880px) { .probono { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: center; gap: 2.5rem; padding: 1.75rem 2rem 1.75rem 1.75rem; } .probono .shot { margin: 0 0.75rem 0.5rem 0; } }
 
 /* ---------- Veteran band and latest ---------- */
+/* ---------- Try it, on the home page: the way to the sample apps page ---------- */
+.try-teaser { padding: 3rem 0 3.25rem; }
+.try-teaser .sec-label { color: var(--brass-300); }
+.try-teaser h2 { margin: 0 0 0.6rem; color: #fff; font-size: clamp(1.9rem, 1.3rem + 2.4vw, 3rem); line-height: 1.05; max-width: 16ch; }
+.try-teaser h2 em { font-style: italic; color: var(--brass-300); }
+.try-teaser p { margin: 0 0 1.4rem; color: var(--muted-on-dark); max-width: 46ch; }
+
 .vet { background: var(--green-100); border-top: 1px solid #cfdcd4; border-bottom: 1px solid #cfdcd4; padding: 2rem 0; }
 .vet .wrap { display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: center; justify-content: space-between; }
 .vet p { margin: 0; max-width: 60ch; color: var(--ink-2); }
@@ -605,10 +613,10 @@ body.home .site-nav li.nav-cta .btn-primary:hover { background: var(--brass-300)
 .intro h1 em { font-style: italic; color: var(--brass-300); }
 .intro .lede { color: var(--muted-on-dark); max-width: 62ch; font-size: 1.12rem; }
 .doors { display: grid; gap: 1rem; margin-top: 2rem; }
-.door { display: grid; grid-template-rows: auto 1fr; overflow: hidden; border-radius: 14px; border: 1px solid var(--rule-on-dark); background: rgba(243, 244, 238, 0.05); color: var(--text-on-dark); text-decoration: none; transition: border-color 0.25s ease, background-color 0.25s ease, translate 0.3s cubic-bezier(0.2, 0.7, 0.2, 1); animation: head-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.25s both; }
+.door { display: grid; grid-template-rows: auto 1fr; overflow: hidden; border-radius: 14px; border: 1px solid var(--rule-on-dark); background: #1a3a30; color: var(--text-on-dark); text-decoration: none; transition: border-color 0.25s ease, background-color 0.25s ease, translate 0.3s cubic-bezier(0.2, 0.7, 0.2, 1); animation: head-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.25s both; }
 .door + .door { animation-delay: 0.35s; }
 .band-dark a.door { color: var(--text-on-dark); }
-.door:hover { border-color: var(--brass-400); background: rgba(243, 244, 238, 0.09); translate: 0 -3px; }
+.door:hover { border-color: var(--brass-400); background: #1f4337; translate: 0 -3px; }
 .door-stage { position: relative; height: 150px; overflow: hidden; border-bottom: 1px solid var(--rule-on-dark); }
 .door-stage img { position: absolute; display: block; height: auto; box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45); transition: translate 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), rotate 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); }
 .door-stage .dm { width: 44px; border-radius: 10px; box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35); z-index: 2; }

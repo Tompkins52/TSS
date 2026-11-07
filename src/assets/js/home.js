@@ -1,4 +1,4 @@
-/* Tompkins Software Systems home page: six working sample apps.
+/* Tompkins Software Systems sample apps (the Try it page): eleven working sample apps.
    No dependencies. Everything runs in the visitor's browser; nothing is sent anywhere. */
 (function () {
   "use strict";
@@ -1079,24 +1079,7 @@
     window.location.href = startForm.getAttribute("action") + "?topic=" + a.topic + "&draft=" + encodeURIComponent(draft);
   });
 
-  // The headline arrives a word at a time; the map drifts as the page scrolls; sections draw in as they arrive.
-  var h1 = hero.querySelector("[data-words]");
-  Array.prototype.forEach.call(document.querySelectorAll(".intro [data-words]"), function (el) { if (!reduceMotion) wordsIn(el); });
-  if (h1 && !reduceMotion) wordsIn(h1);
-  function wordsIn(h1) {
-    var n = 0;
-    Array.prototype.forEach.call(h1.childNodes, function (node) {
-      if (node.nodeType === 3) {
-        var frag = document.createDocumentFragment();
-        node.textContent.split(/(\s+)/).forEach(function (part) { if (!part) return; if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; } var w = document.createElement("span"); w.className = "w"; w.style.setProperty("--i", n++); w.textContent = part; frag.appendChild(w); });
-        h1.replaceChild(frag, node);
-      } else if (node.nodeType === 1) {
-        var inner = node.textContent; node.textContent = "";
-        inner.split(/(\s+)/).forEach(function (part) { if (!part) return; if (/^\s+$/.test(part)) { node.appendChild(document.createTextNode(part)); return; } var w2 = document.createElement("span"); w2.className = "w"; w2.style.setProperty("--i", n++); w2.textContent = part; node.appendChild(w2); });
-      }
-    });
-    h1.classList.add("words");
-  }
+  // The map drifts as the page scrolls. (The headline arrives a word at a time through site.js.)
   var topo = hero.querySelector("[data-topo]");
   if (topo && !reduceMotion) {
     var ticking = false;
