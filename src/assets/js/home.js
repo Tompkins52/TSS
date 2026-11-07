@@ -1081,7 +1081,9 @@
 
   // The headline arrives a word at a time; the map drifts as the page scrolls; sections draw in as they arrive.
   var h1 = hero.querySelector("[data-words]");
-  if (h1 && !reduceMotion) {
+  Array.prototype.forEach.call(document.querySelectorAll(".intro [data-words]"), function (el) { if (!reduceMotion) wordsIn(el); });
+  if (h1 && !reduceMotion) wordsIn(h1);
+  function wordsIn(h1) {
     var n = 0;
     Array.prototype.forEach.call(h1.childNodes, function (node) {
       if (node.nodeType === 3) {
@@ -1098,7 +1100,7 @@
   var topo = hero.querySelector("[data-topo]");
   if (topo && !reduceMotion) {
     var ticking = false;
-    var drift = function () { topo.style.transform = "translate3d(0," + Math.round(window.scrollY * 0.18) + "px,0)"; ticking = false; };
+    var drift = function () { topo.style.transform = "translate3d(0," + Math.round((window.scrollY - hero.offsetTop) * 0.18) + "px,0)"; ticking = false; };
     window.addEventListener("scroll", function () { if (!ticking) { ticking = true; window.requestAnimationFrame(drift); } }, { passive: true });
     drift();
   }

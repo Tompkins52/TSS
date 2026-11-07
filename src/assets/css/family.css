@@ -133,6 +133,8 @@ a.fam-lock:hover .fam-mark { transform: rotate(-6deg) scale(1.06); }
 .fam-tagline { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0; }
 .fam-tagline span { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.22rem 0.65rem; border: 1px dashed #b9c4d6; border-radius: 4px; font-family: var(--f-font); font-size: 0.86rem; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--f-ink); background: #fff; }
 .fam-tagline span::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--f-accent); }
+.fam-tagline .ft-k { border: 0; background: none; padding-left: 0; color: var(--f-text); }
+.fam-tagline .ft-k::before { display: none; }
 
 /* The heading bar of a family block on the products page */
 .fam-bar { display: grid; gap: 0.7rem; padding-bottom: 1.25rem; margin-bottom: 1.6rem; border-bottom: 1px solid var(--f-line); }
@@ -165,18 +167,47 @@ a.fam-lock:hover .fam-mark { transform: rotate(-6deg) scale(1.06); }
 .fam-block .prod-copy h3 { font-family: var(--f-font); letter-spacing: -0.01em; }
 .fam-block.fam-sq .shot:not(.planned) { box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(244, 235, 220, 0.2); }
 
-/* A planned product's card: a drawn plan where the screenshot will go */
-.shot.planned { display: grid; place-content: center; justify-items: center; gap: 0.5rem; aspect-ratio: 1100 / 687; padding: 1rem; text-align: center; color: #f4ebdc; background: repeating-linear-gradient(0deg, rgba(244, 235, 220, 0.07) 0 1px, transparent 1px 22px), repeating-linear-gradient(90deg, rgba(244, 235, 220, 0.07) 0 1px, transparent 1px 22px), linear-gradient(160deg, #18243d, #0c1424); box-shadow: 0 0 0 1px rgba(244, 235, 220, 0.2), 0 16px 40px rgba(0, 0, 0, 0.3); outline: 2px dashed rgba(244, 235, 220, 0.35); outline-offset: -10px; }
-.shot.planned img { width: 56px; height: 56px; border-radius: 13px; }
-.shot.planned b { font-family: "Barlow", var(--font-body); font-weight: 600; font-size: 1.5rem; line-height: 1.1; }
-.shot.planned span { font-size: 0.74rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #ffb020; }
-.shot.planned:hover { transform: none; }
-.prod-planned form { margin-top: 0.4rem; }
-.prod-planned .inline-form input { background: rgba(244, 235, 220, 0.06); border-color: rgba(244, 235, 220, 0.3); color: #f4ebdc; }
-.prod-planned .inline-form input::placeholder { color: #8e97a8; }
-.prod-planned .inline-form input:focus { border-color: #ffb020; box-shadow: 0 0 0 3px rgba(255, 176, 32, 0.3); }
-.prod-planned .form-status { color: #ffc65a; }
-.prod-planned .form-label { display: block; font-size: 0.9rem; font-weight: 600; margin: 0 0 0.45rem; color: #f4ebdc; }
+/* Planned apps: compact dashed cards, and one sign-up line per family */
+.planned-head { display: flex; align-items: center; gap: 0.7rem; margin: 1.75rem 0 0.8rem; font-family: var(--font-body); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--f-accent-ink); }
+.planned-head::after { content: ""; flex: 1; height: 1px; background: var(--f-line); }
+.fam-sq .planned-head { color: var(--f-accent); }
+.fam-sq .planned-head::after { background: var(--f-rule-on); }
+.planned-row { display: grid; gap: 0.9rem; scroll-margin-top: 90px; }
+@media (min-width: 720px) { .planned-row { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 960px) { .planned-row.three { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.planned-card { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.85rem; align-items: start; padding: 1rem 1.1rem; border-radius: var(--radius-lg); border: 1.5px dashed #a9b6cb; background: rgba(255, 255, 255, 0.65); color: var(--f-ink); }
+.fam-sq .planned-card { border-color: rgba(244, 235, 220, 0.35); background: rgba(244, 235, 220, 0.04); color: var(--f-on); }
+.planned-card .fam-mark { width: 36px; height: 36px; border-radius: 8px; }
+.pc-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.35rem 0.6rem; margin-bottom: 0.25rem; }
+.planned-card h3 { margin: 0; font-family: var(--f-font); font-size: 1.12rem; letter-spacing: -0.01em; }
+.planned-card p { margin: 0; font-size: 0.95rem; color: var(--f-text); }
+.fam-sq .planned-card p { color: var(--f-muted-on); }
+.fam-signup { margin-top: 1.1rem; display: grid; gap: 0.45rem; max-width: 40rem; }
+.fam-signup label { font-size: 0.92rem; font-weight: 600; }
+.fam-sq .fam-signup .inline-form input { background: rgba(244, 235, 220, 0.06); border-color: rgba(244, 235, 220, 0.3); color: #f4ebdc; }
+.fam-sq .fam-signup .inline-form input::placeholder { color: #8e97a8; }
+.fam-sq .fam-signup .inline-form input:focus { border-color: #ffb020; box-shadow: 0 0 0 3px rgba(255, 176, 32, 0.3); }
+.fam-signup .form-status { margin-top: 0.2rem; color: var(--f-main); }
+.fam-sq .fam-signup .form-status { color: #ffc65a; }
+
+/* A product as one wide row: the screens on one side, the words on the other */
+.prod-row { align-items: center; }
+.prod-row .shot { margin: 0 0.75rem 0.75rem 0; }
+@media (min-width: 880px) {
+  .prod-row { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 2.75rem; }
+  .prod-row.flip { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); }
+  .prod-row.flip .shot { order: 2; }
+}
+.prod-row + .prod-row { margin-top: 3rem; }
+.np-note { margin-top: 0.3rem; padding: 0.85rem 1rem; border-radius: var(--radius); border: 1px solid var(--stone-200); border-left: 4px solid var(--brass-500); background: var(--surface); }
+.np-note h4 { margin: 0 0 0.25rem; }
+.np-note p { margin: 0; font-size: 0.95rem; }
+
+/* Our products and Customer products: two tabs at the top of each page */
+.ptabs { display: inline-flex; flex-wrap: wrap; gap: 0.25rem; padding: 0.25rem; margin: 0 0 1.3rem; border-radius: 999px; border: 1px solid var(--rule-on-dark); background: rgba(243, 244, 238, 0.07); }
+.band-dark .ptabs a { display: inline-block; padding: 0.45rem 1.05rem; border-radius: 999px; color: var(--text-on-dark); font-size: 0.93rem; font-weight: 600; text-decoration: none; transition: background-color 0.2s ease, color 0.2s ease; }
+.band-dark .ptabs a[aria-current="page"] { background: var(--brass-400); color: var(--ink); }
+.band-dark .ptabs a:not([aria-current]):hover { background: rgba(243, 244, 238, 0.12); color: #fff; }
 
 /* Groups that are not families: departments, on its own */
 .prod-group { margin-top: 3rem; scroll-margin-top: 90px; }
@@ -314,6 +345,7 @@ a.fam-lock:hover .fam-mark { transform: rotate(-6deg) scale(1.06); }
 
 @media (prefers-reduced-motion: reduce) {
   .tag-swing, .tag-stamp, .sq-stage > img, .sq-stage > .phone-planned, .sq-chip, .fam-chips li, .fhero-copy h1, .fhero-copy .lede, .fhero-copy .actions, .fhero .fam-lock.big .fam-mark { animation: none; }
+  .band-dark .ptabs a { transition: none; }
   .fam-card:not(.seen) .phones img, .fam-card:not(.seen) .phones .phone-planned { translate: none; }
   .phone-planned { transition: none; }
 }

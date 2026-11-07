@@ -1,21 +1,19 @@
 <!--
-title: Products
-description: Software from Tompkins Software Systems, by family: Upfront for Small Business (Billhead), Squared Away Training (Part 107 Prep, with PMP exam prep planned), IntelliSafe and Painless Project Management for departments, Witch Card, and the Phantom Soldier site for Project Veteran Overwatch.
+title: Our products
+description: The apps Tompkins Software Systems makes and sells itself, in two families: Upfront for Small Business (Billhead; fleet tracking and timesheets planned) and Squared Away Training (Part 107 Prep; PMP, CDL, and ASVAB prep planned), plus Painless Project Management and Witch Card.
 nav: products
 priority: 0.9
 styles: assets/css/home.css, assets/css/family.css
 -->
 <section class="page-head band-dark on-dark">
   <div class="wrap">
-    <span class="eyebrow">Products</span>
-    <h1>Two families of apps, and the software we build for departments.</h1>
-    <p class="lede">Upfront for Small Business is for running a small business. Squared Away Training is for studying toward a license or a certification. IntelliSafe and Painless Project Management are platforms for departments, Witch Card stands on its own, and Phantom Soldier is our pro bono work. Every status label says exactly where a product stands, and every product page has a piece of it you can try.</p>
+    <nav class="ptabs" aria-label="Products"><a href="{{root}}products.html" aria-current="page">Our products</a><a href="{{root}}customer-products.html">Customer products</a></nav>
+    <h1>Apps we make, sell, and support ourselves.</h1>
+    <p class="lede">Most of them come in two families, each with its own name and rules: Upfront for Small Business, for running a small business, and Squared Away Training, for studying toward a license, a certification, or an entrance exam. Status labels say exactly where each one stands, and Planned means we are working toward it and it is not built yet. The software we build for partners is under <a href="{{root}}customer-products.html">Customer products</a>.</p>
     <nav class="fam-jump" aria-label="Jump to a group">
       <a href="#upfront"><img src="{{root}}assets/img/families/upfront-mark.svg" alt="" width="26" height="26">Upfront for Small Business</a>
       <a href="#squared-away"><img src="{{root}}assets/img/families/squared-away-mark.svg" alt="" width="26" height="26">Squared Away Training</a>
-      <a class="plain" href="#departments">For departments</a>
-      <a class="plain" href="#on-its-own">Witch Card</a>
-      <a class="plain" href="#pro-bono">Pro bono</a>
+      <a class="plain" href="#also">Also from TSS</a>
     </nav>
   </div>
 </section>
@@ -25,7 +23,7 @@ styles: assets/css/home.css, assets/css/family.css
     <section class="fam-block fam-up" id="upfront" aria-label="Upfront for Small Business">
       <div class="fam-bar">
         <a class="fam-lock" href="{{root}}upfront/"><img class="fam-mark" src="{{root}}assets/img/families/upfront-mark.svg" alt="" width="40" height="40"><span class="fam-words"><span class="fam-name">Upfront</span> <span class="fam-desc">for Small Business</span></span></a>
-        <p>Apps for running a small business, with the price on the tag. No subscription, no account, and your records stay on your device.</p>
+        <p>Apps for running a small business, with the price on the tag. No subscription, no ads, and never a cut of your money.</p>
         <a class="fam-more" href="{{root}}upfront/">About the family</a>
       </div>
       <article class="prod prod-app flip">
@@ -42,85 +40,76 @@ styles: assets/css/home.css, assets/css/family.css
           <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/billhead.html">Product page</a><a class="btn btn-outline btn-small" href="{{root}}billhead/">Open Billhead</a></div>
         </div>
       </article>
+      <h3 class="planned-head">Planned</h3>
+      <div class="planned-row">
+        <article class="planned-card"><img class="fam-mark" src="{{root}}assets/img/families/upfront-mark.svg" alt="" width="36" height="36"><div><div class="pc-top"><h3>Fleet tracking</h3><span class="badge badge-plan">Planned</span></div><p>Where your vehicles are and what each one needs, for a small business fleet.</p></div></article>
+        <article class="planned-card"><img class="fam-mark" src="{{root}}assets/img/families/upfront-mark.svg" alt="" width="36" height="36"><div><div class="pc-top"><h3>Timesheets</h3><span class="badge badge-plan">Planned</span></div><p>Crew hours by job and by day, with the price on the tag and no subscription.</p></div></article>
+      </div>
+      <form class="fam-signup" data-form="newsletter" novalidate>
+        <label for="nl-email-up">The Work Order, our monthly email, says when each one opens for testing.</label>
+        <div class="inline-form">
+          <input type="email" id="nl-email-up" name="email" placeholder="you@example.com" autocomplete="email" required>
+          <button class="btn btn-fam btn-small" type="submit">Subscribe</button>
+        </div>
+        <p class="hp" aria-hidden="true"><label>Leave this field empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label></p>
+        <p class="form-status" role="status" aria-live="polite" hidden></p>
+      </form>
     </section>
 
     <section class="fam-block fam-sq" id="squared-away" aria-label="Squared Away Training">
       <div class="fam-bar">
         <a class="fam-lock" href="{{root}}squared-away/"><img class="fam-mark" src="{{root}}assets/img/families/squared-away-mark.svg" alt="" width="40" height="40"><span class="fam-words"><span class="fam-name">Squared Away</span> <span class="fam-desc">Training</span></span></a>
-        <p>Study apps for licenses and certifications. A few minutes a day, and what you miss comes back until it sticks. No account.</p>
+        <p>Study apps for licenses, certifications, and entrance exams. A few minutes a day, and what you miss comes back until it sticks. No account.</p>
         <a class="fam-more" href="{{root}}squared-away/">About the family</a>
       </div>
-      <div class="built-grid two">
-        <article class="prod">
-          <a class="shot" href="{{root}}products/part-107-prep.html" aria-label="Part 107 Prep, product page">
-            <img src="{{root}}assets/img/products/p107-home.webp" alt="Part 107 Prep: the study home page with the five knowledge areas and the daily plan" width="1100" height="687">
-            <img class="ph" src="{{root}}assets/img/products/p107-phone-exam.webp" alt="" width="390" height="844">
-          </a>
-          <div class="prod-copy">
-            <div class="status"><span class="badge badge-ok">Web: available</span><span class="badge badge-brass">Apps: in preparation</span></div>
-            <h3><a href="{{root}}products/part-107-prep.html">Part 107 Prep</a></h3>
-            <p>A free study site and a mobile app for the FAA remote pilot certificate, the commercial drone license. Study modules, more than 200 original practice questions with explanations, timed exams, a daily goal, and spaced review. All progress stays on your own device.</p>
-            <p><strong>For:</strong> anyone studying for the Part 107 knowledge test, including municipal drone programs.</p>
-            <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/part-107-prep.html">Product page</a><a class="btn btn-outline btn-small" href="https://tompkins52.github.io/part107-prep/" rel="noopener">Open the study site</a></div>
-          </div>
-        </article>
-        <article class="prod prod-planned" id="pmp">
-          <div class="shot planned" aria-hidden="true"><img src="{{root}}assets/img/families/squared-away-mark.svg" alt="" width="56" height="56"><b>PMP exam prep</b><span>Planned</span></div>
-          <div class="prod-copy">
-            <div class="status"><span class="badge badge-plan">Planned</span></div>
-            <h3>PMP exam prep</h3>
-            <p>The same daily study for the Project Management Professional exam: situational questions with an explanation for every answer, earned value and the other formulas drilled until they stick, and timed practice exams that mix every domain.</p>
-            <p><strong>For:</strong> project managers preparing for the PMP exam.</p>
-            <form data-form="newsletter" novalidate>
-              <label class="form-label" for="nl-email-pmp">The Work Order, our monthly email, will say when it opens for testing.</label>
-              <div class="inline-form">
-                <input type="email" id="nl-email-pmp" name="email" placeholder="you@example.com" autocomplete="email" required>
-                <button class="btn btn-primary btn-small" type="submit">Subscribe</button>
-              </div>
-              <p class="hp" aria-hidden="true"><label>Leave this field empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label></p>
-              <p class="form-status" role="status" aria-live="polite" hidden></p>
-            </form>
-          </div>
-        </article>
+      <article class="prod prod-row">
+        <a class="shot" href="{{root}}products/part-107-prep.html" aria-label="Part 107 Prep, product page">
+          <img src="{{root}}assets/img/products/p107-home.webp" alt="Part 107 Prep: the study home page with the five knowledge areas and the daily plan" width="1100" height="687">
+          <img class="ph" src="{{root}}assets/img/products/p107-phone-exam.webp" alt="" width="390" height="844">
+        </a>
+        <div class="prod-copy">
+          <div class="status"><span class="badge badge-ok">Web: available</span><span class="badge badge-brass">Apps: in preparation</span></div>
+          <h3><a href="{{root}}products/part-107-prep.html">Part 107 Prep</a></h3>
+          <p>A free study site and a mobile app for the FAA remote pilot certificate, the commercial drone license. Study modules, more than 200 original practice questions with explanations, timed exams, a daily goal, and spaced review. All progress stays on your own device.</p>
+          <p><strong>For:</strong> anyone studying for the Part 107 knowledge test, including municipal drone programs.</p>
+          <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/part-107-prep.html">Product page</a><a class="btn btn-outline btn-small" href="https://tompkins52.github.io/part107-prep/" rel="noopener">Open the study site</a></div>
+        </div>
+      </article>
+      <h3 class="planned-head">Planned, on the same study engine</h3>
+      <div class="planned-row three">
+        <article class="planned-card"><img class="fam-mark" src="{{root}}assets/img/families/squared-away-mark.svg" alt="" width="36" height="36"><div><div class="pc-top"><h3>PMP exam prep</h3><span class="badge badge-plan">Planned</span></div><p>The Project Management Professional exam: situational questions explained, earned value and the other formulas drilled, and timed practice exams.</p></div></article>
+        <article class="planned-card"><img class="fam-mark" src="{{root}}assets/img/families/squared-away-mark.svg" alt="" width="36" height="36"><div><div class="pc-top"><h3>CDL knowledge test prep</h3><span class="badge badge-plan">Planned</span></div><p>The commercial driver's license knowledge tests: general knowledge, air brakes, and combination vehicles.</p></div></article>
+        <article class="planned-card"><img class="fam-mark" src="{{root}}assets/img/families/squared-away-mark.svg" alt="" width="36" height="36"><div><div class="pc-top"><h3>ASVAB prep</h3><span class="badge badge-plan">Planned</span></div><p>The military entrance test: practice for each part, and an estimate of your AFQT score.</p></div></article>
       </div>
+      <form class="fam-signup" data-form="newsletter" novalidate>
+        <label for="nl-email-sq">The Work Order, our monthly email, says when each one opens for testing.</label>
+        <div class="inline-form">
+          <input type="email" id="nl-email-sq" name="email" placeholder="you@example.com" autocomplete="email" required>
+          <button class="btn btn-fam btn-small" type="submit">Subscribe</button>
+        </div>
+        <p class="hp" aria-hidden="true"><label>Leave this field empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label></p>
+        <p class="form-status" role="status" aria-live="polite" hidden></p>
+      </form>
     </section>
+    <p class="fam-fine">PMP is a registered mark of the Project Management Institute, Inc. Squared Away Training is an independent publisher and is not affiliated with or endorsed by PMI, the FAA, the Department of Defense, or any state licensing agency.</p>
 
-    <section class="prod-group" id="departments" aria-labelledby="grp-dept">
-      <h2 class="prod-group-head" id="grp-dept">For departments</h2>
-      <p class="prod-group-line">Platforms a department licenses for its crews and its projects, run in the browser or on the department's own server.</p>
-      <div class="built-grid two">
-        <article class="prod">
-          <a class="shot" href="{{root}}products/intellisafe.html" aria-label="IntelliSafe, product page">
-            <img src="{{root}}assets/img/products/safe-training.webp" alt="IntelliSafe: the training dashboard with nineteen modules and their status" width="1100" height="687" loading="lazy">
-            <img class="ph" src="{{root}}assets/img/products/safe-phone.webp" alt="" width="390" height="844" loading="lazy">
-          </a>
-          <div class="prod-copy">
-            <div class="status"><span class="badge badge-ok">Available</span><span class="badge">Browser and self-hosted</span></div>
-            <h3><a href="{{root}}products/intellisafe.html">IntelliSafe</a></h3>
-            <p>Annual OSHA training in nineteen modules, eight-section incident reports with diagrams and signed statements, and site inspections and annual audits. Licensed by IntelliSafe Systems LLC, developed by Tompkins Software Systems. Formerly Public Works Safety Training.</p>
-            <p><strong>For:</strong> public works directors, safety managers, investigators, and division supervisors.</p>
-            <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/intellisafe.html">Product page</a><a class="btn btn-outline btn-small" href="https://tompkins52.github.io/Safety-Training/" rel="noopener">Open IntelliSafe</a></div>
-          </div>
-        </article>
-        <article class="prod">
-          <a class="shot" href="{{root}}products/painless-project-management.html" aria-label="Painless Project Management, product page">
-            <img src="{{root}}assets/img/products/pm-rollup.webp" alt="Painless Project Management: the roll-up of every project, sorted by who needs attention" width="1100" height="687" loading="lazy">
-            <img class="ph" src="{{root}}assets/img/products/pm-phone.webp" alt="" width="390" height="844" loading="lazy">
-          </a>
-          <div class="prod-copy">
-            <div class="status"><span class="badge badge-ok">Available</span><span class="badge">Web</span></div>
-            <h3><a href="{{root}}products/painless-project-management.html">Painless Project Management</a></h3>
-            <p>A one-page way to run a project without becoming a project manager. A charter gate, up to eight milestones, three money numbers, a two-minute weekly update, and a roll-up that sorts projects by who needs attention.</p>
-            <p><strong>For:</strong> department heads and anyone handed a project without a project manager.</p>
-            <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/painless-project-management.html">Product page</a><a class="btn btn-outline btn-small" href="https://tompkins52.github.io/painless-pm/" rel="noopener">Open the demo</a></div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="prod-group" id="on-its-own" aria-labelledby="grp-own">
-      <h2 class="prod-group-head" id="grp-own">On its own</h2>
-      <article class="prod prod-app">
+    <section class="prod-group" id="also" aria-labelledby="grp-also">
+      <h2 class="prod-group-head" id="grp-also">Also from TSS</h2>
+      <p class="prod-group-line">Two more of our own apps that are not part of a family.</p>
+      <article class="prod prod-row">
+        <a class="shot" href="{{root}}products/painless-project-management.html" aria-label="Painless Project Management, product page">
+          <img src="{{root}}assets/img/products/pm-rollup.webp" alt="Painless Project Management: the roll-up of every project, sorted by who needs attention" width="1100" height="687" loading="lazy">
+          <img class="ph" src="{{root}}assets/img/products/pm-phone.webp" alt="" width="390" height="844" loading="lazy">
+        </a>
+        <div class="prod-copy">
+          <div class="status"><span class="badge badge-ok">Available</span><span class="badge">Web</span></div>
+          <h3><a href="{{root}}products/painless-project-management.html">Painless Project Management</a></h3>
+          <p>A one-page way to run a project without becoming a project manager. A charter gate, up to eight milestones, three money numbers, a two-minute weekly update, and a roll-up that sorts projects by who needs attention.</p>
+          <p><strong>For:</strong> department heads and anyone handed a project without a project manager.</p>
+          <div class="actions"><a class="btn btn-primary btn-small" href="{{root}}products/painless-project-management.html">Product page</a><a class="btn btn-outline btn-small" href="https://tompkins52.github.io/painless-pm/" rel="noopener">Open the demo</a></div>
+        </div>
+      </article>
+      <article class="prod prod-app flip">
         <a class="phones" href="{{root}}products/witch-card.html" aria-label="Witch Card, product page">
           <img class="p1" src="{{root}}assets/img/products/wc-phone-wallet.webp" alt="" width="390" height="844" loading="lazy">
           <img class="p2" src="{{root}}assets/img/products/wc-phone.webp" alt="Witch Card opened at a gas station: it says You're at Shell and shows the card to use, drawn big, with what it earns on the purchase" width="390" height="844" loading="lazy">
@@ -135,19 +124,6 @@ styles: assets/css/home.css, assets/css/family.css
         </div>
       </article>
     </section>
-
-    <div class="probono" id="pro-bono">
-      <a class="shot" href="{{root}}products/phantom-soldier.html" aria-label="Phantom Soldier, what we built">
-        <img src="{{root}}assets/img/products/ps-home.webp" alt="The phantomsoldier.org home page" width="1100" height="687" loading="lazy">
-        <img class="ph" src="{{root}}assets/img/products/ps-phone.webp" alt="" width="390" height="844" loading="lazy">
-      </a>
-      <div class="probono-copy">
-        <span class="badge badge-brass">Pro bono</span>
-        <h3>Phantom Soldier</h3>
-        <p>Veteran stories, told as songs. A project of Project Veteran Overwatch: a veteran tells a story, it comes back as a song released under one name, never theirs, and everything the music earns goes to veteran suicide prevention. We built and maintain the website at no charge, and PVO owns it.</p>
-        <div class="actions"><a class="btn btn-outline btn-small" href="{{root}}products/phantom-soldier.html">What we built</a><a class="btn btn-outline btn-small" href="https://phantomsoldier.org/" rel="noopener">Visit phantomsoldier.org</a></div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -155,7 +131,7 @@ styles: assets/css/home.css, assets/css/family.css
   <div class="wrap split">
     <div class="prose">
       <h2>How we decide what to build</h2>
-      <p>A product gets on this list when three things are true: we needed it ourselves, other people or organizations have the same problem, and the software already out there is priced or designed for someone else. We would rather publish five tools that work than a roadmap of twenty. Pro bono work gets on the list when a veteran-serving organization needs something built and we can finish it.</p>
+      <p>A product gets on this list when three things are true: we needed it ourselves, other people or organizations have the same problem, and the software already out there is priced or designed for someone else. We would rather publish a few tools that work than a long roadmap, so an app is listed as Planned only when we are working toward it, and it stays Planned until it is in testing.</p>
       <h2>Why families</h2>
       <p>Apps for the same people live together under one name and one set of rules, so once you know one, you know what to expect from the next. Every Upfront app puts its price on the tag and never asks for a subscription. Every Squared Away app runs on the same study engine. Each app keeps its own name and look, and its page says which family it belongs to.</p>
       <h2>What every product comes with</h2>
@@ -169,7 +145,7 @@ styles: assets/css/home.css, assets/css/family.css
     <aside>
       <div class="sidebar-note">
         <h3>Need something that is not here?</h3>
-        <p>We take a small number of custom builds each year for public works, local government, small businesses, nonprofits, and learning platforms, and we help people with an idea build and license a platform of their own. Start with the <a href="{{root}}index.html#try">sample apps on the home page</a> or see <a href="{{root}}customers.html#how-to-buy">how an engagement works</a>.</p>
+        <p>We also build software for partners, under their name: see <a href="{{root}}customer-products.html">Customer products</a>. We take a small number of custom builds each year for public works, local government, small businesses, nonprofits, and learning platforms, and we help people with an idea build and license a platform of their own. Try the <a href="{{root}}index.html#try">sample apps on the home page</a> or see <a href="{{root}}customers.html#how-to-buy">how an engagement works</a>.</p>
       </div>
     </aside>
   </div>
