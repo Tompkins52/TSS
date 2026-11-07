@@ -15,6 +15,10 @@
 .phero-grid { display: grid; gap: 2rem; }
 .phero-copy { padding-bottom: 2.5rem; }
 .phero-copy h1 { max-width: 16ch; }
+/* An app's own icon beside its name, the way a store lists it */
+.app-title { display: flex; align-items: center; gap: 0.8rem; }
+.app-mark { flex: none; width: 52px; height: 52px; border-radius: 12px; box-shadow: 0 10px 26px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.12); }
+@media (min-width: 880px) { .app-mark { width: 64px; height: 64px; border-radius: 15px; } }
 .phero-copy .lede { max-width: 54ch; }
 .phero-copy .product-hero-meta { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.1rem; }
 .phero-shots { position: relative; align-self: end; padding-right: 10%; }
