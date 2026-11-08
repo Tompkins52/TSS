@@ -85,6 +85,9 @@ def main():
 
     head_t = open(os.path.join(SRC, "partials", "head.html"), encoding="utf-8").read()
     foot_t = open(os.path.join(SRC, "partials", "footer.html"), encoding="utf-8").read()
+    # "footer: minimal" gives a page a one-line footer (copyright, privacy, terms)
+    # instead of the full company footer; the customer product pages use it.
+    foot_min_t = open(os.path.join(SRC, "partials", "footer-min.html"), encoding="utf-8").read()
     revision = dt.date.today().strftime("%Y.%m.%d")
 
     if os.path.isdir(out):
@@ -143,7 +146,8 @@ def main():
                 "revision": revision,
                 "go": html.escape(meta.get("go", ""), quote=True),
             }
-            page = mark_active_nav(render(head_t, values), meta.get("nav")) + render(body, values) + render(foot_t, values)
+            footer = foot_min_t if meta.get("footer") == "minimal" else foot_t
+            page = mark_active_nav(render(head_t, values), meta.get("nav")) + render(body, values) + render(footer, values)
             dest = os.path.join(out, rel)
             os.makedirs(os.path.dirname(dest), exist_ok=True)
             open(dest, "w", encoding="utf-8").write(page)
