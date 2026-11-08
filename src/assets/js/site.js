@@ -19,6 +19,13 @@
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
       toggle.querySelector(".label").textContent = open ? "Close" : "Menu";
     });
+    document.addEventListener("click", function (e) {
+      if (nav.classList.contains("is-open") && !nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove("is-open");
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.querySelector(".label").textContent = "Menu";
+      }
+    });
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape" && nav.classList.contains("is-open")) {
         nav.classList.remove("is-open");

@@ -21,13 +21,13 @@
   --f-text: #3d4a63;
   --f-accent: #e4572e;
   --f-accent-ink: #b83f1e;
-  --f-accent-on: #ff8a63;
+  --f-accent-on: #ff9d7c;
   --f-on: #f3f5f8;
   --f-muted-on: #b8c4d9;
   --f-rule-on: rgba(243, 245, 248, 0.18);
   --f-planned: #16335f;
   --f-planned-rule: rgba(243, 245, 248, 0.45);
-  --f-planned-label: #ff8a63;
+  --f-planned-label: #ff9d7c;
   --f-chip: rgba(18, 42, 82, 0.92);
   --f-font: "IBM Plex Sans", var(--font-body);
 }
@@ -330,7 +330,7 @@ a.fam-lock:hover .fam-mark { transform: rotate(-6deg) scale(1.06); }
 .fam-prod.fam-up main {
   --steel-950: #0d1f3d; --steel-900: #122a52; --blue-800: #122a52; --blue-700: #1c3f7a; --blue-600: #1c3f7a; --blue-500: #2d5597;
   --steel-100: #dde4f0; --blue-50: #eef2f8;
-  --sky-800: #b83f1e; --sky-700: #b83f1e; --sky-500: #e4572e; --sky-400: #ff8a63; --sky-300: #ffb39b;
+  --sky-800: #b83f1e; --sky-700: #b83f1e; --sky-500: #e4572e; --sky-400: #ff9d7c; --sky-300: #ffb39b;
   --text-on-dark: #f3f5f8; --muted-on-dark: #b8c4d9; --rule-on-dark: rgba(243, 245, 248, 0.18);
   --ok: #2d5597; --focus: 0 0 0 3px rgba(45, 85, 151, 0.35);
 }
