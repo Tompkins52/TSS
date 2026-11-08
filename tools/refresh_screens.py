@@ -81,7 +81,8 @@ def r_goto(path="index.html", scroll=0):
 
 
 def r_safe_module(page, base):
-    page.goto(base + "index.html", wait_until="networkidle")
+    # The site opens on a front door; the training list is at #/dashboard (and #/training).
+    page.goto(base + "index.html#/dashboard", wait_until="networkidle")
     settle(page)
     click_first(page, ["a:has-text('Start')", "button:has-text('Start')"])
     settle(page)
@@ -256,11 +257,11 @@ def r_bh(route="#/", ask=False):
 
 
 SCREENS = [
-    ("safe-training", "safe", "desktop", r_goto("index.html")),
+    ("safe-training", "safe", "desktop", r_goto("index.html#/dashboard")),
     ("safe-module", "safe", "desktop", r_safe_module),
     ("safe-incidents", "safe", "desktop", r_goto("index.html#/incidents")),
     ("safe-inspections", "safe", "desktop", r_goto("index.html#/inspections")),
-    ("safe-phone", "safe", "phone", r_goto("index.html")),
+    ("safe-phone", "safe", "phone", r_goto("index.html#/dashboard")),
     ("safe-phone-incidents", "safe", "phone", r_goto("index.html#/incidents")),
     ("pm-rollup", "pm", "desktop", r_pm_view("Roll-up")),
     ("pm-projects", "pm", "desktop", r_pm_view("Projects")),
