@@ -214,7 +214,7 @@
       return "#" + out.map(function (v) { return (v < 16 ? "0" : "") + v.toString(16); }).join("");
     };
     // The same drawn card the app shows: the card's color, a chip, the issuer, and the network. No issuer artwork.
-    var wcFace = function (card) { return { c1: shade(card.color, 0.22), c2: card.color, c3: shade(card.color, -0.3) }; };
+    var wcFace = function (card) { return { c1: shade(card.color, 0.1), c2: card.color, c3: shade(card.color, -0.3) }; };
     var wcArt = function (card, width) {
       var id = "wca" + (++wcSeq), mid = width >= 60, f = wcFace(card), font = "Archivo WC, Archivo, Helvetica, Arial, sans-serif";
       var net = { "American Express": "AMEX", "Mastercard": "MASTERCARD", "Visa": "VISA" }[card.network] || card.network.toUpperCase();

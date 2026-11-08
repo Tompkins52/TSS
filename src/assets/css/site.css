@@ -296,6 +296,9 @@ code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-si
   .site-nav li.nav-cta a { padding: 0.45rem 0.95rem; }
 }
 
+/* In-page anchors land below the sticky header */
+main [id]:not(section) { scroll-margin-top: 84px; }
+
 /* ---------- Dark bands: hero and page heads ---------- */
 .band-dark {
   background: linear-gradient(180deg, var(--steel-900), var(--steel-950));
@@ -500,6 +503,8 @@ textarea { min-height: 7.5rem; resize: vertical; }
 @media (min-width: 540px) { .inline-form { flex-direction: row; } .inline-form .btn { flex: none; } }
 .form-note { font-size: 0.88rem; color: var(--muted); margin-top: 0.6rem; }
 form + .form-note, .form-note + form { margin-top: 0.75rem; }
+/* Fingers: small buttons still get a 40 px target */
+@media (pointer: coarse) { .btn-small { min-height: 40px; } }
 .form-status { margin-top: 0.75rem; font-size: 0.95rem; font-weight: 500; color: var(--blue-700); }
 .form-status[hidden] { display: none; }
 .hp { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
@@ -539,7 +544,8 @@ form + .form-note, .form-note + form { margin-top: 0.75rem; }
 .footer-brand .badge { margin-top: 1rem; }
 .footer-col h3 { font-family: var(--font-body); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sky-400); margin-bottom: 0.8rem; }
 .footer-col ul { list-style: none; padding: 0; margin: 0; }
-.footer-col li { margin: 0 0 0.5rem; font-size: 0.95rem; }
+.footer-col li { margin: 0; font-size: 0.95rem; }
+.footer-col li a { display: inline-block; padding: 0.3rem 0; }
 .footer-bottom { border-top: 1px solid var(--rule-on-dark); padding: 1.25rem 0 1.5rem; font-size: 0.85rem; display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; justify-content: space-between; }
 .footer-bottom p { margin: 0; }
 /* One-line footer for the customer product pages (footer: minimal) */

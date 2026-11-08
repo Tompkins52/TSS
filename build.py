@@ -117,7 +117,7 @@ def main():
             # A page that has moved: "redirect: products/new-page.html" sends visitors
             # on, points search engines at the new address, and stays out of the sitemap.
             if meta.get("redirect"):
-                canonical = base + meta["redirect"]
+                canonical = base + ("" if meta["redirect"] == "index.html" else meta["redirect"])
                 extra_head += '\n<meta http-equiv="refresh" content="0; url=%s%s">' % (root, meta["redirect"])
                 meta["noindex"] = "true"
             # A short address on this site for a product hosted elsewhere: "go: https://..."
