@@ -209,3 +209,8 @@ body.safe-page {
 .safe-page .safe-facts .timeline { border-left-color: rgba(143, 240, 200, 0.28); }
 .safe-page .safe-facts .timeline li::before { background: var(--is-green); border-color: var(--is-mint); }
 .safe-page .compare .handle::after { box-shadow: 0 4px 14px rgba(4, 24, 42, 0.35); }
+
+/* The page ends on night navy: the one-line footer takes the same color. */
+.safe-page .site-footer-min { background: var(--is-night); color: rgba(255, 255, 255, 0.6); border-top: 1px solid rgba(255, 255, 255, 0.08); }
+.safe-page .site-footer-min a { color: rgba(255, 255, 255, 0.82); }
+.safe-page .site-footer-min a:hover { color: var(--is-mint); }

@@ -533,6 +533,10 @@ textarea { min-height: 7.5rem; resize: vertical; }
 .footer-col li { margin: 0 0 0.5rem; font-size: 0.95rem; }
 .footer-bottom { border-top: 1px solid var(--rule-on-dark); padding: 1.25rem 0 1.5rem; font-size: 0.85rem; display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; justify-content: space-between; }
 .footer-bottom p { margin: 0; }
+/* One-line footer for the customer product pages (footer: minimal) */
+.site-footer-min .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.5rem 1.5rem; padding-top: 1.1rem; padding-bottom: 1.25rem; font-size: 0.85rem; }
+.site-footer-min p { margin: 0; }
+.site-footer-min p + p { display: flex; gap: 1.25rem; }
 .footer-col ul + h3 { margin-top: 1.4rem; }
 .site-footer .footer-col h3 a { color: inherit; text-decoration: none; }
 .site-footer .footer-col h3 a:hover { color: var(--brass-300); text-decoration: underline; }
