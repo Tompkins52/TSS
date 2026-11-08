@@ -32,11 +32,11 @@ OUT = os.path.join(ROOT, "src", "assets", "img", "products")
 
 # Base addresses. Override with environment variables to capture from a local copy.
 PRODUCTS = {
-    "safe": {"name": "IntelliSafe", "base": os.environ.get("SCREENS_SAFE", "https://tompkins52.github.io/Safety-Training/"), "title": "IntelliSafe"},
-    "pm": {"name": "Painless Project Management", "base": os.environ.get("SCREENS_PM", "https://tompkins52.github.io/painless-pm/"), "title": "Painless"},
-    "p107": {"name": "Part 107 Prep", "base": os.environ.get("SCREENS_P107", "https://tompkins52.github.io/part107-prep/"), "title": "Part 107"},
+    "safe": {"name": "IntelliSafe", "base": os.environ.get("SCREENS_SAFE", "https://intellisafe.tompkinssoftwaresystems.com/"), "title": "IntelliSafe"},
+    "pm": {"name": "Painless Project Management", "base": os.environ.get("SCREENS_PM", "https://painless.tompkinssoftwaresystems.com/"), "title": "Painless"},
+    "p107": {"name": "Part 107 Prep", "base": os.environ.get("SCREENS_P107", "https://part107.tompkinssoftwaresystems.com/"), "title": "Part 107"},
     "ps": {"name": "Phantom Soldier", "base": os.environ.get("SCREENS_PS", "https://phantomsoldier.org/"), "title": "Phantom Soldier"},
-    "wc": {"name": "Witch Card", "base": os.environ.get("SCREENS_WC", "https://tompkins52.github.io/which-card/"), "title": "Witch Card"},
+    "wc": {"name": "Witch Card", "base": os.environ.get("SCREENS_WC", "https://witch-card.tompkinssoftwaresystems.com/"), "title": "Witch Card"},
     "bh": {"name": "Billhead", "base": os.environ.get("SCREENS_BH", "https://invoice.tompkinssoftwaresystems.com/"), "title": "Billhead"},
 }
 
