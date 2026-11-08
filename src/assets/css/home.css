@@ -672,3 +672,77 @@ body.home .site-nav li.nav-cta .btn-primary:hover { background: var(--sky-300); 
   .on-dark .swipe-dots button[aria-current="true"]::before { background: var(--sky-400); }
 }
 @media (max-width: 879px) and (prefers-reduced-motion: reduce) { .swipe-dots button::before { transition: none; } }
+
+/* ---------- Desktop: Also from TSS keeps its place under the families ---------- */
+@media (min-width: 880px) { #products.built { padding-bottom: 0; } .built.also { padding-top: 3rem; } }
+
+/* ---------- Phones: one section per screen, and a short swipe moves to the next ---------- */
+@media (max-width: 879px) {
+  html:has(body.home) { scroll-snap-type: y mandatory; scroll-padding-top: 67px; }
+  body.home main > section { scroll-snap-align: start; }
+  body.home .site-footer { scroll-snap-align: end; }
+  body.home :is(.intro, #products, .also, .cust, .how, .try-teaser) {
+    min-height: calc(100svh - 67px); scroll-snap-stop: always;
+    display: flex; flex-direction: column; justify-content: center;
+    padding-block: 0.7rem 0.8rem;
+  }
+  body.home :is(.intro, #products, .also, .cust, .how, .try-teaser) > .wrap { width: 100%; }
+
+  /* What we do */
+  .intro h1 { font-size: clamp(1.75rem, 7.6vw, 2.4rem); }
+  .intro .lede { margin-bottom: 0; font-size: 1rem; }
+  .doors { margin-top: 1rem; }
+  .door-stage { height: clamp(92px, 16svh, 170px); }
+  .door-stage.ours .ph1, .door-stage.ours .ph2 { top: 22px; }
+  .door-copy { padding: 0.75rem 1rem 0.9rem; gap: 0.15rem; }
+  .door strong { font-size: 1.15rem; }
+  .door-p { font-size: 0.9rem; line-height: 1.4; }
+
+  /* Section heads */
+  .sec-label { margin-bottom: 0.45rem; }
+  .built-head { margin-bottom: 0.8rem; }
+  .built-head h2 { margin-bottom: 0.25rem; }
+  .built-head p { display: none; }
+
+  /* Families: the family, its look, and its apps by name and status */
+  .fam-card { gap: 0.65rem; padding: 0.95rem; }
+  .fam-card-head p { margin-top: 0.35rem; font-size: 0.93rem; }
+  .fam-card .phones { display: none; }
+  .fam-apps { gap: 0.3rem; }
+  #products .fam-apps li { flex-direction: row; align-items: center; padding: 0.25rem 0.6rem; }
+  .fam-apps a span { display: none; }
+  .fam-lock .fam-mark { width: 34px; height: 34px; }
+  .fam-card .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; margin-top: 0; }
+  .fam-card .actions .btn { padding: 0.5rem 0.4rem; font-size: 0.8rem; text-align: center; justify-content: center; white-space: normal; }
+  .fam-apps strong { font-size: 0.93rem; }
+  .fam-apps .badge { font-size: 0.68rem; }
+  .fam-card .fam-tagline { display: none; }
+
+  /* Also from TSS: bigger phones, since the section has the screen to itself */
+  .also .prod-group { margin-top: 0; }
+  .also .prod-group-head { margin-bottom: 0.9rem; }
+  .also .mini-prod { grid-template-columns: 1fr; justify-items: start; align-content: start; }
+  .also .mini-prod img { width: auto; height: clamp(170px, 36svh, 340px); aspect-ratio: 390 / 700; }
+
+  /* Systems we build with a partner */
+  .cust .shot > img { aspect-ratio: 2.2 / 1; object-fit: cover; object-position: top; height: auto; }
+  .cust .prod { gap: 0.55rem; }
+  .cust .prod-copy { gap: 0.3rem; padding-top: 0.2rem; }
+  .cust .prod-copy .badge { font-size: 0.68rem; }
+  .cust .prod-copy h3 { font-size: 1.2rem; }
+  .cust .prod-copy p { font-size: 0.93rem; }
+  .cust .prod-copy .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; }
+  .cust .prod-copy .actions .btn { padding: 0.5rem 0.4rem; font-size: 0.8rem; text-align: center; justify-content: center; white-space: normal; }
+  .cust-actions { margin-top: 0.6rem; }
+
+  /* How a build goes */
+  .how-head { margin-bottom: 0.9rem; }
+}
+/* Short phones (iPhone SE and the like): a little less on each screen so it still fits */
+@media (max-width: 879px) and (max-height: 640px) {
+  .intro h1 { font-size: 1.6rem; }
+  .door-p, .fam-card-head p, .cust-actions { display: none; }
+  .cust .shot > img { aspect-ratio: 2.8 / 1; }
+  .built-head h2, .how h2 { font-size: 1.3rem; }
+  #products .fam-apps li { padding-block: 0.18rem; }
+}
