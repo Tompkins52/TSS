@@ -85,7 +85,7 @@ body.home .site-nav li.nav-cta .btn-primary:hover { background: var(--sky-300); 
 }
 
 /* Who it is for: a vertical list on wide screens, a scrolling row on narrow ones */
-.auds { margin: 0; padding: 0; border: 0; min-width: 0; max-width: 100%; display: flex; gap: 0.45rem; overflow-x: auto; scroll-snap-type: x proximity; padding-bottom: 0.35rem; scrollbar-width: none; }
+.auds { margin: 0; padding: 0; border: 0; min-width: 0; max-width: 100%; display: flex; gap: 0.45rem; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x proximity; padding-block: 4px 0.35rem; scrollbar-width: none; }
 .auds::-webkit-scrollbar { display: none; }
 .auds label {
   position: relative; cursor: pointer; flex: none; scroll-snap-align: start;
@@ -192,7 +192,7 @@ body.home .site-nav li.nav-cta .btn-primary:hover { background: var(--sky-300); 
 .device.phone .screen[data-shell="topm"] .layer { grid-template-rows: 80px 1fr; }
 .device.phone .screen[data-shell="drawer"] .layer { grid-template-rows: 46px 1fr; }
 .device.phone .screen[data-shell="topm"] .app-top { justify-content: flex-start; }
-.device.phone .app-tabsx { overflow-x: auto; scrollbar-width: none; flex-wrap: nowrap; }
+.device.phone .app-tabsx { overflow-x: auto; overflow-y: hidden; scrollbar-width: none; flex-wrap: nowrap; }
 .device.phone .app-tabsx::-webkit-scrollbar { display: none; }
 .device.phone .app-tabsx .nv { flex: none; }
 .menu-btn { width: 28px; height: 28px; border: 0; background: transparent; display: grid; gap: 4px; align-content: center; justify-items: center; padding: 0; cursor: pointer; color: inherit; flex: none; margin-right: 2px; }
@@ -652,25 +652,15 @@ body.home .site-nav li.nav-cta .btn-primary:hover { background: var(--sky-300); 
 .mini-prod .mp-p { color: var(--ink-2); font-size: 0.95rem; }
 @media (prefers-reduced-motion: reduce) { .door, .door-stage img, .mini-prod { animation: none; transition: none; } .door:hover, .mini-prod:hover { translate: none; } }
 
-/* ---------- Swipe rows: on phones, card groups scroll sideways instead of stacking ----------
-   The dots' look is in site.css; here the rows swipe, and the dots show, below 880px. */
-@media (max-width: 879px) {
-  .doors.swipe, .fam-duo.swipe, .mini-grid.swipe, .built-grid.swipe, .how-list.swipe {
-    display: flex; gap: 0.9rem; position: relative;
-    overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
-    margin-inline: calc(-1 * var(--gutter)); padding: 0.25rem var(--gutter) 0.5rem; scroll-padding-inline: var(--gutter);
-    scrollbar-width: none;
-  }
-  .swipe > * { flex: 0 0 86%; min-width: 0; scroll-snap-align: start; }
-  .swipe-dots { display: flex; }
-}
+/* Swipe rows (the doors, families, Also from TSS, Customer products, How a build goes) are
+   class swipe swipe-880 in index.html; the row and dot styles are in site.css. */
 
 /* ---------- Desktop: Also from TSS keeps its place under the families ---------- */
 @media (min-width: 880px) { #products.built { padding-bottom: 0; } .built.also { padding-top: 3rem; } }
 
 /* ---------- Phones: one section per screen, and a short swipe moves to the next ---------- */
 @media (max-width: 879px) and (orientation: portrait) and (min-height: 560px) and (hover: none) and (pointer: coarse) {
-  html:has(body.home) { scroll-snap-type: y mandatory; scroll-padding-top: 67px; }
+  html:has(body.home) { scroll-snap-type: y mandatory; scroll-padding-top: 67px; scroll-behavior: auto; }
   body.home main > section { scroll-snap-align: start; }
   body.home .site-footer { scroll-snap-align: end; }
   body.home :is(.intro, #products, .also, .cust, .how, .try-teaser) {

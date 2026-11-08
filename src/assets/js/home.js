@@ -1081,7 +1081,8 @@
 
   // The map drifts as the page scrolls. (The headline arrives a word at a time through site.js.)
   var topo = hero.querySelector("[data-topo]");
-  if (topo && !reduceMotion) {
+  var touchPhone = window.matchMedia && window.matchMedia("(max-width: 879px) and (hover: none) and (pointer: coarse)").matches;
+  if (topo && !reduceMotion && !touchPhone) {
     var ticking = false;
     var drift = function () { topo.style.transform = "translate3d(0," + Math.round((window.scrollY - hero.offsetTop) * 0.18) + "px,0)"; ticking = false; };
     window.addEventListener("scroll", function () { if (!ticking) { ticking = true; window.requestAnimationFrame(drift); } }, { passive: true });

@@ -157,17 +157,8 @@
 .feat-grid li { margin: 0; background: var(--surface); border: 1px solid var(--stone-200); border-top: 3px solid var(--blue-600); border-radius: var(--radius); padding: 1rem 1.1rem; }
 .feat-grid strong { display: block; font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.3rem; }
 .feat-grid span { color: var(--ink-2); font-size: 0.97rem; }
-/* Phones: a feature list marked .swipe scrolls sideways instead of stacking (site.js adds the dots) */
-@media (max-width: 639px) {
-  .feat-grid.swipe {
-    display: flex; gap: 0.9rem; position: relative;
-    overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
-    margin-inline: calc(-1 * var(--gutter)); padding: 0.25rem var(--gutter) 0.9rem; scroll-padding-inline: var(--gutter);
-    scrollbar-width: none;
-  }
-  .feat-grid.swipe > li { flex: 0 0 86%; min-width: 0; scroll-snap-align: start; }
-  .feat-grid.swipe + .swipe-dots { display: flex; margin-top: 0; }
-}
+/* On phones the feature cards swipe sideways (class swipe swipe-640; row styles in site.css) */
+@media (max-width: 639px) { .feat-grid.swipe + .swipe-dots { margin-top: 0; } }
 .more { margin-top: 1.75rem; border-top: 1px solid var(--stone-300); }
 .more summary { cursor: pointer; font-weight: 600; padding: 0.9rem 0; color: var(--blue-700); list-style: none; display: flex; align-items: center; gap: 0.5rem; }
 .more summary::-webkit-details-marker { display: none; }
@@ -330,6 +321,12 @@
 @media (min-width: 560px) { .screens-grid.phones { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (min-width: 960px) { .screens-grid.phones { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .screens-grid.phones figcaption { text-align: center; max-width: 24ch; margin: 0 auto; }
+/* On phones the screens swipe sideways (class swipe swipe-720; row styles in site.css); phone screens are narrower so one fits the screen */
+@media (max-width: 719px) {
+  .screens-grid.swipe { gap: 1rem; }
+  .screens-grid.phones.swipe > figure { flex-basis: 54%; }
+  .screens-grid.phones.swipe img { max-width: none; }
+}
 
 /* Billhead: what a year of invoicing costs */
 .bh-from { display: inline-block; margin: 0 0 0.6rem; padding: 0.35em 0.75em; border-radius: 999px; background: rgba(255, 255, 255, 0.12); color: var(--sky-300); font-size: 0.88rem; font-weight: 600; }
@@ -350,4 +347,74 @@
 
 @media (prefers-reduced-motion: reduce) {
   .wc-winner.reveal .wc-big, .wc-winner.reveal .wc-hat, .wc-here.found b { animation: none; }
+}
+
+/* ---------- Phones: one section per screen, and a short swipe moves to the next ----------
+   The same rule as the home page: only on touch screens held upright, because a mouse wheel cannot
+   cross a full-screen mandatory snap. Each section is at least one screen tall and trimmed so it
+   fits one: the hero keeps its copy and a cropped screen, section heads keep their label and
+   heading, the demos keep the piece you can use, and the facts sit in two columns. */
+@media (max-width: 879px) and (orientation: portrait) and (min-height: 560px) and (hover: none) and (pointer: coarse) {
+  html:has(body.prod) { scroll-snap-type: y mandatory; scroll-padding-top: 67px; scroll-behavior: auto; }
+  body.prod main > section[id] { scroll-margin-top: 0; }   /* the page's own padding places the snap; no second offset */
+  body.prod main > section { scroll-snap-align: start; scroll-snap-stop: always; min-height: calc(100svh - 67px); display: flex; flex-direction: column; justify-content: center; padding-block: 0.9rem 1rem; }
+  body.prod main > section > .wrap { width: 100%; }
+  body.prod main > .phero-rule { display: none; }
+  body.prod .site-footer { scroll-snap-align: end; }
+
+  /* The hero: copy at the top, the screen along the bottom edge */
+  body.prod .phero { padding-bottom: 0; }
+  body.prod .phero > .wrap { flex: 1; display: grid; align-content: space-between; row-gap: 1rem; }
+  body.prod .phero-copy { padding-bottom: 0; }
+  body.prod .phero-copy h1 { font-size: clamp(1.9rem, 8vw, 2.4rem); }
+  body.prod .phero-copy .lede { font-size: 1rem; }
+  body.prod .product-hero-meta { display: none; }
+  body.prod .phero-copy .actions { margin-top: 1rem; }
+  body.prod .phero-shots .frame img { aspect-ratio: 2.2 / 1; object-fit: cover; object-position: top; }
+  body.prod .frame-phone { display: none; }
+  body.prod .phero-phones { height: clamp(200px, 36svh, 300px); }
+
+  /* Section heads keep the label and the heading; the demos keep the piece you can use */
+  body.prod .section-head { margin-bottom: 1rem; }
+  body.prod .section-head p, body.prod .demo-copy p, body.prod .compare-ends, body.prod .bh-ref, body.prod .bh-what { display: none; }
+  body.prod .demo-copy .actions { margin-top: 0.6rem; }
+  body.prod .demo { gap: 1rem; }
+  body.prod .compare { aspect-ratio: 1 / 1; min-height: 0; }
+  body.prod .feat-grid li { padding: 0.9rem 1rem; }
+  body.prod .more { margin-top: 1rem; }
+  body.prod .facts dl { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.9rem 1rem; }
+  body.prod .feat-grid span { font-size: 0.93rem; }
+  /* Painless PM's weekly update and Part 107's question: tighter, the goal ring beside its numbers */
+  body.prod .pm-grid { gap: 0.8rem; }
+  body.prod .pm-grid .pm-controls { gap: 0.45rem; }
+  body.prod .pm-help { margin-top: 0.4rem; }
+  body.prod .pm-roll { order: -1; position: sticky; top: 67px; z-index: 2; box-shadow: 0 8px 16px -10px rgba(16, 22, 30, 0.25); }
+  body.prod .q-grid { gap: 0.8rem; }
+  body.prod .goal { display: grid; grid-template-columns: 72px minmax(0, 1fr); column-gap: 0.8rem; align-items: center; text-align: left; }
+  body.prod .goal svg { grid-row: 1 / span 3; width: 72px; height: 72px; }
+  body.prod .goal .n { font-size: 1.3rem; }
+  body.prod .goal .streak { margin-top: 0; }
+  body.prod .q-text { font-size: 1.1rem; margin-bottom: 0.7rem; }
+  body.prod .q-opt { padding: 0.55em 0.8em; }
+  /* Billhead's calculator: tighter rows */
+  body.prod .bh-grid { gap: 0.9rem; }
+  body.prod .bh-grid .pm-controls { gap: 0.5rem; }
+  body.prod .bh-opts { gap: 0.4rem; }
+  body.prod .bh-opts li { padding: 0.45rem 0.75rem; }
+  body.prod .bh-opts li small { display: none; }
+  body.prod .bh-best { margin-top: 0.6rem; font-size: 0.88rem; }
+  body.prod .panel-body { padding: 0.8rem 0.9rem 0.9rem; }
+  /* A phone screen among the screens stands no taller than half the screen */
+  body.prod .screens-grid.swipe figure.tall img { max-width: none; width: auto; height: clamp(220px, 44svh, 400px); }
+}
+/* Taller phones have room for the hero's badges and a deeper screen */
+@media (max-width: 879px) and (orientation: portrait) and (min-height: 740px) and (hover: none) and (pointer: coarse) {
+  body.prod .product-hero-meta { display: flex; }
+  body.prod .phero-shots .frame img { aspect-ratio: 1.75 / 1; }
+}
+/* Short phones: IntelliSafe's hero drops its description, and the compare piece is a little shorter */
+@media (max-width: 879px) and (orientation: portrait) and (min-height: 560px) and (max-height: 700px) and (hover: none) and (pointer: coarse) {
+  body.prod .safe-hero .lede { display: none; }
+  body.prod .compare { aspect-ratio: 4 / 3; }
+  body.prod .matrix tbody tr:nth-child(6) { display: none; }
 }

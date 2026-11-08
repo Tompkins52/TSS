@@ -109,8 +109,12 @@
   }
 
   /* ---- Motion: things fade in as they arrive and out as they leave; the map drifts; a reading line ---- */
+  // On touch phones the fade-ins and the parallax stay off (site.css shows everything at once), so
+  // nothing moves inside the page while a swipe moves the page; the reading line stays.
+  var onScrollHooks = [];
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!reduceMotion) {
+  var touchPhone = window.matchMedia && window.matchMedia("(max-width: 879px) and (hover: none) and (pointer: coarse)").matches;
+  if (!reduceMotion && !touchPhone) {
     var REVEAL = ".card, .feat-grid > li, .values > li, .sectors > li, .screens-grid figure, .checklist > li, .sidebar-note, .facts dl > div, .section-head, .demo-copy, .demo .panel, .phero-shots, .phero-phones, .grp, .how-list > li, .prose > h2, .callout, .spec, .fam-rules > li, .fam-where dl > div";
     var items = document.querySelectorAll(REVEAL), counts = [];
     Array.prototype.forEach.call(items, function (el) {
@@ -128,15 +132,23 @@
       Array.prototype.forEach.call(document.querySelectorAll(".rv"), function (el) { io.observe(el); });
     } else { Array.prototype.forEach.call(document.querySelectorAll(".rv"), function (el) { el.classList.add("in"); }); }
 
-    var bands = document.querySelectorAll(".band-dark"), header = document.querySelector(".site-header"), line = null;
-    if (header) { line = document.createElement("div"); line.className = "read-line"; header.appendChild(line); }
-    var ticking = false;
-    var onScroll = function () {
-      ticking = false;
-      var y = window.scrollY || window.pageYOffset;
+    var bands = document.querySelectorAll(".band-dark");
+    var parallax = function () {
       Array.prototype.forEach.call(bands, function (b) { var r = b.getBoundingClientRect(); if (r.bottom > 0 && r.top < window.innerHeight) b.style.setProperty("--py", Math.round((r.top - window.innerHeight / 2) * -0.12) + "px"); });
-      if (line) { var h = document.documentElement.scrollHeight - window.innerHeight; line.style.width = (h > 0 ? Math.min(100, y / h * 100) : 0) + "%"; }
     };
+    onScrollHooks.push(parallax);
+  }
+  if (!reduceMotion) {
+    var header = document.querySelector(".site-header"), line = null;
+    if (header) { line = document.createElement("div"); line.className = "read-line"; header.appendChild(line); }
+    if (line) onScrollHooks.push(function () {
+      var y = window.scrollY || window.pageYOffset, h = document.documentElement.scrollHeight - window.innerHeight;
+      line.style.width = (h > 0 ? Math.min(100, y / h * 100) : 0) + "%";
+    });
+  }
+  if (onScrollHooks.length) {
+    var ticking = false;
+    var onScroll = function () { ticking = false; onScrollHooks.forEach(function (f) { f(); }); };
     window.addEventListener("scroll", function () { if (!ticking) { ticking = true; window.requestAnimationFrame(onScroll); } }, { passive: true });
     onScroll();
   }
@@ -180,7 +192,7 @@
     var pad = function () { return parseFloat(getComputedStyle(row).paddingLeft) || 0; };
     items.forEach(function (item, i) {
       var b = document.createElement("button");
-      var t = item.querySelector(".fam-name, h3, strong, b");
+      var t = item.querySelector(".fam-name, h3, strong, b, figcaption");
       b.type = "button";
       b.setAttribute("aria-label", (t ? t.textContent.trim() : "Item " + (i + 1)) + ", " + (i + 1) + " of " + items.length);
       b.addEventListener("click", function () { row.scrollTo({ left: item.offsetLeft - pad(), behavior: smooth ? "smooth" : "auto" }); });
@@ -200,6 +212,39 @@
     }, { passive: true });
     mark();
   });
+
+  /* ---- Footer: on phones each column heading folds its links away until it is tapped ---- */
+  var foot = document.querySelector(".site-footer:not(.site-footer-min)");
+  var phoneFoot = window.matchMedia && window.matchMedia("(max-width: 639px)");
+  if (foot && phoneFoot) {
+    var groups = [];
+    Array.prototype.forEach.call(foot.querySelectorAll(".footer-col h3"), function (h, i) {
+      var list = h.nextElementSibling;
+      if (!list || list.tagName !== "UL") return;
+      if (!list.id) list.id = "footer-links-" + (i + 1);
+      groups.push({ h: h, list: list, inner: h.innerHTML, text: h.textContent.trim() });
+    });
+    var fold = function (phone) {
+      groups.forEach(function (g) {
+        var has = g.h.querySelector("button");
+        if (phone && !has) {
+          g.h.textContent = "";
+          var b = document.createElement("button"), label = document.createElement("span");
+          b.type = "button"; b.className = "f-toggle"; b.setAttribute("aria-expanded", "false"); b.setAttribute("aria-controls", g.list.id);
+          label.textContent = g.text; b.appendChild(label);
+          b.insertAdjacentHTML("beforeend", '<svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+          b.addEventListener("click", function () { var open = b.getAttribute("aria-expanded") === "true"; b.setAttribute("aria-expanded", open ? "false" : "true"); g.list.hidden = open; });
+          g.h.appendChild(b); g.list.hidden = true;
+        } else if (!phone && has) {
+          g.h.innerHTML = g.inner; g.list.hidden = false;
+        }
+      });
+      foot.classList.toggle("folded", !!phone);
+    };
+    fold(phoneFoot.matches);
+    var onFold = function (e) { fold(e.matches); };
+    if (phoneFoot.addEventListener) phoneFoot.addEventListener("change", onFold); else if (phoneFoot.addListener) phoneFoot.addListener(onFold);
+  }
 
   /* ---- Footer year ----------------------------------------------------------- */
   var year = document.querySelector("[data-year]");
