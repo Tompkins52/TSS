@@ -158,6 +158,7 @@ body.safe-page {
 .safe-tile svg { width: 22px; height: 22px; }
 .safe-page .feat-grid strong { font-family: var(--is-cond); font-weight: 700; font-size: 1.3rem; color: var(--is-navy); line-height: 1.15; margin-bottom: 0.45rem; }
 .safe-page .feat-grid span { color: var(--is-steel); font-size: 1rem; line-height: 1.55; }
+.safe-page .swipe-dots button[aria-current="true"]::before { background: var(--is-navy); }
 .safe-page .more { border-top: 0; margin-top: 1.5rem; background: #fff; border-radius: 16px; padding: 0.3rem 1.5rem; box-shadow: 0 1px 2px rgba(11, 57, 84, 0.06), 0 4px 14px -6px rgba(11, 57, 84, 0.12); }
 .safe-page .more summary { font-family: var(--is-cond); font-weight: 700; font-size: 1.15rem; color: var(--is-navy); padding: 1rem 0; }
 .safe-page .more summary::before { border-color: var(--is-green); color: var(--is-green-deep); }

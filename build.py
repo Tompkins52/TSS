@@ -20,7 +20,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(ROOT, "src")
-SITE_NAME = "Tompkins Software Systems"
+SITE_NAME = "TSS"
 DEFAULT_BASE_URL = "https://tompkinssoftwaresystems.com/"
 
 META_RE = re.compile(r"^\s*<!--(.*?)-->", re.S)

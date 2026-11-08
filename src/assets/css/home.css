@@ -39,12 +39,11 @@
 /* ---------- Header merges with the dark top ---------- */
 body.home .site-header { background: var(--steel-950); border-bottom-color: var(--table-rule); }
 body.home .site-header .brand { color: var(--text-on-dark); }
-body.home .site-header .brand-top { color: #fff; }
+body.home .site-header .brand-name { color: #fff; }
 /* On the dark home header the shield takes its brighter set (defined in the header's inline SVG) */
 body.home .site-header .mark .m1 { fill: url(#hd-m1); }
 body.home .site-header .mark .m2 { fill: url(#hd-m2); }
 body.home .site-header .mark .m3 { fill: url(#hd-m3); }
-body.home .site-header .brand-sub { color: var(--muted-on-dark); }
 body.home .site-nav a { color: var(--text-on-dark); }
 body.home .site-nav a[aria-current="page"] { color: #fff; }
 body.home .site-nav.is-open { background: var(--steel-950); border-bottom-color: var(--table-rule); }
@@ -653,8 +652,8 @@ body.home .site-nav li.nav-cta .btn-primary:hover { background: var(--sky-300); 
 .mini-prod .mp-p { color: var(--ink-2); font-size: 0.95rem; }
 @media (prefers-reduced-motion: reduce) { .door, .door-stage img, .mini-prod { animation: none; transition: none; } .door:hover, .mini-prod:hover { translate: none; } }
 
-/* ---------- Swipe rows: on phones, card groups scroll sideways instead of stacking ---------- */
-.swipe-dots { display: none; }
+/* ---------- Swipe rows: on phones, card groups scroll sideways instead of stacking ----------
+   The dots' look is in site.css; here the rows swipe, and the dots show, below 880px. */
 @media (max-width: 879px) {
   .doors.swipe, .fam-duo.swipe, .mini-grid.swipe, .built-grid.swipe, .how-list.swipe {
     display: flex; gap: 0.9rem; position: relative;
@@ -662,16 +661,9 @@ body.home .site-nav li.nav-cta .btn-primary:hover { background: var(--sky-300); 
     margin-inline: calc(-1 * var(--gutter)); padding: 0.25rem var(--gutter) 0.5rem; scroll-padding-inline: var(--gutter);
     scrollbar-width: none;
   }
-  .swipe::-webkit-scrollbar { display: none; }
   .swipe > * { flex: 0 0 86%; min-width: 0; scroll-snap-align: start; }
-  .swipe-dots { display: flex; justify-content: center; gap: 0.15rem; margin-top: 0.35rem; }
-  .swipe-dots button { display: grid; place-items: center; min-width: 32px; height: 32px; padding: 0; border: 0; background: none; cursor: pointer; }
-  .swipe-dots button::before { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--stone-300); transition: width 0.2s ease, background 0.2s ease; }
-  .swipe-dots button[aria-current="true"]::before { width: 22px; background: var(--blue-700); }
-  .on-dark .swipe-dots button::before { background: rgba(255, 255, 255, 0.3); }
-  .on-dark .swipe-dots button[aria-current="true"]::before { background: var(--sky-400); }
+  .swipe-dots { display: flex; }
 }
-@media (max-width: 879px) and (prefers-reduced-motion: reduce) { .swipe-dots button::before { transition: none; } }
 
 /* ---------- Desktop: Also from TSS keeps its place under the families ---------- */
 @media (min-width: 880px) { #products.built { padding-bottom: 0; } .built.also { padding-top: 3rem; } }

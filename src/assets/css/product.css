@@ -157,6 +157,17 @@
 .feat-grid li { margin: 0; background: var(--surface); border: 1px solid var(--stone-200); border-top: 3px solid var(--blue-600); border-radius: var(--radius); padding: 1rem 1.1rem; }
 .feat-grid strong { display: block; font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.3rem; }
 .feat-grid span { color: var(--ink-2); font-size: 0.97rem; }
+/* Phones: a feature list marked .swipe scrolls sideways instead of stacking (site.js adds the dots) */
+@media (max-width: 639px) {
+  .feat-grid.swipe {
+    display: flex; gap: 0.9rem; position: relative;
+    overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
+    margin-inline: calc(-1 * var(--gutter)); padding: 0.25rem var(--gutter) 0.9rem; scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+  .feat-grid.swipe > li { flex: 0 0 86%; min-width: 0; scroll-snap-align: start; }
+  .feat-grid.swipe + .swipe-dots { display: flex; margin-top: 0; }
+}
 .more { margin-top: 1.75rem; border-top: 1px solid var(--stone-300); }
 .more summary { cursor: pointer; font-weight: 600; padding: 0.9rem 0; color: var(--blue-700); list-style: none; display: flex; align-items: center; gap: 0.5rem; }
 .more summary::-webkit-details-marker { display: none; }
