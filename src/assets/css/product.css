@@ -39,6 +39,7 @@
 .watch .section-head { max-width: 58ch; }
 .watch-frame { border-radius: 12px; overflow: hidden; background: #1d0f34; box-shadow: 0 24px 60px rgba(13, 29, 24, 0.28), 0 0 0 1px rgba(13, 29, 24, 0.08); }
 .watch-frame video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; }
+.watch-frame.watch-safe { background: #061a2b; }
 
 /* ---------- Try a piece of it ---------- */
 .try-section { padding: 3rem 0; }
