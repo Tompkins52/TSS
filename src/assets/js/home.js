@@ -397,7 +397,7 @@
     certSvg: function (st) {
       var w = 640, h = 440;
       return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + " " + h + '" width="' + w + '" height="' + h + '" font-family="Georgia, serif">' +
-        '<rect width="' + w + '" height="' + h + '" fill="#f7f8fa"/><rect x="14" y="14" width="' + (w - 28) + '" height="' + (h - 28) + '" fill="none" stroke="#004a88" stroke-width="3"/><rect x="22" y="22" width="' + (w - 44) + '" height="' + (h - 44) + '" fill="none" stroke="#d4a84b" stroke-width="1"/>' +
+        '<rect width="' + w + '" height="' + h + '" fill="#f7f8fa"/><rect x="14" y="14" width="' + (w - 28) + '" height="' + (h - 28) + '" fill="none" stroke="#004a88" stroke-width="3"/><rect x="22" y="22" width="' + (w - 44) + '" height="' + (h - 44) + '" fill="none" stroke="#00a8e6" stroke-width="1"/>' +
         '<text x="320" y="92" text-anchor="middle" font-size="13" letter-spacing="4" fill="#5f6b7a">CERTIFICATE OF COMPLETION</text>' +
         '<text x="320" y="150" text-anchor="middle" font-size="30" fill="#004a88">Phishing basics for staff</text>' +
         '<text x="320" y="196" text-anchor="middle" font-size="13" fill="#5a6574">is awarded to</text>' +
@@ -817,7 +817,7 @@
      The shell: who it is for, the device, and the start-from-this form
      ===================================================================== */
   var AUD = [
-    { id: "works", label: "Public works", kind: "Work orders", app: WorkOrders, ask: "Want a work order board like this for your department?", hint: "For example: photos from the truck, and a public map of what is open", title: "Work orders for a streets crew", why: "Requests come in from the website, the front desk, and the phone. The board is the one list the crew works from, and the Friday report writes itself.", look: { palette: "evergreen", font: "sans", layout: "classic", icon: "M3 13l5-5m0 0 2-2a2.5 2.5 0 0 1 3.5 3.5l-2 2m-3.5-3.5 3.5 3.5M3 13l1 1" }, topic: "build" },
+    { id: "works", label: "Public works", kind: "Work orders", app: WorkOrders, ask: "Want a work order board like this for your department?", hint: "For example: photos from the truck, and a public map of what is open", title: "Work orders for a streets crew", why: "Requests come in from the website, the front desk, and the phone. The board is the one list the crew works from, and the Friday report writes itself.", look: { palette: "steel", font: "sans", layout: "classic", icon: "M3 13l5-5m0 0 2-2a2.5 2.5 0 0 1 3.5 3.5l-2 2m-3.5-3.5 3.5 3.5M3 13l1 1" }, topic: "build" },
     { id: "gov", label: "Local government", kind: "Permit desk", app: Permits, ask: "Want a permit desk like this for your office?", hint: "For example: online payment, and inspections scheduled from the permit", title: "A permit desk residents can use from a phone", why: "Apply, see the fee, get the permit by email. The clerk works one queue instead of a stack of PDFs, and the fee table is theirs to edit.", look: { palette: "paper", font: "atkinson", layout: "modern", icon: "M2 7h12M3 7v6h10V7M8 2l6 4H2z M5 13v-4M8 13v-4M11 13v-4" }, topic: "build" },
     { id: "biz", label: "Small business", kind: "Estimates", app: Estimates, ask: "Want estimates like this for your business?", hint: "For example: customer signatures, and an export for the bookkeeper", title: "Estimates that go out before you leave the driveway", why: "Line items, tax, a copy the customer can read on a phone, and a list of what is still waiting on a yes.", look: { palette: "rust", font: "barlow", layout: "classic", icon: "M2 14l5-5m2-6 3 3-5 5-3-3zM10 2l4 4" }, topic: "build" },
     { id: "np", label: "Nonprofit", kind: "Volunteer shifts", app: Volunteers, ask: "Want volunteer sign-ups like this for your organization?", hint: "For example: background check status, and text reminders", title: "Volunteer shifts that fill themselves", why: "Open spots, sign-ups, reminders, and the hours report your board asks for, without a shared spreadsheet that nobody trusts.", look: { palette: "brick", font: "merriweather", layout: "friendly", icon: "M8 13 3 8.5a2.8 2.8 0 0 1 4-4l1 1 1-1a2.8 2.8 0 0 1 4 4z" }, topic: "build" },
@@ -833,7 +833,7 @@
 
   /* Palettes and fonts the visitor can pick for each sample app. Applied as CSS variables on the screen. */
   var PALETTES = [
-    { id: "evergreen", label: "Evergreen and brass", top: "#12352b", side: "#0c241d", accent: "#184a3c", accentDark: "#12352b", soft: "#dfeae3", hi: "#d4a84b", bg: "#f4f5f1" },
+    { id: "steel", label: "Steel and blue", top: "#171e27", side: "#10151b", accent: "#004a88", accentDark: "#003a6b", soft: "#e3edf7", hi: "#29b9ef", bg: "#f4f6f8" },
     { id: "paper", label: "Paper and blue", top: "#ffffff", topInk: "#1a221e", topMuted: "#6b7280", side: "#f1f2ee", sideInk: "#1a221e", sideMuted: "#5e675f", sideOn: "rgba(0, 0, 0, 0.05)", accent: "#1f5c9b", accentDark: "#174a7e", soft: "#dde9f6", hi: "#1f5c9b", bg: "#fafafa" },
     { id: "teal", label: "Teal and sand", top: "#0f6b63", side: "#0b5049", accent: "#13857a", accentDark: "#0f6b63", soft: "#d6efec", hi: "#f2d37a", bg: "#f3f8f7" },
     { id: "rust", label: "Rust and ivory", top: "#b4541b", side: "#8e4115", accent: "#c9641f", accentDark: "#a24f18", soft: "#fbe6d8", hi: "#ffe9c2", bg: "#fbf7f2" },
@@ -893,7 +893,7 @@
   var states = {}, themes = {};
   function current() { return byId[state.aud]; }
   function st() { if (!states[state.aud]) states[state.aud] = current().app.init(); return states[state.aud]; }
-  function theme() { if (!themes[state.aud]) { var lk = current().look || {}; themes[state.aud] = { palette: lk.palette || "evergreen", font: lk.font || "sans", layout: lk.layout || "classic", custom: "#1b3a6b" }; } return themes[state.aud]; }
+  function theme() { if (!themes[state.aud]) { var lk = current().look || {}; themes[state.aud] = { palette: lk.palette || "steel", font: lk.font || "sans", layout: lk.layout || "classic", custom: "#1b3a6b" }; } return themes[state.aud]; }
   function palette() { var t = theme(); return t.palette === "custom" ? derivePalette(t.custom) : find(PALETTES, t.palette); }
 
   // The layouts: four presets, each shown as a small drawing of itself.
@@ -908,7 +908,7 @@
   // The swatches: one per palette, then one that opens the device's own color picker.
   PALETTES.forEach(function (p) {
     var l = document.createElement("label"); l.className = "sw";
-    l.innerHTML = '<input type="radio" name="palette" value="' + p.id + '"' + (p.id === "evergreen" ? " checked" : "") + ' aria-label="' + esc(p.label) + '"><i style="--a:' + p.top + ';--b:' + p.accent + ';--c:' + p.hi + ';--d:' + p.bg + '"></i><span class="tip">' + esc(p.label) + "</span>";
+    l.innerHTML = '<input type="radio" name="palette" value="' + p.id + '"' + (p.id === "steel" ? " checked" : "") + ' aria-label="' + esc(p.label) + '"><i style="--a:' + p.top + ';--b:' + p.accent + ';--c:' + p.hi + ';--d:' + p.bg + '"></i><span class="tip">' + esc(p.label) + "</span>";
     swatches.appendChild(l);
   });
   var customSw = document.createElement("label"); customSw.className = "sw custom";
@@ -1071,7 +1071,7 @@
     e.preventDefault();
     var a = current(), need = needEl.value.trim();
     var t = theme(), lk = a.look || {}, parts = [];
-    if (t.palette !== (lk.palette || "evergreen")) parts.push(palette().label.toLowerCase());
+    if (t.palette !== (lk.palette || "steel")) parts.push(palette().label.toLowerCase());
     if (t.font !== (lk.font || "sans")) parts.push(find(FONTS, t.font).label + " type");
     if (t.layout !== (lk.layout || "classic")) parts.push(find(LAYOUTS, t.layout).label.toLowerCase() + " layout");
     var look = parts.length ? " Look: " + parts.join(", ") + "." : "";
