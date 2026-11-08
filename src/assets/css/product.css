@@ -24,7 +24,7 @@
 .phero-shots { position: relative; align-self: end; padding-right: 10%; }
 .frame { border-radius: 10px 10px 0 0; overflow: hidden; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.14); }
 .frame img { display: block; width: 100%; height: auto; }
-.frame-phone { position: absolute; right: 0; bottom: 0; width: 24%; min-width: 96px; border-radius: 14px; border: 4px solid #0d1d18; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45); background: #fff; }
+.frame-phone { position: absolute; right: 0; bottom: 0; width: 24%; min-width: 96px; border-radius: 14px; border: 4px solid #10151b; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45); background: #fff; }
 @media (min-width: 880px) {
   .phero { padding-top: 3.5rem; }
   .phero-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 3rem; align-items: end; }
@@ -37,7 +37,7 @@
 /* ---------- The video ---------- */
 .watch { padding-bottom: 0; }
 .watch .section-head { max-width: 58ch; }
-.watch-frame { border-radius: 12px; overflow: hidden; background: #1d0f34; box-shadow: 0 24px 60px rgba(13, 29, 24, 0.28), 0 0 0 1px rgba(13, 29, 24, 0.08); }
+.watch-frame { border-radius: 12px; overflow: hidden; background: #1d0f34; box-shadow: 0 24px 60px rgba(10, 16, 24, 0.28), 0 0 0 1px rgba(10, 16, 24, 0.08); }
 .watch-frame video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; }
 .watch-frame.watch-safe { background: #061a2b; }
 
@@ -139,7 +139,7 @@
 .q-opt { font: inherit; text-align: left; padding: 0.7em 0.9em; border-radius: var(--radius); border: 1.5px solid var(--stone-300); background: var(--surface); cursor: pointer; color: var(--ink); transition: border-color 0.15s ease, background-color 0.15s ease; }
 .q-opt:hover { border-color: var(--blue-500); }
 .q-opt[disabled] { cursor: default; }
-.q-opt.right { border-color: var(--blue-600); background: #dff0e6; }
+.q-opt.right { border-color: var(--ok); background: #dff0e6; }
 .q-opt.wrong { border-color: var(--app-red); background: #f6e1de; }
 .q-explain { margin-top: 0.9rem; padding: 0.8rem 0.95rem; background: var(--stone-100); border-left: 3px solid var(--sky-500); border-radius: 4px; font-size: 0.92rem; }
 .q-explain .ref { display: block; margin-top: 0.3rem; font-size: 0.8rem; color: var(--muted); }
@@ -171,7 +171,7 @@
 @media (min-width: 720px) { .screens-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .screens-grid figure { margin: 0; display: grid; gap: 0.5rem; align-content: start; }
 .screens-grid img { display: block; width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--stone-300); box-shadow: var(--shadow); background: #fff; }
-.screens-grid figure.tall img { max-width: 220px; margin: 0 auto; border-radius: 18px; border: 4px solid #0d1d18; }
+.screens-grid figure.tall img { max-width: 220px; margin: 0 auto; border-radius: 18px; border: 4px solid #10151b; }
 .screens-grid figcaption { font-size: 0.9rem; color: var(--ink-2); }
 
 /* ---------- Facts strip ---------- */
@@ -190,7 +190,7 @@
 
 /* ---------- Witch Card (formerly Which Card): an app for phones, shown only on phones ---------- */
 .phero-phones { position: relative; align-self: end; width: 100%; max-width: 540px; height: clamp(330px, 88vw, 420px); margin: 0 auto; overflow: hidden; }
-.phero-phones img { position: absolute; display: block; height: auto; border-radius: 28px; border: 6px solid #0d1d18; background: #fff; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.14); }
+.phero-phones img { position: absolute; display: block; height: auto; border-radius: 28px; border: 6px solid #10151b; background: #fff; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.14); }
 .phero-phones .ph-front { left: 4%; top: 22px; width: 50%; rotate: -3deg; z-index: 2; }
 .phero-phones .ph-back { right: 4%; top: 64px; width: 45%; rotate: 4deg; }
 @media (min-width: 880px) { .phero-phones { height: 540px; } .phero-phones .ph-front { top: 34px; } .phero-phones .ph-back { top: 84px; } }
