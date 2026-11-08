@@ -75,7 +75,7 @@
     wireForm(
       f,
       NEWSLETTER_ENDPOINT,
-      "The mailing list is not open yet. The first issue goes out after the company launch; check back here or on the Updates page.",
+      "The mailing list is not open yet. The first issue goes out after the company launch; check back here.",
       "Thanks. Check your inbox for a confirmation email."
     );
   });
@@ -104,7 +104,7 @@
   /* ---- Motion: things fade in as they arrive and out as they leave; the map drifts; a reading line ---- */
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!reduceMotion) {
-    var REVEAL = ".card, .feat-grid > li, .timeline > li, .values > li, .sectors > li, .screens-grid figure, .checklist > li, .sidebar-note, .facts dl > div, .section-head, .demo-copy, .demo .panel, .phero-shots, .phero-phones, .grp, .how-list > li, .prose > h2, .callout, .spec, .fam-rules > li, .fam-where dl > div";
+    var REVEAL = ".card, .feat-grid > li, .values > li, .sectors > li, .screens-grid figure, .checklist > li, .sidebar-note, .facts dl > div, .section-head, .demo-copy, .demo .panel, .phero-shots, .phero-phones, .grp, .how-list > li, .prose > h2, .callout, .spec, .fam-rules > li, .fam-where dl > div";
     var items = document.querySelectorAll(REVEAL), counts = [];
     Array.prototype.forEach.call(items, function (el) {
       if (el.closest("#try")) return;
@@ -136,7 +136,7 @@
 
   /* ---- Product cards and section labels draw in once, the first time they are seen ---- */
   // Used by the home page and the products page. With reduced motion the CSS shows them at once.
-  var seenEls = document.querySelectorAll("[data-seen], .prod, .probono, .gift, .latest, .fam-card");
+  var seenEls = document.querySelectorAll("[data-seen], .prod, .probono, .gift, .fam-card");
   if (seenEls.length) {
     if ("IntersectionObserver" in window) {
       var seenIo = new IntersectionObserver(function (entries) { entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("seen"); seenIo.unobserve(en.target); } }); }, { rootMargin: "0px 0px -12% 0px", threshold: 0.15 });
@@ -162,6 +162,37 @@
       el.classList.add("words");
     });
   }
+
+  /* ---- Swipe rows: on phones, card groups scroll sideways, with dots below ---- */
+  Array.prototype.forEach.call(document.querySelectorAll(".swipe"), function (row) {
+    var items = Array.prototype.filter.call(row.children, function (c) { return c.nodeType === 1; });
+    if (items.length < 2) return;
+    var smooth = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    var dots = document.createElement("div");
+    dots.className = "swipe-dots";
+    var pad = function () { return parseFloat(getComputedStyle(row).paddingLeft) || 0; };
+    items.forEach(function (item, i) {
+      var b = document.createElement("button");
+      var t = item.querySelector(".fam-name, h3, strong, b");
+      b.type = "button";
+      b.setAttribute("aria-label", (t ? t.textContent.trim() : "Item " + (i + 1)) + ", " + (i + 1) + " of " + items.length);
+      b.addEventListener("click", function () { row.scrollTo({ left: item.offsetLeft - pad(), behavior: smooth ? "smooth" : "auto" }); });
+      dots.appendChild(b);
+    });
+    row.parentNode.insertBefore(dots, row.nextSibling);
+    var mark = function () {
+      var x = row.scrollLeft, best = 0, bestD = Infinity;
+      if (x >= row.scrollWidth - row.clientWidth - 4) best = items.length - 1;
+      else items.forEach(function (item, i) { var d = Math.abs(item.offsetLeft - pad() - x); if (d < bestD) { bestD = d; best = i; } });
+      Array.prototype.forEach.call(dots.children, function (b, i) { b.setAttribute("aria-current", i === best ? "true" : "false"); });
+    };
+    var queued = false;
+    row.addEventListener("scroll", function () {
+      if (queued) return; queued = true;
+      requestAnimationFrame(function () { queued = false; mark(); });
+    }, { passive: true });
+    mark();
+  });
 
   /* ---- Footer year ----------------------------------------------------------- */
   var year = document.querySelector("[data-year]");

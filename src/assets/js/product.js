@@ -102,8 +102,8 @@
     };
     var drawGoal = function () {
       var pct = answered / goal, r = 50, c = 2 * Math.PI * r;
-      goalRing.innerHTML = '<circle cx="60" cy="60" r="' + r + '" fill="none" stroke="#e3e5df" stroke-width="10"/>' +
-        '<circle cx="60" cy="60" r="' + r + '" fill="none" stroke="#2a7560" stroke-width="10" stroke-linecap="round" stroke-dasharray="' + c + '" stroke-dashoffset="' + (c * (1 - pct)) + '" transform="rotate(-90 60 60)" style="transition:stroke-dashoffset .5s ease"/>';
+      goalRing.innerHTML = '<circle cx="60" cy="60" r="' + r + '" fill="none" stroke="#e0e5eb" stroke-width="10"/>' +
+        '<circle cx="60" cy="60" r="' + r + '" fill="none" stroke="#2a78c2" stroke-width="10" stroke-linecap="round" stroke-dasharray="' + c + '" stroke-dashoffset="' + (c * (1 - pct)) + '" transform="rotate(-90 60 60)" style="transition:stroke-dashoffset .5s ease"/>';
       goalN.textContent = answered + " of " + goal;
       score.textContent = answered ? correct + " right so far" : "Answer one to start the day";
       if (answered >= goal) score.textContent = "Daily goal done. " + correct + " of " + goal + " right.";
