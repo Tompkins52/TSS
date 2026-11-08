@@ -179,11 +179,6 @@ body.safe-page {
 .safe-page .safe-facts dt { font-family: var(--is-cond); font-size: 0.8rem; letter-spacing: 0.14em; color: var(--is-mint); margin-bottom: 0.35rem; }
 .safe-page .safe-facts dd { font-family: var(--is-cond); font-weight: 600; font-size: 1.12rem; line-height: 1.3; color: #fff; }
 .safe-page .safe-facts a:not(.btn) { color: var(--is-mint); }
-.safe-page .safe-facts .history { margin-top: 2rem; padding: 1.2rem 1.4rem; border-radius: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.10); }
-.safe-page .safe-facts .history summary { font-family: var(--is-cond); font-weight: 700; font-size: 1.1rem; color: #fff; }
-.safe-page .safe-facts .timeline time { font-family: var(--is-cond); color: var(--is-mint); }
-.safe-page .safe-facts .timeline h3 { color: #fff; font-size: 1.25rem; }
-.safe-page .safe-facts .timeline p { color: var(--is-fog); }
 
 /* Closing band */
 .safe-cta { position: relative; isolation: isolate; overflow: hidden; background: var(--is-night); color: var(--is-fog); }
@@ -206,8 +201,6 @@ body.safe-page {
 @media (prefers-reduced-motion: reduce) {
   .safe-liquid span, .safe-track, .safe-hero .phero-copy, .safe-hero .phero-shots { animation: none; }
 }
-.safe-page .safe-facts .timeline { border-left-color: rgba(143, 240, 200, 0.28); }
-.safe-page .safe-facts .timeline li::before { background: var(--is-green); border-color: var(--is-mint); }
 .safe-page .compare .handle::after { box-shadow: 0 4px 14px rgba(4, 24, 42, 0.35); }
 
 /* The page ends on night navy: the one-line footer takes the same color. */

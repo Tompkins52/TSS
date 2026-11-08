@@ -397,14 +397,14 @@
     certSvg: function (st) {
       var w = 640, h = 440;
       return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + " " + h + '" width="' + w + '" height="' + h + '" font-family="Georgia, serif">' +
-        '<rect width="' + w + '" height="' + h + '" fill="#fbfbf8"/><rect x="14" y="14" width="' + (w - 28) + '" height="' + (h - 28) + '" fill="none" stroke="#12352b" stroke-width="3"/><rect x="22" y="22" width="' + (w - 44) + '" height="' + (h - 44) + '" fill="none" stroke="#d4a84b" stroke-width="1"/>' +
-        '<text x="320" y="92" text-anchor="middle" font-size="13" letter-spacing="4" fill="#7f5f1b">CERTIFICATE OF COMPLETION</text>' +
-        '<text x="320" y="150" text-anchor="middle" font-size="30" fill="#12352b">Phishing basics for staff</text>' +
-        '<text x="320" y="196" text-anchor="middle" font-size="13" fill="#5e675f">is awarded to</text>' +
+        '<rect width="' + w + '" height="' + h + '" fill="#f7f8fa"/><rect x="14" y="14" width="' + (w - 28) + '" height="' + (h - 28) + '" fill="none" stroke="#004a88" stroke-width="3"/><rect x="22" y="22" width="' + (w - 44) + '" height="' + (h - 44) + '" fill="none" stroke="#d4a84b" stroke-width="1"/>' +
+        '<text x="320" y="92" text-anchor="middle" font-size="13" letter-spacing="4" fill="#5f6b7a">CERTIFICATE OF COMPLETION</text>' +
+        '<text x="320" y="150" text-anchor="middle" font-size="30" fill="#004a88">Phishing basics for staff</text>' +
+        '<text x="320" y="196" text-anchor="middle" font-size="13" fill="#5a6574">is awarded to</text>' +
         '<text x="320" y="246" text-anchor="middle" font-size="34" font-style="italic" fill="#1a221e">' + esc(st.cert.name) + "</text>" +
         '<line x1="160" y1="262" x2="480" y2="262" stroke="#cbcfc6"/>' +
         '<text x="320" y="300" text-anchor="middle" font-size="14" fill="#3a443f">Completed on ' + esc(st.cert.date) + " with a score of " + st.cert.score + " of " + QUIZ.length + "</text>" +
-        '<text x="320" y="372" text-anchor="middle" font-size="11" fill="#5e675f">Certificate ' + esc(st.cert.id) + " · Sample certificate from a Tompkins Software Systems demo</text></svg>";
+        '<text x="320" y="372" text-anchor="middle" font-size="11" fill="#5a6574">Certificate ' + esc(st.cert.id) + " · Sample certificate from a Tompkins Software Systems demo</text></svg>";
     },
     render: function (st, view, phone) {
       var prog = progress(Course.steps(st) / 4 * 100, Course.steps(st) + " of 4 steps");

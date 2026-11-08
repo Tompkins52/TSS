@@ -81,7 +81,7 @@ a.fam-lock:hover .fam-mark { transform: rotate(-6deg) scale(1.06); }
 .btn-paper { background: var(--f-on); color: var(--f-deep); border-color: var(--f-on); }
 .btn-paper:hover { background: #fff; color: var(--f-deep); border-color: #fff; box-shadow: 0 0 0 3px var(--f-accent), 0 8px 18px rgba(0, 0, 0, 0.2); }
 
-.badge-plan { background: transparent; border: 1px dashed currentColor; color: var(--f-accent-ink, var(--brass-700)); }
+.badge-plan { background: transparent; border: 1px dashed currentColor; color: var(--f-accent-ink, var(--sky-800)); }
 
 /* ---------- The products page and the home page: a family block ---------- */
 .fam-duo { display: grid; gap: 1.5rem; }
@@ -207,20 +207,20 @@ a.fam-lock:hover .fam-mark { transform: rotate(-6deg) scale(1.06); }
   .prod-row.flip .shot { order: 2; }
 }
 .prod-row + .prod-row { margin-top: 3rem; }
-.np-note { margin-top: 0.3rem; padding: 0.85rem 1rem; border-radius: var(--radius); border: 1px solid var(--stone-200); border-left: 4px solid var(--brass-500); background: var(--surface); }
+.np-note { margin-top: 0.3rem; padding: 0.85rem 1rem; border-radius: var(--radius); border: 1px solid var(--stone-200); border-left: 4px solid var(--sky-500); background: var(--surface); }
 .np-note h4 { margin: 0 0 0.25rem; }
 .np-note p { margin: 0; font-size: 0.95rem; }
 
 /* Our products and Customer products: two tabs at the top of each page */
 .ptabs { display: inline-flex; flex-wrap: wrap; gap: 0.25rem; padding: 0.25rem; margin: 0 0 1.3rem; border-radius: 999px; border: 1px solid var(--rule-on-dark); background: rgba(243, 244, 238, 0.07); }
 .band-dark .ptabs a { display: inline-block; padding: 0.45rem 1.05rem; border-radius: 999px; color: var(--text-on-dark); font-size: 0.93rem; font-weight: 600; text-decoration: none; transition: background-color 0.2s ease, color 0.2s ease; }
-.band-dark .ptabs a[aria-current="page"] { background: var(--brass-400); color: var(--ink); }
+.band-dark .ptabs a[aria-current="page"] { background: var(--sky-400); color: var(--ink); }
 .band-dark .ptabs a:not([aria-current]):hover { background: rgba(243, 244, 238, 0.12); color: #fff; }
 
 /* Groups that are not families: departments, on its own */
 .prod-group { margin-top: 3rem; scroll-margin-top: 90px; }
 .prod-group:first-child { margin-top: 0; }
-.prod-group-head { display: flex; align-items: center; gap: 0.7rem; margin: 0 0 0.45rem; font-family: var(--font-body); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brass-600); }
+.prod-group-head { display: flex; align-items: center; gap: 0.7rem; margin: 0 0 0.45rem; font-family: var(--font-body); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sky-700); }
 .prod-group-head::after { content: ""; flex: 1; height: 1px; background: var(--stone-300); }
 .prod-group-line { margin: 0 0 1.4rem; max-width: 62ch; color: var(--ink-2); }
 .prod-group .prod-app { margin-top: 0; }
@@ -230,7 +230,7 @@ a.fam-lock:hover .fam-mark { transform: rotate(-6deg) scale(1.06); }
 .fam-jump { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
 .band-dark .fam-jump a { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.85rem 0.35rem 0.35rem; border-radius: 999px; border: 1px solid var(--rule-on-dark); background: rgba(243, 244, 238, 0.06); color: var(--text-on-dark); font-size: 0.9rem; font-weight: 600; text-decoration: none; transition: border-color 0.2s ease, background-color 0.2s ease; }
 .band-dark .fam-jump a.plain { padding-left: 0.85rem; }
-.band-dark .fam-jump a:hover { border-color: var(--brass-400); background: rgba(243, 244, 238, 0.12); color: #fff; }
+.band-dark .fam-jump a:hover { border-color: var(--sky-400); background: rgba(243, 244, 238, 0.12); color: #fff; }
 .fam-jump img { width: 26px; height: 26px; border-radius: 7px; }
 
 /* ---------- A family's own page ---------- */
@@ -328,16 +328,16 @@ a.fam-lock:hover .fam-mark { transform: rotate(-6deg) scale(1.06); }
    the company's palette variables are pointed at the family's colors, and the hero
    takes the family's texture in place of the survey map. */
 .fam-prod.fam-up main {
-  --green-950: #0d1f3d; --green-900: #122a52; --green-800: #1c3f7a; --green-700: #1c3f7a; --green-600: #2d5597;
-  --green-100: #dde4f0; --green-50: #eef2f8;
-  --brass-700: #b83f1e; --brass-600: #b83f1e; --brass-500: #e4572e; --brass-400: #ff8a63; --brass-300: #ffb39b;
+  --steel-950: #0d1f3d; --steel-900: #122a52; --blue-800: #122a52; --blue-700: #1c3f7a; --blue-600: #1c3f7a; --blue-500: #2d5597;
+  --steel-100: #dde4f0; --blue-50: #eef2f8;
+  --sky-800: #b83f1e; --sky-700: #b83f1e; --sky-500: #e4572e; --sky-400: #ff8a63; --sky-300: #ffb39b;
   --text-on-dark: #f3f5f8; --muted-on-dark: #b8c4d9; --rule-on-dark: rgba(243, 245, 248, 0.18);
   --ok: #2d5597; --focus: 0 0 0 3px rgba(45, 85, 151, 0.35);
 }
 .fam-prod.fam-sq main {
-  --green-950: #0a1220; --green-900: #101a2e; --green-800: #16223b; --green-700: #24365c; --green-600: #33497a;
-  --green-100: #efe4d0; --green-50: #f7f1e6;
-  --brass-700: #7a4e00; --brass-600: #7a4e00; --brass-500: #ffb020; --brass-400: #ffb020; --brass-300: #ffc65a;
+  --steel-950: #0a1220; --steel-900: #101a2e; --blue-800: #101a2e; --blue-700: #16223b; --blue-600: #24365c; --blue-500: #33497a;
+  --steel-100: #efe4d0; --blue-50: #f7f1e6;
+  --sky-800: #7a4e00; --sky-700: #7a4e00; --sky-500: #ffb020; --sky-400: #ffb020; --sky-300: #ffc65a;
   --text-on-dark: #f4ebdc; --muted-on-dark: #aeb6c6; --rule-on-dark: rgba(244, 235, 220, 0.16);
   --ok: #33497a; --focus: 0 0 0 3px rgba(51, 73, 122, 0.35);
 }
