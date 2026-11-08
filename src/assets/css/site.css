@@ -241,10 +241,8 @@ code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-si
   color: var(--ink);
 }
 .brand .mark { width: auto; height: 40px; flex: none; }
-.brand-name { display: flex; flex-direction: column; line-height: 1.05; }
-/* Wordmark lines set to the same width, as in the logo */
-.brand-top { font-family: var(--font-display); font-weight: 800; font-size: 1.25rem; line-height: 1; letter-spacing: 0; text-transform: uppercase; color: var(--blue-700); }
-.brand-sub { font-family: var(--font-display); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.025em; text-transform: uppercase; color: var(--steel-600); margin-top: 4px; }
+/* Wordmark: TSS, the everyday name, in the logo's Montserrat */
+.brand-name { font-family: var(--font-display); font-weight: 800; font-size: 1.75rem; line-height: 1; letter-spacing: 0.02em; color: var(--blue-700); }
 
 .nav-toggle {
   display: inline-flex; align-items: center; gap: 0.5rem;
@@ -296,8 +294,24 @@ code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-si
   .site-nav li.nav-cta a { padding: 0.45rem 0.95rem; }
 }
 
-/* In-page anchors land below the sticky header */
+/* In-page anchors land below the sticky header (67px: 66px row and its border).
+   A jump to a full-width section puts its top edge at the header's bottom edge, so its own
+   padding shows. The home page sets this on the page itself for its one-section-per-screen
+   scrolling; cards that are sections (the families on Our products) keep their own margin. */
 main [id]:not(section) { scroll-margin-top: 84px; }
+body:not(.home) main > section[id] { scroll-margin-top: 67px; }
+
+/* ---------- Swipe rows: on phones, card groups scroll sideways instead of stacking ----------
+   site.js adds the dots after each .swipe row; each page's stylesheet sets the width
+   below which its rows swipe and shows the dots there. */
+.swipe-dots { display: none; justify-content: center; gap: 0.15rem; margin-top: 0.35rem; }
+.swipe-dots button { display: grid; place-items: center; min-width: 32px; height: 32px; padding: 0; border: 0; background: none; cursor: pointer; }
+.swipe-dots button::before { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--stone-300); transition: width 0.2s ease, background 0.2s ease; }
+.swipe-dots button[aria-current="true"]::before { width: 22px; background: var(--blue-700); }
+.on-dark .swipe-dots button::before { background: rgba(255, 255, 255, 0.3); }
+.on-dark .swipe-dots button[aria-current="true"]::before { background: var(--sky-400); }
+.swipe::-webkit-scrollbar { display: none; }
+@media (prefers-reduced-motion: reduce) { .swipe-dots button::before { transition: none; } }
 
 /* ---------- Dark bands: hero and page heads ---------- */
 .band-dark {
@@ -538,8 +552,7 @@ form + .form-note, .form-note + form { margin-top: 0.75rem; }
 .site-footer a:hover { color: var(--sky-300); text-decoration: underline; }
 .footer-grid { display: grid; gap: 2rem; padding: 3rem 0 2.25rem; }
 .footer-brand .brand { color: var(--text-on-dark); }
-.footer-brand .brand-top { color: #fff; }
-.footer-brand .brand-sub { color: var(--muted-on-dark); }
+.footer-brand .brand-name { color: #fff; }
 .footer-brand p { margin: 1rem 0 0; max-width: 34ch; font-size: 0.95rem; }
 .footer-brand .badge { margin-top: 1rem; }
 .footer-col h3 { font-family: var(--font-body); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sky-400); margin-bottom: 0.8rem; }
