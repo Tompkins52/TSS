@@ -40,6 +40,10 @@
 body.home .site-header { background: var(--steel-950); border-bottom-color: var(--table-rule); }
 body.home .site-header .brand { color: var(--text-on-dark); }
 body.home .site-header .brand-top { color: #fff; }
+/* On the dark home header the shield takes its brighter set (defined in the header's inline SVG) */
+body.home .site-header .mark .m1 { fill: url(#hd-m1); }
+body.home .site-header .mark .m2 { fill: url(#hd-m2); }
+body.home .site-header .mark .m3 { fill: url(#hd-m3); }
 body.home .site-header .brand-sub { color: var(--muted-on-dark); }
 body.home .site-nav a { color: var(--text-on-dark); }
 body.home .site-nav a[aria-current="page"] { color: #fff; }
