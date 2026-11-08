@@ -312,6 +312,36 @@ body:not(.home) main > section[id] { scroll-margin-top: 67px; }
 .on-dark .swipe-dots button[aria-current="true"]::before { background: var(--sky-400); }
 .swipe::-webkit-scrollbar { display: none; }
 @media (prefers-reduced-motion: reduce) { .swipe-dots button::before { transition: none; } }
+/* A row swipes below the width its second class names: swipe-880, swipe-720 or swipe-640.
+   A row that scrolls sideways must never also scroll up and down, even by a pixel (a tilted card
+   or a lifted one adds a little height): a vertical swipe that starts on such a row would move the
+   row instead of the page. Rows are padded so nothing is cut off by the clip. */
+@media (max-width: 879px) {
+  .swipe.swipe-880 { display: flex; gap: 0.9rem; position: relative; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none;
+    margin-inline: calc(-1 * var(--gutter)); padding: 0.5rem var(--gutter) 0.6rem; scroll-padding-inline: var(--gutter); }
+  .swipe.swipe-880 > * { flex: 0 0 86%; min-width: 0; scroll-snap-align: start; }
+  .swipe.swipe-880 + .swipe-dots { display: flex; }
+}
+@media (max-width: 719px) {
+  .swipe.swipe-720 { display: flex; gap: 0.9rem; position: relative; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none;
+    margin-inline: calc(-1 * var(--gutter)); padding: 0.5rem var(--gutter) 0.6rem; scroll-padding-inline: var(--gutter); }
+  .swipe.swipe-720 > * { flex: 0 0 86%; min-width: 0; scroll-snap-align: start; }
+  .swipe.swipe-720 + .swipe-dots { display: flex; }
+}
+@media (max-width: 639px) {
+  .swipe.swipe-640 { display: flex; gap: 0.9rem; position: relative; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none;
+    margin-inline: calc(-1 * var(--gutter)); padding: 0.5rem var(--gutter) 0.6rem; scroll-padding-inline: var(--gutter); }
+  .swipe.swipe-640 > * { flex: 0 0 86%; min-width: 0; scroll-snap-align: start; }
+  .swipe.swipe-640 + .swipe-dots { display: flex; }
+}
+
+/* ---------- Touch phones: nothing moves inside the page while the page itself moves ----------
+   Fade-ins, the drifting map and the parallax are for mice. On a phone every section is a swipe
+   away, and anything animating during that swipe reads as stutter. */
+@media (max-width: 879px) and (hover: none) and (pointer: coarse) {
+  .rv { opacity: 1; translate: none; transition: none; }
+  .band-dark::before { transform: none; will-change: auto; }
+}
 
 /* ---------- Dark bands: hero and page heads ---------- */
 .band-dark {
@@ -432,6 +462,7 @@ body:not(.home) main > section[id] { scroll-margin-top: 67px; }
 
 /* Two-column prose layout used on the long pages */
 .split { display: grid; gap: 2rem; }
+.split > * { min-width: 0; }   /* a wide row inside (a swipe row, a table) scrolls instead of widening the page */
 @media (min-width: 880px) { .split { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 3rem; align-items: start; } }
 .sidebar-note {
   background: var(--surface); border: 1px solid var(--stone-200); border-left: 4px solid var(--sky-500);
@@ -447,7 +478,7 @@ body:not(.home) main > section[id] { scroll-margin-top: 67px; }
 .prose table { max-width: 100%; }
 
 /* ---------- Tables ---------- */
-.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 0 1.25rem; }
+.table-wrap { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; margin: 0 0 1.25rem; }
 table { border-collapse: collapse; width: 100%; font-size: 0.97rem; background: var(--surface); }
 th, td { text-align: left; padding: 0.7rem 0.8rem; border-bottom: 1px solid var(--stone-200); vertical-align: top; }
 th { font-weight: 600; background: var(--stone-100); color: var(--ink); font-size: 0.9rem; letter-spacing: 0.02em; }
@@ -485,6 +516,7 @@ tr:last-child td { border-bottom: 0; }
 .sectors strong { display: block; }
 .sectors span { color: var(--ink-2); font-size: 0.97rem; }
 @media (min-width: 640px) { .sectors { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 639px) { .sectors.swipe > li { align-content: start; } }
 
 /* ---------- Callout ---------- */
 .callout {
@@ -573,6 +605,17 @@ form + .form-note, .form-note + form { margin-top: 0.75rem; }
 .footer-col li.f-fam ul li { margin: 0 0 0.35rem; font-size: 0.92rem; }
 @media (min-width: 640px) { .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (min-width: 960px) { .footer-grid { grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 2.5rem; } }
+/* Phones: the four link groups fold up behind their headings (site.js adds the buttons and the folded class) */
+@media (max-width: 639px) {
+  .site-footer.folded .footer-grid { gap: 0; padding: 2.25rem 0 1.5rem; }
+  .site-footer.folded .footer-brand { padding-bottom: 1.5rem; }
+  .site-footer.folded .footer-col h3, .site-footer.folded .footer-col ul + h3 { margin: 0; border-top: 1px solid var(--rule-on-dark); }
+  .site-footer.folded .footer-col ul { padding-bottom: 1rem; }
+  .f-toggle { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 1rem; min-height: 48px; margin: 0; padding: 0.4rem 0; border: 0; border-radius: 0; background: none; color: inherit; font: inherit; letter-spacing: inherit; text-transform: inherit; text-align: left; cursor: pointer; }
+  .f-toggle svg { flex: none; transition: transform 0.2s ease; }
+  .f-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+  .f-toggle:focus-visible { outline: 3px solid var(--sky-400); outline-offset: 2px; }
+}
 
 /* Keep the footer at the bottom on short pages */
 body { min-height: 100vh; display: flex; flex-direction: column; }

@@ -118,7 +118,8 @@ body.safe-page {
 @keyframes safe-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 /* 01 Watch */
-.safe-watch { background: var(--is-concrete); padding-top: 1.5rem; }
+.safe-watch { background: var(--is-concrete); padding-top: 0; }
+.safe-watch > .wrap { padding-top: 1.5rem; }
 .safe-page .watch-frame.watch-safe { background: var(--is-night); border-radius: 16px; box-shadow: var(--is-shadow-dark); }
 .safe-watch .watch-frame { margin-bottom: 0.5rem; }
 @media (min-width: 880px) { .safe-watch { padding-bottom: 4.25rem; } }
@@ -208,3 +209,24 @@ body.safe-page {
 .safe-page .site-footer-min { background: var(--is-night); color: rgba(255, 255, 255, 0.6); border-top: 1px solid rgba(255, 255, 255, 0.08); }
 .safe-page .site-footer-min a { color: rgba(255, 255, 255, 0.82); }
 .safe-page .site-footer-min a:hover { color: var(--is-mint); }
+
+/* Touch phones: the blurred glow holds still (it is costly to animate) and the page snaps one
+   section per screen (product.css); here each IntelliSafe section is trimmed to fit one. */
+@media (max-width: 879px) and (hover: none) and (pointer: coarse) {
+  .safe-liquid span { animation: none; }
+}
+@media (max-width: 879px) and (orientation: portrait) and (min-height: 560px) and (hover: none) and (pointer: coarse) {
+  .safe-hero .safe-pill { margin-bottom: 0.9rem; padding: 0.3rem 0.75rem; font-size: 0.72rem; }
+  .safe-page main .safe-name { margin-bottom: 0.7rem; font-size: 1.7rem; }
+  .safe-display { font-size: clamp(1.9rem, 8.4vw, 2.5rem); margin-bottom: 0.9rem; }
+  .safe-hero .lede { font-size: 1rem; line-height: 1.45; }
+  .safe-hero .actions { margin-top: 0.9rem; }
+  .safe-hero .actions .safe-btn-ghost:last-child { display: none; }
+  .safe-hero .phero-shots { padding-top: 0; }
+  .safe-hero .phero-copy { padding-bottom: 0; }
+  /* The tape opens the Watch screen, right under the header; the heading and the video sit centered below it */
+  .safe-watch { justify-content: flex-start; padding-top: 0; }
+  .safe-watch > .wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; padding-top: 0.5rem; }
+  .safe-watch .watch-frame { margin-bottom: 0; }
+  .safe-page .safe-facts dd { font-size: 1.02rem; }
+}
