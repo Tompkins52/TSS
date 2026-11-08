@@ -499,6 +499,7 @@ textarea { min-height: 7.5rem; resize: vertical; }
 .inline-form input { flex: 1 1 auto; }
 @media (min-width: 540px) { .inline-form { flex-direction: row; } .inline-form .btn { flex: none; } }
 .form-note { font-size: 0.88rem; color: var(--muted); margin-top: 0.6rem; }
+form + .form-note, .form-note + form { margin-top: 0.75rem; }
 .form-status { margin-top: 0.75rem; font-size: 0.95rem; font-weight: 500; color: var(--blue-700); }
 .form-status[hidden] { display: none; }
 .hp { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }

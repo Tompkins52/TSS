@@ -83,7 +83,7 @@
     document.querySelector("form[data-form=contact]"),
     CONTACT_ENDPOINT,
     "This form is not connected yet. Please email your message to admin@tompkinssoftwaresystems.com; what you typed is still here to copy.",
-    "Thanks. We read every message and reply within three business days."
+    "Thanks. We read every message and usually reply within three business days."
   );
 
   /* ---- Contact form prefilled from the sample apps on the home page -------- */
