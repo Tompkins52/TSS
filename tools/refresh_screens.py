@@ -33,7 +33,6 @@ OUT = os.path.join(ROOT, "src", "assets", "img", "products")
 # Base addresses. Override with environment variables to capture from a local copy.
 PRODUCTS = {
     "safe": {"name": "IntelliSafe", "base": os.environ.get("SCREENS_SAFE", "https://intellisafe.tompkinssoftwaresystems.com/"), "title": "IntelliSafe"},
-    "pm": {"name": "Painless Project Management", "base": os.environ.get("SCREENS_PM", "https://painless.tompkinssoftwaresystems.com/"), "title": "Painless"},
     "p107": {"name": "Part 107 Prep", "base": os.environ.get("SCREENS_P107", "https://part107.tompkinssoftwaresystems.com/"), "title": "Part 107"},
     "ps": {"name": "Phantom Soldier", "base": os.environ.get("SCREENS_PS", "https://phantomsoldier.org/"), "title": "Phantom Soldier"},
     "wc": {"name": "Witch Card", "base": os.environ.get("SCREENS_WC", "https://witch-card.tompkinssoftwaresystems.com/"), "title": "Witch Card"},
@@ -86,15 +85,6 @@ def r_safe_module(page, base):
     settle(page)
     click_first(page, ["a:has-text('Start')", "button:has-text('Start')"])
     settle(page)
-
-
-def r_pm_view(label):
-    def go(page, base):
-        page.goto(base + "index.html", wait_until="networkidle")
-        settle(page)
-        click_first(page, ["button:has-text('%s')" % label, "a:has-text('%s')" % label])
-        settle(page)
-    return go
 
 
 def r_p107_exam(page, base):
@@ -263,11 +253,6 @@ SCREENS = [
     ("safe-inspections", "safe", "desktop", r_goto("index.html#/inspections")),
     ("safe-phone", "safe", "phone", r_goto("index.html#/dashboard")),
     ("safe-phone-incidents", "safe", "phone", r_goto("index.html#/incidents")),
-    ("pm-rollup", "pm", "desktop", r_pm_view("Roll-up")),
-    ("pm-projects", "pm", "desktop", r_pm_view("Projects")),
-    ("pm-charter", "pm", "desktop", r_pm_view("Start a project")),
-    ("pm-phone", "pm", "phone", r_goto("index.html")),
-    ("pm-phone-rollup", "pm", "phone", r_pm_view("Roll-up")),
     ("p107-home", "p107", "desktop", r_goto("index.html")),
     ("p107-airspace", "p107", "desktop", r_goto("study-airspace.html", scroll=600)),
     ("p107-exam", "p107", "desktop", r_p107_exam),

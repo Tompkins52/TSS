@@ -67,27 +67,10 @@
 .range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px rgba(42, 120, 194, 0.35); }
 .range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 4px rgba(42, 120, 194, 0.35); }
 
-/* Painless PM demo */
-.pm-grid { display: grid; gap: 1rem; }
-@media (min-width: 680px) { .pm-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.5rem; } }
-.pm-controls { display: grid; gap: 0.9rem; }
-.pm-controls label { display: block; font-size: 0.85rem; font-weight: 600; }
-.pm-controls .val { float: right; font-weight: 500; color: var(--ink-2); font-variant-numeric: tabular-nums; }
-.pm-roll { background: var(--stone-100); border-radius: var(--radius); padding: 0.9rem 1rem; }
-.pm-roll h3 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; margin: 0 0 0.5rem; }
-.rag { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.7rem; }
-.rag span { font-size: 0.78rem; font-weight: 600; padding: 0.2em 0.65em; border-radius: 999px; background: var(--stone-200); color: var(--ink-2); }
-.rag .g { background: #dff0e6; color: var(--ok-ink); }
-.rag .a { background: #f7efdc; color: var(--warn-ink); }
-.rag .r { background: #f6e1de; color: var(--app-red); }
-.pm-summary { font-size: 0.95rem; color: var(--ink); margin: 0; }
-.pm-help { margin-top: 0.7rem; font-size: 0.88rem; display: flex; flex-wrap: wrap; gap: 0.5rem 0.8rem; align-items: center; }
-.pm-help input[type=checkbox] { margin-right: 0.3rem; }
-.pm-help input[type=text] { width: 10rem; padding: 0.3em 0.5em; font-size: 0.88rem; }
-.pm-milestones { display: flex; gap: 4px; margin: 0.4rem 0 0.2rem; }
-.pm-milestones i { flex: 1; height: 8px; border-radius: 4px; background: var(--stone-300); }
-.pm-milestones i.done { background: var(--blue-600); }
-.pm-milestones i.late { background: var(--app-red); }
+/* Slider panel for the demos */
+.demo-controls { display: grid; gap: 0.9rem; }
+.demo-controls label { display: block; font-size: 0.85rem; font-weight: 600; }
+.demo-controls .val { float: right; font-weight: 500; color: var(--ink-2); font-variant-numeric: tabular-nums; }
 
 /* IntelliSafe before and after */
 .compare { position: relative; aspect-ratio: 16 / 10; min-height: 300px; background: var(--stone-100); user-select: none; overflow: hidden; }
@@ -333,7 +316,7 @@
 .bh-never { font-weight: 600; color: var(--ink); }
 .bh-grid { display: grid; gap: 1.25rem; }
 @media (min-width: 680px) { .bh-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 1.5rem; } }
-.bh-grid .pm-controls { align-content: start; }
+.bh-grid .demo-controls { align-content: start; }
 .bh-what { margin: 0; font-size: 0.85rem; color: var(--muted); }
 .bh-opts { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
 .bh-opts li { margin: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.15rem 1rem; align-items: baseline; padding: 0.65rem 0.85rem; border: 1px solid var(--stone-200); border-radius: var(--radius); background: var(--surface); transition: border-color 0.2s ease, background-color 0.2s ease; }
@@ -384,11 +367,7 @@
   body.prod .more { margin-top: 1rem; }
   body.prod .facts dl { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.9rem 1rem; }
   body.prod .feat-grid span { font-size: 0.93rem; }
-  /* Painless PM's weekly update and Part 107's question: tighter, the goal ring beside its numbers */
-  body.prod .pm-grid { gap: 0.8rem; }
-  body.prod .pm-grid .pm-controls { gap: 0.45rem; }
-  body.prod .pm-help { margin-top: 0.4rem; }
-  body.prod .pm-roll { order: -1; position: sticky; top: 67px; z-index: 2; box-shadow: 0 8px 16px -10px rgba(16, 22, 30, 0.25); }
+  /* Part 107's question: tighter, the goal ring beside its numbers */
   body.prod .q-grid { gap: 0.8rem; }
   body.prod .goal { display: grid; grid-template-columns: 72px minmax(0, 1fr); column-gap: 0.8rem; align-items: center; text-align: left; }
   body.prod .goal svg { grid-row: 1 / span 3; width: 72px; height: 72px; }
@@ -398,7 +377,7 @@
   body.prod .q-opt { padding: 0.55em 0.8em; }
   /* Billhead's calculator: tighter rows */
   body.prod .bh-grid { gap: 0.9rem; }
-  body.prod .bh-grid .pm-controls { gap: 0.5rem; }
+  body.prod .bh-grid .demo-controls { gap: 0.5rem; }
   body.prod .bh-opts { gap: 0.4rem; }
   body.prod .bh-opts li { padding: 0.45rem 0.75rem; }
   body.prod .bh-opts li small { display: none; }
