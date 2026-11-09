@@ -10,51 +10,6 @@
   function fill(range) { var min = Number(range.min || 0), max = Number(range.max || 100), v = Number(range.value); range.style.setProperty("--fill", ((v - min) / (max - min) * 100) + "%"); }
   function wireRange(range, fn) { fill(range); range.addEventListener("input", function () { fill(range); fn(); }); }
 
-  /* ---------- Painless Project Management: the roll-up from the real rules ---------- */
-  var pm = document.getElementById("demo-pm");
-  if (pm) {
-    var approved = pm.querySelector("[data-approved]"), spent = pm.querySelector("[data-spent]"), forecast = pm.querySelector("[data-forecast]");
-    var done = pm.querySelector("[data-done]"), nextDue = pm.querySelector("[data-next]"), lastUp = pm.querySelector("[data-last]");
-    var help = pm.querySelector("[data-help]"), where = pm.querySelector("[data-where]");
-    [approved, spent, forecast, done, nextDue, lastUp].forEach(function (r) { wireRange(r, pmUpdate); });
-    help.addEventListener("change", pmUpdate);
-    where.addEventListener("input", pmUpdate);
-    pmUpdate();
-  }
-  function pmUpdate() {
-    var A = Number(approved.value), S = Number(spent.value), F = Number(forecast.value);
-    var D = Number(done.value), N = Number(nextDue.value), L = Number(lastUp.value);
-    if (S > A * 1.5) { S = A * 1.5; spent.value = S; fill(spent); }
-    pm.querySelector("[data-approved-v]").textContent = money(A);
-    pm.querySelector("[data-spent-v]").textContent = money(S) + " (" + Math.round(S / A * 100) + "%)";
-    pm.querySelector("[data-forecast-v]").textContent = money(F) + " (" + Math.round(F / A * 100) + "%)";
-    pm.querySelector("[data-done-v]").textContent = D + " of 8";
-    pm.querySelector("[data-next-v]").textContent = N < 0 ? Math.abs(N) + (N === -1 ? " day overdue" : " days overdue") : N === 0 ? "due today" : "due in " + N + (N === 1 ? " day" : " days");
-    pm.querySelector("[data-last-v]").textContent = L === 0 ? "today" : L + (L === 1 ? " day ago" : " days ago");
-
-    // The product's rules: an overdue milestone turns schedule amber, red past 14 days;
-    // a forecast over approved turns budget amber, red past 110 percent; quiet after 14 days.
-    var sched = D >= 8 ? "g" : N < -14 ? "r" : N < 0 ? "a" : "g";
-    var budget = F > A * 1.1 ? "r" : F > A ? "a" : "g";
-    var quiet = L > 14;
-    var needs = help.checked;
-    var name = { g: "On track", a: "Watch", r: "Off track" };
-    var rag = pm.querySelector("[data-rag]");
-    rag.innerHTML = '<span class="' + sched + '">Schedule: ' + name[sched] + '</span><span class="' + budget + '">Budget: ' + name[budget] + "</span>" +
-      (quiet ? '<span class="a">Quiet ' + L + " days</span>" : "") + (needs ? '<span class="r">Needs help</span>' : "");
-    var ms = pm.querySelector("[data-ms]");
-    ms.innerHTML = "";
-    for (var i = 0; i < 8; i++) ms.appendChild(el("i", i < D ? "done" : (i === D && N < 0) ? "late" : ""));
-
-    var s = "Fleet telematics rollout is " + (sched === "g" && budget === "g" && !needs ? "on track" : sched === "r" || budget === "r" ? "off track" : "being watched") + ": " +
-      D + " of 8 milestones done, " + Math.round(S / A * 100) + "% of the approved budget spent, forecast " +
-      (F > A ? money(F - A) + " over" : F < A ? money(A - F) + " under" : "at") + " approved";
-    if (N < 0 && D < 8) s += ", next milestone " + Math.abs(N) + " days overdue";
-    if (quiet) s += ". No update in " + L + " days";
-    if (needs) s += ". Help requested" + (where.value.trim() ? ": " + where.value.trim() : "");
-    pm.querySelector("[data-summary]").textContent = s + ".";
-  }
-
   /* ---------- IntelliSafe: the binder and the platform ---------- */
   var cmp = document.getElementById("compare");
   if (cmp) {
