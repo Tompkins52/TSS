@@ -10,25 +10,25 @@
 @font-face { font-family: "Barlow"; src: url("../fonts/picker/barlow-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
 
 /* ---------- Family tokens ---------- */
-/* Upfront: Billhead's navy on cool paper, with the red-orange of the shop awning in its mark. */
+/* Upfront: the family's navy on cool paper, with the red of the shop awning in its mark. */
 .fam-up {
-  --f-deep: #122a52;
-  --f-main: #1c3f7a;
-  --f-glow: #2f5ea8;
+  --f-deep: #0f2038;
+  --f-main: #172e4e;
+  --f-glow: #304e77;
   --f-paper: #f3f5f8;
   --f-line: #d5dce7;
   --f-ink: #14213d;
   --f-text: #3d4a63;
-  --f-accent: #e4572e;
-  --f-accent-ink: #b83f1e;
-  --f-accent-on: #ff9d7c;
+  --f-accent: #f34d38;
+  --f-accent-ink: #b43929;
+  --f-accent-on: #f8988c;
   --f-on: #f3f5f8;
   --f-muted-on: #b8c4d9;
   --f-rule-on: rgba(243, 245, 248, 0.18);
-  --f-planned: #16335f;
+  --f-planned: #132844;
   --f-planned-rule: rgba(243, 245, 248, 0.45);
-  --f-planned-label: #ff9d7c;
-  --f-chip: rgba(18, 42, 82, 0.92);
+  --f-planned-label: #f8988c;
+  --f-chip: rgba(15, 32, 56, 0.92);
   --f-font: "IBM Plex Sans", var(--font-body);
 }
 /* Pass Muster (its class stays fam-sq): Part 107 Prep's night sky, cream, and signal amber. */
@@ -93,7 +93,7 @@ a.fam-lock:hover .fam-mark { transform: rotate(-6deg) scale(1.06); }
 @media (min-width: 880px) { .fam-card { padding: 1.6rem 1.75rem 1.75rem; } .fam-block { padding: 1.75rem 2rem 2.25rem; margin-bottom: 3rem; } }
 
 /* Upfront sits light, like a sheet of invoice paper with the navy rule across the top. */
-.fam-card.fam-up, .fam-block.fam-up { background: var(--surface); color: var(--f-ink); border: 1px solid var(--f-line); border-top: 4px solid var(--f-main); box-shadow: 0 16px 40px rgba(18, 42, 82, 0.1); }
+.fam-card.fam-up, .fam-block.fam-up { background: var(--surface); color: var(--f-ink); border: 1px solid var(--f-line); border-top: 4px solid var(--f-main); box-shadow: 0 16px 40px rgba(15, 32, 56, 0.1); }
 .fam-block.fam-up { background: var(--f-paper); }
 /* Pass Muster sits dark, like the study site at night, with the amber rule. */
 .fam-card.fam-sq, .fam-block.fam-sq { background: linear-gradient(180deg, var(--f-main), var(--f-deep)); color: var(--f-on); border: 1px solid var(--f-deep); border-top: 4px solid var(--f-accent); box-shadow: 0 16px 40px rgba(10, 18, 32, 0.28); }
@@ -106,13 +106,13 @@ a.fam-lock:hover .fam-mark { transform: rotate(-6deg) scale(1.06); }
 
 /* The stage of phones inside a family card uses the family's own night or navy */
 .fam-up .phones { background: radial-gradient(90% 85% at 50% 108%, var(--f-glow) 0%, var(--f-main) 55%, var(--f-deep) 100%); }
-.fam-up .phones::before { background: radial-gradient(closest-side, rgba(228, 87, 46, 0.24), transparent); }
+.fam-up .phones::before { background: radial-gradient(closest-side, rgba(243, 77, 56, 0.24), transparent); }
 .fam-sq .phones { background: radial-gradient(90% 85% at 50% 108%, var(--f-glow) 0%, #141f36 55%, var(--f-deep) 100%); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--f-rule-on); }
 .fam-sq .phones::before { background: radial-gradient(closest-side, rgba(255, 176, 32, 0.2), transparent); }
 .fam-card .phones { aspect-ratio: 16 / 9; }
 .fam-card .phones img, .fam-card .phones .phone-planned { width: 24%; }
 .fam-card:not(.seen) .phones img, .fam-card:not(.seen) .phones .phone-planned { translate: 0 45%; }
-.fam-up .phones:hover, .fam-up .shot:hover { box-shadow: 0 20px 44px rgba(18, 42, 82, 0.24), 0 0 0 2px var(--f-accent); }
+.fam-up .phones:hover, .fam-up .shot:hover { box-shadow: 0 20px 44px rgba(15, 32, 56, 0.24), 0 0 0 2px var(--f-accent); }
 .fam-sq .phones:hover, .fam-sq .shot:hover { box-shadow: 0 20px 44px rgba(0, 0, 0, 0.35), 0 0 0 2px var(--f-accent); }
 
 /* A phone that does not exist yet: drawn, dashed, and labeled Planned */
@@ -186,6 +186,9 @@ a.fam-lock:hover .fam-mark { transform: rotate(-6deg) scale(1.06); }
 .planned-card { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.85rem; align-items: start; padding: 1rem 1.1rem; border-radius: var(--radius-lg); border: 1.5px dashed #a9b6cb; background: rgba(255, 255, 255, 0.65); color: var(--f-ink); }
 .fam-sq .planned-card { border-color: rgba(244, 235, 220, 0.35); background: rgba(244, 235, 220, 0.04); color: var(--f-on); }
 .planned-card .fam-mark { width: 36px; height: 36px; border-radius: 8px; }
+/* An app's own mark beside its name in a family listing. */
+.prod-copy h3.app-name { display: flex; align-items: center; gap: 0.6rem; }
+.prod-copy h3.app-name .fam-mark { width: 36px; height: 36px; border-radius: 8px; }
 .pc-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.35rem 0.6rem; margin-bottom: 0.25rem; }
 .planned-card h3 { margin: 0; font-family: var(--f-font); font-size: 1.12rem; letter-spacing: -0.01em; }
 .planned-card p { margin: 0; font-size: 0.95rem; color: var(--f-text); }
@@ -255,7 +258,7 @@ a.fam-lock:hover .fam-mark { transform: rotate(-6deg) scale(1.06); }
 /* Upfront: ledger paper in navy, with the red margin rule */
 .fam-up .fhero, .fam-prod.fam-up .phero { background: linear-gradient(180deg, var(--f-main), var(--f-deep)); }
 .fam-up .fhero::before, .fam-prod.fam-up .phero::before { content: ""; position: absolute; inset: 0; opacity: 1; pointer-events: none; background: repeating-linear-gradient(180deg, transparent 0 31px, rgba(243, 245, 248, 0.07) 31px 32px); }
-@media (min-width: 880px) { .fam-up .fhero::before, .fam-prod.fam-up .phero::before { background: linear-gradient(90deg, transparent calc(4.5% - 1px), rgba(228, 87, 46, 0.42) calc(4.5% - 1px), rgba(228, 87, 46, 0.42) calc(4.5% + 1px), transparent calc(4.5% + 1px)), repeating-linear-gradient(180deg, transparent 0 31px, rgba(243, 245, 248, 0.07) 31px 32px); } }
+@media (min-width: 880px) { .fam-up .fhero::before, .fam-prod.fam-up .phero::before { background: linear-gradient(90deg, transparent calc(4.5% - 1px), rgba(243, 77, 56, 0.42) calc(4.5% - 1px), rgba(243, 77, 56, 0.42) calc(4.5% + 1px), transparent calc(4.5% + 1px)), repeating-linear-gradient(180deg, transparent 0 31px, rgba(243, 245, 248, 0.07) 31px 32px); } }
 /* Pass Muster: a study grid at night */
 .fam-sq .fhero, .fam-prod.fam-sq .phero { background: radial-gradient(120% 90% at 85% 0%, var(--f-glow) 0%, var(--f-main) 46%, var(--f-deep) 100%); }
 .fam-sq .fhero::before, .fam-prod.fam-sq .phero::before { content: ""; position: absolute; inset: 0; opacity: 1; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(244, 235, 220, 0.045) 0 1px, transparent 1px 28px), repeating-linear-gradient(90deg, rgba(244, 235, 220, 0.045) 0 1px, transparent 1px 28px); -webkit-mask-image: linear-gradient(180deg, #000 40%, transparent); mask-image: linear-gradient(180deg, #000 40%, transparent); }
@@ -328,11 +331,11 @@ a.fam-lock:hover .fam-mark { transform: rotate(-6deg) scale(1.06); }
    the company's palette variables are pointed at the family's colors, and the hero
    takes the family's texture in place of the survey map. */
 .fam-prod.fam-up main {
-  --steel-950: #0d1f3d; --steel-900: #122a52; --blue-800: #122a52; --blue-700: #1c3f7a; --blue-600: #1c3f7a; --blue-500: #2d5597;
+  --steel-950: #0b182a; --steel-900: #0f2038; --blue-800: #0f2038; --blue-700: #172e4e; --blue-600: #172e4e; --blue-500: #304e77;
   --steel-100: #dde4f0; --blue-50: #eef2f8;
-  --sky-800: #b83f1e; --sky-700: #b83f1e; --sky-500: #e4572e; --sky-400: #ff9d7c; --sky-300: #ffb39b;
+  --sky-800: #b43929; --sky-700: #b43929; --sky-500: #f34d38; --sky-400: #f8988c; --sky-300: #fab4ab;
   --text-on-dark: #f3f5f8; --muted-on-dark: #b8c4d9; --rule-on-dark: rgba(243, 245, 248, 0.18);
-  --ok: #2d5597; --focus: 0 0 0 3px rgba(45, 85, 151, 0.35);
+  --ok: #304e77; --focus: 0 0 0 3px rgba(48, 78, 119, 0.35);
 }
 .fam-prod.fam-sq main {
   --steel-950: #0a1220; --steel-900: #101a2e; --blue-800: #101a2e; --blue-700: #16223b; --blue-600: #24365c; --blue-500: #33497a;
@@ -350,7 +353,7 @@ a.fam-lock:hover .fam-mark { transform: rotate(-6deg) scale(1.06); }
 .fam-prod .phero .badge-brass, .fam-block.fam-sq .badge-brass, .fam-card.fam-sq .badge-brass { background: transparent; border-color: var(--f-accent); color: var(--f-accent-on); }
 .fam-prod .phero .badge-dark { background: rgba(0, 0, 0, 0.18); border-color: var(--f-rule-on); color: var(--f-on); }
 .fam-block.fam-up .badge-ok, .fam-card.fam-up .badge-ok, .fam-page.fam-up main .badge-ok { background: #e8eef7; border-color: var(--f-line); color: var(--f-main); }
-.fam-block.fam-up .badge-brass, .fam-card.fam-up .badge-brass, .fam-page.fam-up main .badge-brass { background: #fdece6; border-color: #f4c4b3; color: var(--f-accent-ink); }
+.fam-block.fam-up .badge-brass, .fam-card.fam-up .badge-brass, .fam-page.fam-up main .badge-brass { background: #feebe9; border-color: #fbc2bb; color: var(--f-accent-ink); }
 .fam-prod .facts { border-color: var(--f-line); }
 .fam-prod .bh-from { background: rgba(255, 255, 255, 0.1); color: var(--f-accent-on); }
 .fam-prod .frame-phone, .fam-prod .screens-grid figure.tall img { border-color: var(--f-deep); }
