@@ -274,6 +274,14 @@ a.fam-lock:hover .fam-mark { transform: rotate(-6deg) scale(1.06); }
 .fhero-copy .actions { animation-delay: 0.2s; }
 .fhero .fam-lock.big .fam-mark { animation: mark-in 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 @keyframes mark-in { 0% { opacity: 0; transform: rotate(-14deg) scale(0.8); } 100% { opacity: 1; transform: none; } }
+/* The Upfront mark in parts (its hero): the awning drops stripe by stripe, then the arrow runs in under it.
+   Every part is an SVG the size of the tile, so all of them land on the same pixels as the single-file mark. Nothing leaves the tile. */
+.fam-live { position: relative; background: #172e4e; }
+.fam-live > svg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; }
+.fhero .fam-live .uf-st { transform-origin: 50% 22.656%; animation: fam-drop 0.42s cubic-bezier(0.34, 1.45, 0.64, 1) both; animation-delay: calc(0.5s + var(--i) * 0.06s); }
+.fhero .fam-live .uf-ar { animation: fam-run 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.25) 1s both; }
+@keyframes fam-drop { 0% { transform: scaleY(0.001); } 100% { transform: scaleY(1); } }
+@keyframes fam-run { 0% { opacity: 0; transform: translateX(-16.5%); } 100% { opacity: 1; transform: translateX(0); } }
 
 /* A family page's hero picture: its first app on two phones, and the plan for the next */
 .fam-stage { position: relative; align-self: end; width: 100%; max-width: 560px; height: clamp(340px, 92vw, 430px); margin: 0 auto; overflow: hidden; }
@@ -374,7 +382,7 @@ a.fam-lock:hover .fam-mark { transform: rotate(-6deg) scale(1.06); }
 .fam-sheet .fam-lock .fam-desc { color: var(--f-accent-ink); }
 
 @media (prefers-reduced-motion: reduce) {
-  .fam-stage > img, .fam-stage > .phone-planned, .fam-chip, .fam-chips li, .fhero-copy h1, .fhero-copy .lede, .fhero-copy .actions, .fhero .fam-lock.big .fam-mark { animation: none; }
+  .fam-stage > img, .fam-stage > .phone-planned, .fam-chip, .fam-chips li, .fhero-copy h1, .fhero-copy .lede, .fhero-copy .actions, .fhero .fam-lock.big .fam-mark, .fhero .fam-live .uf-st, .fhero .fam-live .uf-ar { animation: none; }
   .band-dark .ptabs a { transition: none; }
   .fam-card:not(.seen) .phones img, .fam-card:not(.seen) .phones .phone-planned { translate: none; }
   .phone-planned { transition: none; }
